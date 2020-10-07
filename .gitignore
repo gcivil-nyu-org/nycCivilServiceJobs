@@ -5,7 +5,7 @@
 .vscode/
 
 # OS
-.DS Store
+.DS_Store
 
 # Log file
 *.log
