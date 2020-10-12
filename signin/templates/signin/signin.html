@@ -2,12 +2,22 @@
 
 {% block content %}
 <div class="container">
+    <div class="row">
+        <aside class="col-sm-4" style="margin: auto">
+
+            <h1 class="mt-2">nycCivilServiceJobs</h1>
+        </aside>
+    </div>
+</div>
+<div class="container">
 <div class="row">
 	<aside class="col-sm-4" style="margin: auto">
     <div class="card ">
         <article class="card-body">
             <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
             <hr>
+
+            <style> ul.errorlist {display: none;}</style>
             {% for message in messages %}
             <div class="alert alert-danger">
                 {{ message }}

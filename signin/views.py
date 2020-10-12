@@ -1,9 +1,8 @@
-from django.shortcuts import render,redirect,reverse
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.forms import *
 from django.contrib.auth import *
 from django.contrib import messages
 from django.views.generic import *
-
 
 
 class SignInView(FormView):
@@ -25,10 +24,12 @@ class SignInView(FormView):
             return redirect(reverse('index'))
         else:
             messages.error(self.request, "Invalid username or password.")
+
     def form_invalid(self, form):
         messages.error(self.request, "Invalid username or password.")
         return self.render_to_response(
-        self.get_context_data(request=self.request, form=form))
+            self.get_context_data(request=self.request, form=form))
+
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect(reverse('index'))
