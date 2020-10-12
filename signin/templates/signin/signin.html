@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<div class="row">
+	<aside class="col-sm-4" style="margin: auto">
+    <div class="card ">
+        <article class="card-body">
+            <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
+            <hr>
+            {% for message in messages %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+            {% endfor %}
+            <form method='POST' class="from-group">
+                {% csrf_token %}
+                {{form.as_p}}
+
+                <input class="btn btn-lg btn-success btn-block" type="submit" value="Login">
+
+            </form>
+            <p class="text-center"><a href="/resetpassword" class="btn">Forgot password?</a></p>
+
+            <div class="form-group">
+                <input class="btn btn-lg btn-success btn-block" type="submit" value="Create New Account" onclick="window.location='/register'">
+            </div> <!-- form-group// -->
+        </article>
+    </div> <!-- card.// -->
+
+</aside> <!-- col.// -->
+</div> <!-- row.// -->
+
+</div>
+<!--container end.//-->
+{% endblock %}
