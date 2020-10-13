@@ -1,68 +1,47 @@
 
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
-
-{% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'register/signup.css' %}">
 
+{% block content %}
+<div class="container">
+    <div class="row">
+        <aside class="col-sm-4" style="margin: auto">
 
-    <form method="post">
-        {% csrf_token %}
-  <head></head>
-  <body>
-    <div class="signup">
-    <span>Account Type:</span><br>
-		<div class="switch-field">
-		<input type="radio" id="radio-one" name="switch-one" value="job-seeker" checked/>
-		<label for="radio-one">Job Seeker</label>
-		<input type="radio" id="radio-two" name="switch-one" value="hiring-manager" />
-		<label for="radio-two">Hiring Manager</label>
-	</div>
+            <h1 class="mt-2">nycCivilServiceJobs</h1>
+        </aside>
+    </div>
+</div>
+<div class="container">
+<div class="row">
+	<aside class="col-sm-8" style="margin: auto">
+    <div class="card ">
+        <article class="card-body">
+            <h4 class="card-title text-center mb-4 mt-1">Create Account</h4>
+            <hr>
 
-		<span>First Name:</span><br>
-		<input type="text" id="first_name" name="text" placeholder="First Name"><br>
-		<span>Last Name:</span><br>
-		<input type="text" id="last_name" name="text" placeholder="Last Name"><br>
-		<span>Email Address:</span><br>
-		<input type="email" id="email" name="email" placeholder="abc@xyz.com"><br>
-		<span>Username:</span><br>
-    <input type="username" id=username name="username" placeholder="username"><br>
-		<span>Password:</span><br>
-		<input type="password" id=password name="password" placeholder="password"><br>
-    <span>Confirm Password:</span><br>
-		<input type="password2" id=password2 name="password2" placeholder="Confirm Password"><br>
-		<span>Date of Birth:</span><br>
-		<input type="text" id=dob name="dob" placeholder="MM/DD/YYYY"><br>
-     <span>Security Question:</span><br>
+            <style> ul.errorlist {display: none;}</style>
+            {% for message in messages %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+            {% endfor %}
 
+            <form method='POST' class="from-group">
+                {% csrf_token %}
+                {{ form|crispy }}
 
-<select name="question" id=question>
-  <option value="option1">What is your favourite vacaction spot?</option>
-  <option value="option2">What is your mother's maiden name?</option>
-  <option value="option3">What city were you born in?</option>
-  <option value="option4">What is your favourite car brand ?</option>
-</select><br>
-    <span>Security Answer:</span><br>
-		<input type="password" id=answer name="answer"><br><br><br>
-		<div class="subutton">
-			<a href="#">Register</a>
-		</div>
-	</div>
-  </body>
+            <div class="form-group">
+                <button class="btn btn-success" type="submit"> Register </button>
+            </div> <!-- form-group// -->
+            </form>
+        </article>
+    </div> <!-- card.// -->
 
-        <!-- <a href="{% url 'register:home' %}">Home</a> -->
-    </form>
-{% endblock content %}
+</aside> <!-- col.// -->
+</div> <!-- row.// -->
 
-{% block javascript %}
-<script>
-$(function() {
-    $( ".datepicker" ).datepicker({
-      changeMonth: true,
-      changeYear: true,
-      yearRange: "1900:2012",
-      // You can put more options here.
-
-    });
-  });
-</script>
-{% endblock javascript %}
+</div>
+<!--container end.//-->
+{% endblock %}

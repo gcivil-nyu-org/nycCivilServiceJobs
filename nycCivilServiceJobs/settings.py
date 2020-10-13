@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "crispy_forms",
     'register.apps.RegisterConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -122,3 +123,4 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "nycCivilService.csgy6063@gmail.com"
 EMAIL_HOST_PASSWORD = "ickmxllehcjescwh"
 DEFAULT_FROM_EMAIL = "nycCivilServiceJobs Team <noreply@nycCivilServiceJobs.com>"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
