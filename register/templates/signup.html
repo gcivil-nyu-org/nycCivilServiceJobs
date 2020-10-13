@@ -1,0 +1,66 @@
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'register/signup.css' %}">
+
+
+    <form method="post">
+        {% csrf_token %}
+  <head></head>
+  <body>
+    <div class="signup">
+    <span>Account Type:</span><br>
+		<div class="switch-field">
+		<input type="radio" id="radio-one" name="switch-one" value="job-seeker" checked/>
+		<label for="radio-one">Job Seeker</label>
+		<input type="radio" id="radio-two" name="switch-one" value="hiring-manager" />
+		<label for="radio-two">Hiring Manager</label>
+	</div>
+
+		<span>First Name:</span><br>
+		<input type="text" id="first_name" name="text" placeholder="First Name"><br>
+		<span>Last Name:</span><br>
+		<input type="text" id="last_name" name="text" placeholder="Last Name"><br>
+		<span>Email Address:</span><br>
+		<input type="email" id="email" name="email" placeholder="abc@xyz.com"><br>
+		<span>Password:</span><br>
+		<input type="password" id=password name="password" placeholder="password"><br>
+    <span>Confirm Password:</span><br>
+		<input type="password2" id=password2 name="password2" placeholder="Confirm Password"><br>
+		<span>Date of Birth:</span><br>
+		<input type="text" id=dob name="dob" placeholder="MM/DD/YYYY"><br>
+     <span>Security Question:</span><br>
+
+
+<select name="question" id=question>
+  <option value="option1">What is your favourite vacaction spot?</option>
+  <option value="option2">What is your mother's maiden name?</option>
+  <option value="option3">What city were you born in?</option>
+  <option value="option4">What is your favourite car brand ?</option>
+</select><br>
+    <span>Security Answer:</span><br>
+		<input type="password" id=answer name="answer"><br><br><br>
+		<div class="subutton">
+			<a href="#">Register</a>
+		</div>
+	</div>
+  </body>
+
+        <!-- <a href="{% url 'register:home' %}">Home</a> -->
+    </form>
+{% endblock content %}
+
+{% block javascript %}
+<script>
+$(function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1900:2012",
+      // You can put more options here.
+
+    });
+  });
+</script>
+{% endblock javascript %}
