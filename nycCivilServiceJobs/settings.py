@@ -115,10 +115,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Email settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "nycCivilServiceJobs@gmail.com"
-EMAIL_HOST_PASSWORD = "imzSQleb99Jn"
+EMAIL_HOST_USER = "nycCivilService.csgy6063@gmail.com"
+EMAIL_HOST_PASSWORD = "ickmxllehcjescwh"
 DEFAULT_FROM_EMAIL = "nycCivilServiceJobs Team <noreply@nycCivilServiceJobs.com>"
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
