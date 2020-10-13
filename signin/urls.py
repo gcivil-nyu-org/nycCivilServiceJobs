@@ -19,5 +19,6 @@ from signin.views import *
 
 app_name = 'signin'
 urlpatterns = [
-    path('', SignInView.as_view(),name='signin')
+    path('', SignInView.as_view(),name='signin'),
+    path('success',SuccessView.as_view(),name='success')
 ]

@@ -3,6 +3,8 @@ from django.contrib.auth.forms import *
 from django.contrib.auth import *
 from django.contrib import messages
 from django.views.generic import *
+from django.views import View
+from django.contrib.auth.decorators import login_required
 
 
 class SignInView(FormView):
@@ -20,8 +22,8 @@ class SignInView(FormView):
 
         if user is not None:
             login(self.request, user)
-            messages.info(self.request, f"You are now logged in as {username}")
-            return redirect(reverse('index'))
+            #messages.info(self.request, f"You are now logged in as {username}")
+            return redirect(reverse('signin:success'))
         else:
             messages.error(self.request, "Invalid username or password.")
 
@@ -32,5 +34,14 @@ class SignInView(FormView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect(reverse('index'))
+            return redirect(reverse('signin:success'))
         return super(SignInView, self).get(request, *args, **kwargs)
+
+
+class SuccessView(View):
+
+
+    def get(self, request, *args, **kwargs):
+        return render(request = request,
+                        template_name = "signin/success.html",
+                        context={"user":request.user})
