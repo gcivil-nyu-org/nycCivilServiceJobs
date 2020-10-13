@@ -1,47 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load crispy_forms_tags %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'signin/style.css' %}">
+
 <div class="container">
     <div class="row">
-        <aside class="col-sm-4" style="margin: auto">
-
+        <aside class="col-sm-5" style="margin: auto">
             <h1 class="mt-2">nycCivilServiceJobs</h1>
         </aside>
     </div>
 </div>
 <div class="container">
-<div class="row">
-	<aside class="col-sm-4" style="margin: auto">
-    <div class="card ">
-        <article class="card-body">
-            <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
-            <hr>
+    <div class="row">
+        <aside class="col-sm-5" style="margin: auto">
+            <div class="card ">
+                <article class="card-body">
+                    <h4 class="card-title text-center mb-4 mt-1">Sign in</h4>
+                    <hr>
+                    {% for message in messages %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                    <form method='POST' class="from-group">
+                        {% csrf_token %}
+                        {{form|crispy}}
 
-            <style> ul.errorlist {display: none;}</style>
-            {% for message in messages %}
-            <div class="alert alert-danger">
-                {{ message }}
+                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Sign In">
+                    </form>
+                    <p class="text-center"><a href="/resetpassword" class="btn">Forgot password?</a></p>
+
+                    <div class="form-group">
+                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Create New Account"
+                               onclick="window.location='/register'">
+                    </div>
+                </article>
             </div>
-            {% endfor %}
-
-            <form method='POST' class="from-group">
-                {% csrf_token %}
-                {{form.as_p}}
-
-                <input class="btn btn-lg btn-success btn-block" type="submit" value="Login">
-
-            </form>
-            <p class="text-center"><a href="/resetpassword" class="btn">Forgot password?</a></p>
-
-            <div class="form-group">
-                <input class="btn btn-lg btn-success btn-block" type="submit" value="Create New Account" onclick="window.location='/register'">
-            </div> <!-- form-group// -->
-        </article>
-    </div> <!-- card.// -->
-
-</aside> <!-- col.// -->
-</div> <!-- row.// -->
-
+        </aside>
+    </div>
 </div>
-<!--container end.//-->
+
 {% endblock %}
