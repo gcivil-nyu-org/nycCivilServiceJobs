@@ -23,13 +23,11 @@ class SignUpForm(UserCreationForm):
                   ('hm', 'Hiring Manager')]
 
     acc_type = forms.CharField(label='Account Type', widget=forms.Select(choices=CHOICES_AT))
-    dob = forms.DateField(label='Date of Birth')
-
+    dob = forms.DateField(label='Date of Birth',  widget=forms.DateInput(     
+        attrs={'type': 'date'} 
+    ))
     class Meta:
         model = User
-        widgets = {
-            'dob': forms.DateInput(attrs={'class': 'datepicker'}),
-        }
         fields = [
             'acc_type',
             'username',
@@ -43,13 +41,13 @@ class SignUpForm(UserCreationForm):
             'security_ans',
         ]
 
-    def clean(self):
-        email = self.cleaned_data.get('email')
+    def clean_email(self):
+        email = self.cleaned_data.get('email').lower()
         if User.objects.filter(email=email).exists():
-            raise ValidationError("Email exists")
+            raise ValidationError("This Email is already registered. Please use a different email address.")
 
         account_type = self.cleaned_data.get('acc_type')
         email_domain = email[-4:]
         if account_type == 'hm' and email_domain != '.gov':
-            raise ValidationError("Not a valid Email for Hiring Manager")
-        return self.cleaned_data
+            raise ValidationError("This email is not a valid Email Address for Hiring Manager. Please use a different email address.")
+        return self.cleaned_data.get('email')

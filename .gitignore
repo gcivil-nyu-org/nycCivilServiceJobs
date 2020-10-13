@@ -27,3 +27,4 @@ staticfiles/
 
 .coverage
 htmlcov/
+db.sqlite3
