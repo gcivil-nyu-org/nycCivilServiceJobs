@@ -47,7 +47,7 @@ class SignUpView(CreateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect(reverse('signin'))
+            return redirect(reverse('signin:success'))
         return super(SignUpView, self).get(request, *args, **kwargs)
 
 class SuccessView(View):

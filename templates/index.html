@@ -58,7 +58,7 @@
                                 <div class="main-menu">
                                     <nav class="d-none d-lg-block">
                                         <ul id="navigation">
-                                            <li><a href="#l">Home</a></li>
+                                            <li><a href="#">Home</a></li>
                                             <li><a href="#">Find  Jobs </a></li>
                                             <li><a href="#">About</a></li>
                                             <li><a href="#">Dashboard</a>
@@ -70,8 +70,8 @@
                                 </div>
                                 <!-- Header-btn -->
                                 <div class="header-btn d-none f-right d-lg-block">
-                                    <a href="\register" class="btn head-btn1">Register</a>
-                                    <a href="\signin" class="btn head-btn2">Sign In</a>
+                                    <!-- <a href="{% url 'register:signup' %}" class="btn head-btn1">Register</a> -->
+                                    <a href="{% url 'signin:signin' %}"  class="btn head-btn1">Sign In</a>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
     
 
         <!-- footer-bottom area -->
-        <footer style="postition:fixed;bottom:0px;">
+        <footer style="position:fixed;bottom:0px;">
         <div class="footer-bottom-area footer-bg">
             <div class="container">
                 <div class="footer-border">
@@ -150,7 +150,7 @@
         <script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
 
 		<!-- Jquery Plugins, main Jquery -->
-        <script src="{% static 'js/plugins.js' %}%}"></script>
+        <script src="{% static 'js/plugins.js'%}"></script>
         <script src="{% static 'js/main.js' %}"></script>
     </body>
 </html>
