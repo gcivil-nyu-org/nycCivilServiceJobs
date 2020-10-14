@@ -1,9 +1,9 @@
-{% block content %}
-{% load crispy_forms_tags %}
+
 {% load static %}
 
 <html class="no-js" lang="zxx">
     <head>
+
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
          <title>NYC Civil Services</title>
@@ -58,13 +58,13 @@
                                 <div class="main-menu">
                                     <nav class="d-none d-lg-block">
                                         <ul id="navigation">
-                                            <li><a href="index.html">Home</a></li>
-                                            <li><a href="job_listing.html">Find  Jobs </a></li>
-                                            <li><a href="about.html">About</a></li>
+                                            <li><a href="#l">Home</a></li>
+                                            <li><a href="#">Find  Jobs </a></li>
+                                            <li><a href="#">About</a></li>
                                             <li><a href="#">Dashboard</a>
 
                                             </li>
-                                            <li><a href="contact.html">Contact Us</a></li>
+                                            <li><a href="#">Contact Us</a></li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -83,15 +83,13 @@
                 </div>
            </div>
        </div>
+
         <!-- Header End -->
     </header>
-    <main>
-
-
-
-
+    
 
         <!-- footer-bottom area -->
+        <footer style="postition:fixed;bottom:0px;">
         <div class="footer-bottom-area footer-bg">
             <div class="container">
                 <div class="footer-border">
@@ -114,9 +112,10 @@
                      </div>
                 </div>
             </div>
-        </div>
+      </div>
+      </footer>
         <!-- Footer End-->
-    </footer>
+
 
   <!-- JS here -->
 		<!-- All JS Custom Plugins Link Here here -->
@@ -155,4 +154,3 @@
         <script src="{% static 'js/main.js' %}"></script>
     </body>
 </html>
-{% endblock %}
