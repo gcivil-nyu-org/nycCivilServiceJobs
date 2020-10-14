@@ -7,6 +7,9 @@
 # OS
 .DS_Store
 
+# Database
+*.sqlite3
+
 # Log file
 *.log
 
@@ -27,3 +30,4 @@ staticfiles/
 
 .coverage
 htmlcov/
+db.sqlite3
