@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <table class="table">
+        <thead class="thread-dark">
+        <tr>
+            <th>Business Title</th>
+            <th>Agency</th>
+            <th>Civil Service Title</th>
+            <th>Career Level</th>
+            <th>Work Location</th>
+            <th>Posting Date</th>
+            <th>Valid Until</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td>{{ job.business_title }}</td>
+            <td>{{ job.agency }}</td>
+            <td>{{ job.civil_service_title}}</td>
+            <td>{{ job.career_level }}</td>
+            <td>{{ job.work_location_1 }}</td>
+            <td>{{ job.posting_date }}</td>
+            <td>{{ job.post_until }}</td>
+
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+ 
+{% endblock %}}
