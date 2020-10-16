@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
+    'jobs',
     'register.apps.RegisterConfig',
     'signin',
     'django.contrib.admin',
