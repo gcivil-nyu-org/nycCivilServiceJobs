@@ -54,7 +54,7 @@ def save_exam_result_active():
                                 list_agency_code_promo_desc=row['list_agency_desc'],
                                 list_div_code_promo= (row['list_div_code'] if 'list_div_code' in row.index and not is_nan(row['list_div_code']) else None),
                                 anniversary_date=getAwareDate(row['anniversary_date']),
-                                extention_date=getAwareDate(row['extension_date']),
+                                extension_date=(getAwareDate(row['extension_date']) if 'extension_date' in row.index and not is_nan(row['extension_date']) else None),
                                 veteran_credit= (row['veteran_credit'] if 'veteran_credit' in row.index and not is_nan(row['veteran_credit']) else None),
                                 parent_legacy_credit= (row['parent_lgy_credit'] if 'parent_lgy_credit' in row.index and not is_nan(row['parent_lgy_credit']) else None),
                                 sibling_legacy_credit=(row['sibling_lgy_credit'] if 'sibling_lgy_credit' in row.index and not is_nan(row['sibling_lgy_credit']) else None),
