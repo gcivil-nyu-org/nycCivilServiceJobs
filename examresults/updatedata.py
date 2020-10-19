@@ -29,15 +29,14 @@ def update_exam_result_active():
     exam_result_list_df= exam_result_list_df.where(exam_result_list_df.notnull(),None)
 
     for c in columns:
-        if c not in exam_result_list_df:
+        if c not in exam_result_list_df.columns:
             exam_result_list_df[c] = None
 
     entries = []
-    count = 0
+
     for index, row in exam_result_list_df.iterrows():
         try:
-            count+=1
-            new = False
+            new = True
             filtered_results = ExamResultsActive.objects.filter(exam_number=row['exam_no'])
             if filtered_results:
                 val = filtered_results.filter(list_title_code=row['list_title_code'],
@@ -45,10 +44,8 @@ def update_exam_result_active():
                                                 first_name=row['first_name'],
                                                 last_name=row['last_name'],
                                                 middle_initial = row['mi'])
-                if not val:
-                    new = True
-            else:
-                new = True
+                if val:
+                    new = False
             if new:
                 entries.append(ExamResultsActive(exam_number=row['exam_no'],
                                     list_number=row['list_no'],
@@ -64,6 +61,7 @@ def update_exam_result_active():
                                     list_div_code_promo= row['list_div_code'] ,
                                     anniversary_date=getAwareDate(row['anniversary_date']),
                                     extension_date=getAwareDate(row['extension_date']),
+                                    published_date = getAwareDate(row['published_date']),
                                     veteran_credit= row['veteran_credit'],
                                     parent_legacy_credit= row['parent_lgy_credit'],
                                     sibling_legacy_credit=row['sibling_lgy_credit'],

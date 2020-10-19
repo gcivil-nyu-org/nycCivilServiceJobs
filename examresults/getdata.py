@@ -15,7 +15,7 @@ from examresults.models import ExamResultsTerminated
 from django.utils import timezone
 import datetime
 
-
+#Fetch Active Exam Results from NYC Open Data
 def get_exam_result_active():
     client = Socrata("data.cityofnewyork.us",
                      "m7QHRP2U6tqRR7XCge8TzIRUW",
@@ -26,7 +26,7 @@ def get_exam_result_active():
 
     return results
 
-
+#Fetch Terminated Exam Results from NYC Open Data
 def get_exam_result_terminated():
     client = Socrata("data.cityofnewyork.us",
                      "m7QHRP2U6tqRR7XCge8TzIRUW",
@@ -44,6 +44,16 @@ def save_exam_result_active():
     exam_result_list_df = pd.DataFrame.from_records(exam_result_list)
     exam_result_list_df= exam_result_list_df.where(exam_result_list_df.notnull(),None)
 
+    columns = ['exam_no', 'list_no', 'first_name', 'last_name', 'adj_fa',
+       'list_title_code', 'list_title_desc', 'group_no', 'list_agency_code',
+       'list_agency_desc', 'established_date', 'anniversary_date', 'mi',
+       'published_date', 'veteran_credit', 'extension_date',
+       'sibling_lgy_credit', 'list_div_code', 'parent_lgy_credit','residency_credit']
+
+    for c in columns:
+     if c not in exam_result_list_df.columns:
+         exam_result_list_df[c] = None
+
     entries = []
     for index, row in exam_result_list_df.iterrows():
         try:
@@ -59,6 +69,7 @@ def save_exam_result_active():
                                 list_agency_code_promo=row['list_agency_code'],
                                 list_agency_code_promo_desc=row['list_agency_desc'],
                                 list_div_code_promo= row['list_div_code'] ,                               anniversary_date=getAwareDate(row['anniversary_date']),
+                                published_date =getAwareDate(row['published_date']),
                                 extension_date=getAwareDate(row['extension_date']),
                                 veteran_credit= row['veteran_credit'],
                                 parent_legacy_credit= row['parent_lgy_credit'],
@@ -72,16 +83,20 @@ def save_exam_result_active():
     print("Created Objects")
     ExamResultsActive.objects.bulk_create(entries,ignore_conflicts=True)
 
-    return
-
-
 
 def save_exam_result_terminated():
     ExamResultsTerminated.objects.all().delete()
     exam_result_list = get_exam_result_terminated()
     exam_result_list_df = pd.DataFrame.from_records(exam_result_list)
     exam_result_list_df= exam_result_list_df.where(exam_result_list_df.notnull(),None)
+
+    columns = ['exam_no','list_title_code','list_title_desc']
+    for c in columns:
+     if c not in exam_result_list_df.columns:
+         exam_result_list_df[c] = None
     entries = []
+
+
     for index, row in exam_result_list_df.iterrows():
         try:
 
