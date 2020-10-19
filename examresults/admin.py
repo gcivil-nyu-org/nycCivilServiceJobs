@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import ExamResultsTerminated, ExamResultsActive
+
+admin.site.register(ExamResultsTerminated)
+admin.site.register(ExamResultsActive)
