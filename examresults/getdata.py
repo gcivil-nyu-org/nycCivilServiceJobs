@@ -60,7 +60,9 @@ def save_exam_result_active():
 
         exam_result_list =  client.get("vx8i-nprf", offset=offset, limit=limit)
         exam_result_list_df = pd.DataFrame.from_records(exam_result_list)
+        exam_result_list_df = exam_result_list_df.replace(r'^\s*$', None, regex=True)
         exam_result_list_df= exam_result_list_df.where(exam_result_list_df.notnull(),None)
+        exam_result_list_df = exam_result_list_df[exam_result_list_df['first_name'].notnull() & exam_result_list_df['last_name'].notnull()]
 
         for c in columns:
          if c not in exam_result_list_df.columns:
