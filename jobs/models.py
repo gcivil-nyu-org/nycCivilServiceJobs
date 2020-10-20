@@ -35,4 +35,7 @@ class job_record(models.Model):
 
     def __int__(self):
         return self.job_id
+    
+    class Meta:
+      verbose_name_plural = "Job Records"
 
