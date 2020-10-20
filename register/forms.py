@@ -5,6 +5,9 @@ from django.forms.widgets import DateInput
 from django.core.exceptions import ValidationError
 
 
+# from signin.models import User
+
+
 # Sign Up Form
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30)
@@ -23,9 +26,10 @@ class SignUpForm(UserCreationForm):
                   ('hm', 'Hiring Manager')]
 
     acc_type = forms.CharField(label='Account Type', widget=forms.Select(choices=CHOICES_AT))
-    dob = forms.DateField(label='Date of Birth',  widget=forms.DateInput(     
-        attrs={'type': 'date'} 
+    dob = forms.DateField(label='Date of Birth', widget=forms.DateInput(
+        attrs={'type': 'date'}
     ))
+
     class Meta:
         model = User
         fields = [
@@ -49,5 +53,6 @@ class SignUpForm(UserCreationForm):
         account_type = self.cleaned_data.get('acc_type')
         email_domain = email[-4:]
         if account_type == 'hm' and email_domain != '.gov':
-            raise ValidationError("This email is not a valid Email Address for Hiring Manager. Please use a different email address.")
+            raise ValidationError(
+                "This email is not a valid Email Address for Hiring Manager. Please use a different email address.")
         return self.cleaned_data.get('email')
