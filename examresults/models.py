@@ -24,10 +24,17 @@ class ExamResultsActive(models.Model):
     sibling_legacy_credit = models.CharField(max_length=100, blank=True,null=True)
     residency_credit = models.CharField(max_length=100, blank=True,null=True)
 
+    class Meta:
+      verbose_name_plural = "Exam Results(Active)"
+
 class ExamResultsTerminated(models.Model):
     exam_number = models.IntegerField(null=True)
     list_title_code = models.IntegerField(null=True)
     list_title_desc = models.CharField(max_length=250, blank=True, null=True)
+
+
+    class Meta:
+      verbose_name_plural = "Exam Results(Terminated)"
 
 def __int__(self):
     return self.exam_number
