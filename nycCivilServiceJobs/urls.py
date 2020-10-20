@@ -26,5 +26,6 @@ urlpatterns = [
     path('signin/', include('signin.urls')),
     path('logout/',LogoutView.as_view(),name = 'logout'),
     path('admin/', admin.site.urls),
-    path('jobs/', GetData.as_view(template_name='jobs/jobs.html'), name='jobs')
+    path('jobs/', GetData.as_view(template_name='jobs/jobs.html'), name='jobs'),
+    path('exams/', include('examresults.urls')),
 ]
