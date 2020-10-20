@@ -1,37 +1,8 @@
-{% extends 'base.html' %}
-
-{% block content %}
-
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'signin/style.css' %}">
+{% extends "generic_base.html" %} {% block content %}
 
 <div class="container">
-    <div class="row">
-        <aside class="col-sm-5" style="margin: auto">
-            <h1 class="mt-2" style="text-align:center">nycCivilServiceJobs</h1>
-        </aside>
-    </div>
+    <h2 class="mt-3" style="text-align:center">Thank You! You have been successfully registered. {{user.username}}</h2>
+    <!-- <p>You have been successfully registered. Please click <a href="\signin"> here</a> to login.</p> -->
+
 </div>
-
-<div class="container">
-    <div class="row">
-        <aside class="col-sm-5" style="margin: auto">
-            <div class="card ">
-                <article class="card-body">
-                    <h4 class="card-title text-center mb-4 mt-1">Welcome! {{user.username}}</h4>
-                    <hr>
-                    <p>You have been successfully registered. Please click <a href="\signin"> here</a> to login.</p>
-                    {% for message in messages %}
-                    <div class="alert alert-danger">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
-                    <a href="/">Back to home</a>
-                </article>
-            </div>
-        </aside>
-    </div>
-</div>
-
-
 {% endblock %}

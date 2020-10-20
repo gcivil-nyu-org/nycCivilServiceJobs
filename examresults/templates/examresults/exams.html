@@ -1,0 +1,58 @@
+{% extends 'generic_base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <table class="table">
+        <thead class="thread-dark">
+        <tr>
+            <th>Exam Number</th>
+            <th>List Title Code</th>
+            <th>List Title Descrption</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Final Average</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for exam in page_obj %}
+        <tr>
+            <td>{{ exam.exam_number }}</td>
+            <td>{{ exam.list_title_code }}</td>
+            <td>{{ exam.list_title_desc}}</td>
+            <td>{{ exam.first_name }}</td>
+            <td>{{ exam.last_name }}</td>
+            <td>{{ exam.adjust_final_average }}</td>
+
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    {% if is_paginated %}
+<ul class="pagination">
+  {% if page_obj.has_previous %}
+    <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&laquo;</span></li>
+  {% endif %}
+  {% for i in paginator.page_range %}
+    {% if page_obj.number == i %}
+      <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+    {% else %}
+      <li><a href="?page={{ i }}">{{ i }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% if page_obj.has_next %}
+    <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+  {% else %}
+    <li class="disabled"><span>&raquo;</span></li>
+  {% endif %}
+</ul>
+{% endif %}
+</div>
+
+{% endblock %}
