@@ -1,12 +1,8 @@
 from django import forms
-from django.contrib.auth.models import User
+from register.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms.widgets import DateInput
 from django.core.exceptions import ValidationError
-
-
-# from signin.models import User
-
 
 # Sign Up Form
 class SignUpForm(UserCreationForm):
@@ -20,12 +16,12 @@ class SignUpForm(UserCreationForm):
                   ('CF', "What is the name of your favorite childhood friend?"),
                   ('FJ', "In what city or town was your first job?")]
 
-    security_ques = forms.CharField(label='Security Question', widget=forms.Select(choices=CHOICES_SQ))
+    security_ques = forms.CharField(
+        label='Security Question', widget=forms.Select(choices=CHOICES_SQ))
     security_ans = forms.CharField(label='Answer', max_length=100)
-    CHOICES_AT = [('js', 'Job Seeker'),
-                  ('hm', 'Hiring Manager')]
-
-    acc_type = forms.CharField(label='Account Type', widget=forms.Select(choices=CHOICES_AT))
+    CHOICES_AT = [(False, 'Job Seeker'), (True, 'Hiring Manager')]
+    is_hiring_manager = forms.ChoiceField(choices=CHOICES_AT, label="Account Type",
+                                          widget=forms.Select(), required=True)
     dob = forms.DateField(label='Date of Birth', widget=forms.DateInput(
         attrs={'type': 'date'}
     ))
@@ -33,7 +29,7 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = [
-            'acc_type',
+            'is_hiring_manager',
             'username',
             'first_name',
             'last_name',
@@ -48,7 +44,8 @@ class SignUpForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email').lower()
         if User.objects.filter(email=email).exists():
-            raise ValidationError("This Email is already registered. Please use a different email address.")
+            raise ValidationError(
+                "This Email is already registered. Please use a different email address.")
 
         account_type = self.cleaned_data.get('acc_type')
         email_domain = email[-4:]
