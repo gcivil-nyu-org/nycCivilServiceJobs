@@ -1,36 +1,25 @@
 {% extends 'base.html' %}
 
+
 {% load static %}
 
 {% block content %}
-    <table class="table">
-        <thead class="thread-dark">
-        <tr>
-            <th>Business Title</th>
-            <th>Agency</th>
-            <th>Civil Service Title</th>
-            <th>Career Level</th>
-            <th>Work Location</th>
-            <th>Posting Date</th>
-            <th>Valid Until</th>
+{% for job in jobs %}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
 
-        </tr>
-        </thead>
-        <tbody>
-        {% for job in jobs %}
-        <tr>
-            <td>{{ job.business_title }}</td>
-            <td>{{ job.agency }}</td>
-            <td>{{ job.civil_service_title}}</td>
-            <td>{{ job.career_level }}</td>
-            <td>{{ job.work_location_1 }}</td>
-            <td>{{ job.posting_date }}</td>
-            <td>{{ job.post_until }}</td>
+        <h5 class="card-title">{{ job.business_title }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ job.agency }}</h6>
+        <p class="card-text">Civil Service Title : {{ job.civil_service_title}} <br>
+            <b>Job Career Level</b> : {{ job.career_level }} <br>
+            <b>Job Work Location</b>: {{ job.work_location_1 }}<br>
+            <b>Job Posting Date :</b> {{ job.posting_date }}<br>
+            <b>Job Work Location :</b> {{ job.post_until }}<br></p>
 
+        <a href="#" class="card-link">Apply Now</a>
+        <a href="#" class="card-link">Read More</a>
+    </div>
 
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
- 
+</div>
+{% endfor %}
 {% endblock %}}
