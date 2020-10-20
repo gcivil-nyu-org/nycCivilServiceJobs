@@ -18,10 +18,10 @@ class SignUpView(CreateView):
     template_name = 'register/signup.html'
 
     def form_valid(self, form):
-        """
-        The user has provided valid credentials (this was checked in AuthenticationForm.is_valid()). So now we
-        can log him in.
-        """
+        # """
+        # The user has provided valid credentials (this was checked in AuthenticationForm.is_valid()). So now we
+        # can log him in.
+        # """
 
         first_name = form.cleaned_data.get("first_name")
         current_site = get_current_site(self.request)
@@ -50,8 +50,9 @@ class SignUpView(CreateView):
             return redirect(reverse('signin:success'))
         return super(SignUpView, self).get(request, *args, **kwargs)
 
+
 class SuccessView(View):
     def get(self, request, *args, **kwargs):
-        return render(request = request,
-                        template_name = "register/success.html",
-                        context={"user":request.user})
+        return render(request=request,
+                      template_name="register/success.html",
+                      context={"user": request.user})
