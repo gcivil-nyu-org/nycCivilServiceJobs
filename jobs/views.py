@@ -11,11 +11,16 @@ from register.forms import SignUpForm
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
+from .models import job_record
+
+data = job_record.objects.all()
+
 
 class GetData(TemplateView):
-    template_name = 'jobs.html'
+    template_name = "jobs.html"
+
     def get_context_data(self, *args, **kwargs):
         context = {
-            'jobs' : getJobs(),
+            "jobs": data,
         }
         return context
