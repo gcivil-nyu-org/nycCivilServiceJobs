@@ -1,16 +1,8 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="container">
-    <div class="row">
-        <aside class="col-sm-4" style="margin: auto">
-
-            <h1 class="mt-2">nycCivilServiceJobs</h1>
-        </aside>
-    </div>
-</div>
+{% extends "generic_base.html" %} {% block content %}
 
 <div class="container">
-<h2>Welcome! {{user.username}}</h2>
-<p>You have been successfully registered. Please click <a href="\signin"> here</a> to login.</p>
+    <h2 class="mt-3" style="text-align:center">Thank You! You have been successfully registered. {{user.username}}</h2>
+    <!-- <p>You have been successfully registered. Please click <a href="\signin"> here</a> to login.</p> -->
+
 </div>
 {% endblock %}

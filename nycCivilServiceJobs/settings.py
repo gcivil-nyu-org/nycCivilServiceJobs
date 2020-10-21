@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
+    'examresults.apps.ExamresultsConfig',
+    'jobs.apps.JobsConfig',
     'register.apps.RegisterConfig',
     'signin',
     'django.contrib.admin',
@@ -144,3 +146,7 @@ DEFAULT_FROM_EMAIL = "nycCivilServiceJobs Team <noreply@nycCivilServiceJobs.com>
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 django_heroku.settings(locals())
+
+
+#User Model with added Hiring Manger Field
+AUTH_USER_MODEL = 'register.User'

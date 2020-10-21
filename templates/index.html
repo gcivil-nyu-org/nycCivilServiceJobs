@@ -1,41 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>NYC Civil Services</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-
-<body>
-
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">nycCivilServiceJobs</a>
-            </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#">Jobs</a></li>
-                <li><a href="#">Exams</a></li>
-                <li><a href="#">About Us</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <a class="btn btn-success navbar-btn" href="{% url 'signin:signin' %}">Sign In</a>
-                <!-- <li><a href="\login">Login</a></li> -->
-            </ul>
+{% extends 'generic_base.html' %} {% load static %} {% block content %}
+<div class="container">
+    <div class="row">
+        <div style="margin: auto">
+            <h1>Welcome</h1>
         </div>
-    </nav>
-
-    <div class="container">
-        <div class="row">
-            <div>
-                <h1 class="text-center">Welcome</h1>
-            </div>
-        </div>
-
-</body>
-
-</html>
+    </div>
+</div>
+{% endblock %}}
