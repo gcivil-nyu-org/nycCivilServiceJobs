@@ -4,7 +4,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from register import form
+from register import forms
 
 
 class RegistrationFormTests(TestCase):
