@@ -1,8 +1,7 @@
 from django.urls import path
-from examresults.views import *
-from django.views.generic import TemplateView
+from examresults.views import ExamsActiveView
 
-app_name = 'examresults'
+app_name = "examresults"
 urlpatterns = [
-    path('', ExamsActiveView.as_view(), name='exams'),
+    path("", ExamsActiveView.as_view(), name="exams"),
 ]
