@@ -4,4 +4,4 @@
 max-line-length = 88
 
 # Exclude auto generated files during migration
-exclude = */migrations/*
+exclude = */migrations/*,getdata.py
