@@ -10,15 +10,6 @@ class SignUpForm(UserCreationForm):
     last_name = forms.CharField(max_length=30)
     email = forms.EmailField(max_length=254)
     username = forms.CharField(max_length=30)
-    CHOICES_SQ = [('MN', "What is Your Mother\'s maiden name"),
-                  ('VS', "What is your favorite vacation spot?"),
-                  ('NM', "What was your childhood nickname?"),
-                  ('CF', "What is the name of your favorite childhood friend?"),
-                  ('FJ', "In what city or town was your first job?")]
-
-    security_ques = forms.CharField(
-        label='Security Question', widget=forms.Select(choices=CHOICES_SQ))
-    security_ans = forms.CharField(label='Answer', max_length=100)
     CHOICES_AT = [(False, 'Job Seeker'), (True, 'Hiring Manager')]
     is_hiring_manager = forms.ChoiceField(choices=CHOICES_AT, label="Account Type",
                                           widget=forms.Select(), required=True)
@@ -37,8 +28,6 @@ class SignUpForm(UserCreationForm):
             'email',
             'password1',
             'password2',
-            'security_ques',
-            'security_ans',
         ]
 
     def clean_email(self):
@@ -47,9 +36,9 @@ class SignUpForm(UserCreationForm):
             raise ValidationError(
                 "This Email is already registered. Please use a different email address.")
 
-        account_type = self.cleaned_data.get('acc_type')
+        is_hiring_manager = self.cleaned_data.get('is_hiring_manager')
         email_domain = email[-4:]
-        if account_type == 'hm' and email_domain != '.gov':
+        if is_hiring_manager == 'True' and email_domain != '.gov':
             raise ValidationError(
                 "This email is not a valid Email Address for Hiring Manager. Please use a different email address.")
         return self.cleaned_data.get('email')
