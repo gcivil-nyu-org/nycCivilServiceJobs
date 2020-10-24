@@ -146,7 +146,7 @@ EMAIL_HOST_PASSWORD = "ickmxllehcjescwh"
 DEFAULT_FROM_EMAIL = "nycCivilServiceJobs Team <noreply@nycCivilServiceJobs.com>"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-django_heroku.settings(locals())
+django_heroku.settings(locals(),test_runner=False)
 
 
 # User Model with added Hiring Manger Field
