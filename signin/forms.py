@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+
 # from signin.models import User
 
 
@@ -13,8 +14,7 @@ class EmailValidationOnForgotPassword(PasswordResetForm):
 
         if User.objects.filter(email__iexact=email, is_active=False).exists():
             raise ValidationError(
-                "You need to activate your account first."
-                "Please check your email."
+                "You need to activate your account first." "Please check your email."
             )
 
         if not User.objects.filter(email__iexact=email, is_active=True).exists():

@@ -1,0 +1,7 @@
+[flake8]
+
+# 88 is Black's default line length
+max-line-length = 92
+
+# Exclude auto generated files during migration
+exclude = */migrations/*,getdata.py,updatedata.py
