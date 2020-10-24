@@ -14,49 +14,42 @@
 #     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 
 from django.contrib.auth import views as auth_views
-from django.urls import include, path, reverse_lazy
-from signin.views import *
+from django.urls import path, reverse_lazy
+from signin.views import SignInView, SuccessView
 
 app_name = "signin"
 urlpatterns = [
-    path(
-        "", SignInView.as_view(), name="signin"
-    ),
-
-    path(
-        "success", SuccessView.as_view(), name="success"
-    ),
-
+    path("", SignInView.as_view(), name="signin"),
+    path("success", SuccessView.as_view(), name="success"),
     path(
         "password_reset/",
         auth_views.PasswordResetView.as_view(
             template_name="signin/password_reset.html",
             email_template_name="signin/password_reset_email.html",
-            success_url=reverse_lazy("signin:password_reset_done")
+            success_url=reverse_lazy("signin:password_reset_done"),
         ),
-        name="password_reset"
+        name="password_reset",
     ),
-
     path(
         "password_reset_done/",
         auth_views.PasswordResetDoneView.as_view(
-            template_name="signin/password_reset_sent.html"),
-        name="password_reset_done"
+            template_name="signin/password_reset_sent.html"
+        ),
+        name="password_reset_done",
     ),
-
     path(
         "password_reset_confirm/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(
             template_name="signin/password_reset_confirm.html",
-            success_url=reverse_lazy("signin:password_reset_complete")
+            success_url=reverse_lazy("signin:password_reset_complete"),
         ),
-        name="password_reset_confirm"
+        name="password_reset_confirm",
     ),
-
     path(
-        'password_reset_complete/',
+        "password_reset_complete/",
         auth_views.PasswordResetCompleteView.as_view(
-            template_name="signin/password_reset_complete.html"),
-        name="password_reset_complete"
+            template_name="signin/password_reset_complete.html"
+        ),
+        name="password_reset_complete",
     ),
 ]
