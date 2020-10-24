@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.core import mail
 from django.urls import reverse
-from pdb import set_trace
 from register.models import User
 
 
@@ -105,7 +104,7 @@ class PasswordResetTest(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, "Password reset on testserver")
         # The password reset email sent page should be displayed.
-        response1 = self.client.get(response.url)
+        response1 = self.client.get(url)
         self.assertEqual(response1.template_name[0], "signin/password_reset_sent.html")
 
     def test_c_password_reset(self):

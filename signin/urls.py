@@ -14,8 +14,8 @@
 #     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 
 from django.contrib.auth import views as auth_views
-from django.urls import include, path, reverse_lazy
-from signin.views import *
+from django.urls import path, reverse_lazy
+from signin.views import SignInView, SuccessView
 
 app_name = "signin"
 urlpatterns = [

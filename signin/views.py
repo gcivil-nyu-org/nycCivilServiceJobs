@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, reverse
-from django.contrib.auth.forms import *
-from django.contrib.auth import *
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from django.views.generic import *
+from django.views.generic import FormView
 from django.views import View
-from django.contrib.auth.decorators import login_required
 
 
 class SignInView(FormView):
@@ -13,8 +12,9 @@ class SignInView(FormView):
 
     def form_valid(self, form):
         # """
-        # The user has provided valid credentials (this was checked in AuthenticationForm.is_valid()). So now we
-        # can log him in.
+        # The user has provided valid credentials
+        # (this was checked in AuthenticationForm.is_valid()).
+        # So now we can log him in.
         # """
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
