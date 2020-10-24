@@ -1,6 +1,131 @@
 {% extends 'generic_base.html' %} 
 {% load static %} 
 {% block content %}
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Jobs</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'jobs/style.css' %}">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <main role="main" class="container">
+
+      <h4>Filter Jobs</h4>
+      <form method="GET" action=".">
+        <div class="form-row">
+            <div class="form-group col-12">
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" type="search" name="title_contains" placeholder="Civil Service Title..." />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-12">
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" type="search" name="id_exact" placeholder="Exact Job ID..." />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-12">
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" type="search" name="title_or_agency" placeholder="Business Title or Agency..." />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-2 col-lg-2">
+            <label for="viewCountMin">Salary Range From</label>
+            <input type="number" min=0 class="form-control" id="salaryRangeFrom" placeholder="25000" name="salary_range_from">
+          </div>
+          <div class="form-group col-md-2 col-lg-2">
+            <label for="viewCountMax">Salary Range To</label>
+            <input type="number" min=0 class="form-control" id="salaryRangeTo" placeholder="150000" name="salary_range_to">
+          </div>
+          <div class="form-group col-md-2 col-lg-2">
+            <label for="publishDateMin">Posting date</label>
+            <input type="date" class="form-control" id="postingDate" name="posting_date">
+          </div>
+          <div class="form-group col-md-2 col-lg-2">
+            <label for="publishDateMax">Post Until</label>
+            <input type="date" class="form-control" id="postUntil" name="post_until">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="category">Career Level</label>
+            <select id="careerLevel" class="form-control" name="career_level">
+              <option selected>Choose...</option>
+              {% for cat in categories %}
+              <option value="{{ cat }}">{{ cat }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="fulltime" name="fulltime">
+            <label class="form-check-label" for="fulltime">
+              Full-time
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+
+      <hr />
+
+      <div class="row">
+        <ul>
+          {% for job in queryset %}
+            <li>
+              {{ job.civil_service_title }}
+              <span>JobId: {{ job.job_id }}</span>
+{#              <span>#}
+{#                {% for cat in job.business_title.all %}#}
+{#                  {{ cat }}#}
+{#                {% endfor %}#}
+{#              </span>#}
+              <span>Posting date: {{ job.posting_date }}</span>
+              <span>Post until: {{ job.posting_date }}</span>
+            </li>
+            <hr />
+          {% endfor %}
+        </ul>
+      </div>
+
+    </main>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
+{# Job cards below #}
 <div class="container">
     <div class="row">
         <aside class="col-sm-5" style="margin: auto">
@@ -25,4 +150,9 @@
     <!-- row.// -->
 </div>
 <!--container end.//-->
+
+</body>
+
+</html>
+
 {% endblock %}}
