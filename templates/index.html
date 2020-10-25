@@ -1,9 +1,60 @@
-{% extends 'generic_base.html' %} {% load static %} {% block content %}
-<div class="container">
-    <div class="row">
-        <div style="margin: auto">
-            <h1>Welcome</h1>
+{% extends 'landing_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero-wrap js-fullheight">
+  <div class="overlay"></div>
+  <div class="container-fluid px-0">
+    <div class="row d-md-flex no-gutters slider-text align-items-end js-fullheight justify-content-end">
+      <img class="one-third align-self-end order-md-last img-fluid" src="{% static 'images/undraw_work_time_lhoj.svg' %}" alt="">
+      <div class="one-forth d-flex align-items-center ftco-animate js-fullheight">
+        <div class="text mt-5">
+          <p class="mb-4 mt-5 pt-5">We have <span class="number" data-number="200000">0</span> great job offers you deserve!</p>
+          <h1 class="mb-5">One stop for all your NYC Civil Service needs.</h1>
+
+          <div class="ftco-search">
+          <section class=  services-section bg-primary">
+            <div class="row">
+              <div class="col-md-12 ">
+                <div class="nav nav-pills text-center" id="v-pills-tab"  aria-orientation="vertical">
+                  <p class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill" aria-controls="v-pills-1" aria-selected="true">Find a Job</p>
+              </div>
+              </div>
+              <div class="col-md-12 tab-wrap">
+
+                <div class="tab-content p-5" id="v-pills-tabContent">
+
+                  <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
+                    <form action="#" class="search-job">
+                      <div class="row no-gutters">
+                        <div class="col-md-8">
+                          <div class="form-group">
+                            <div class="form-field">
+                              <div class="icon"><span class="icon-briefcase"></span></div>
+                              <input type="text" class="form-control" placeholder="eg. City Planner,  Web Developer">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md">
+                          <div class="form-group">
+                            <div class="form-field">
+                              <button type="submit" class="form-control btn btn-secondary">Search</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-{% endblock %}}
+
+
+
+{% endblock %}

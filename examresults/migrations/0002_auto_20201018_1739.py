@@ -6,27 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('examresults', '0001_initial'),
+        ("examresults", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='examresultsactive',
-            name='extention_date',
+            model_name="examresultsactive",
+            name="extention_date",
         ),
         migrations.AddField(
-            model_name='examresultsactive',
-            name='extension_date',
+            model_name="examresultsactive",
+            name="extension_date",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='examresultsactive',
-            name='anniversary_date',
+            model_name="examresultsactive",
+            name="anniversary_date",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='examresultsactive',
-            name='established_date',
+            model_name="examresultsactive",
+            name="established_date",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]
