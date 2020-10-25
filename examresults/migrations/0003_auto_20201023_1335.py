@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('examresults', '0002_auto_20201018_1739'),
+        ("examresults", "0002_auto_20201018_1739"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='examresultsactive',
-            options={'verbose_name_plural': 'Exam Results(Active)'},
+            name="examresultsactive",
+            options={"verbose_name_plural": "Exam Results(Active)"},
         ),
         migrations.AlterModelOptions(
-            name='examresultsterminated',
-            options={'verbose_name_plural': 'Exam Results(Terminated)'},
+            name="examresultsterminated",
+            options={"verbose_name_plural": "Exam Results(Terminated)"},
         ),
     ]

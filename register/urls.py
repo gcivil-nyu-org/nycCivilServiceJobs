@@ -16,14 +16,13 @@
 from django.urls import path
 from register.views import SignUpView, SuccessView
 from django.views.generic import TemplateView
-from django.contrib.auth import views as auth_views
-from . import views
 
-app_name = 'register'
+
+app_name = "register"
 urlpatterns = [
-    path('', SignUpView.as_view(), name='signup'),
-
-    path('success', SuccessView.as_view(), name='success'),
-
-    path('home', TemplateView.as_view(template_name='register/success.html'), name='home'),
+    path("", SignUpView.as_view(), name="signup"),
+    path("success", SuccessView.as_view(), name="success"),
+    path(
+        "home", TemplateView.as_view(template_name="register/success.html"), name="home"
+    ),
 ]

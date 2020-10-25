@@ -7,19 +7,19 @@ from django.views.generic import CreateView
 from django.views import View
 from register.forms import SignUpForm
 from django.core.mail import EmailMessage
-from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 
 
 # Sign Up View
 class SignUpView(CreateView):
     form_class = SignUpForm
-    success_url = reverse_lazy('register:success')
-    template_name = 'register/signup.html'
+    success_url = reverse_lazy("register:success")
+    template_name = "register/signup.html"
 
     def form_valid(self, form):
         # """
-        # The user has provided valid credentials (this was checked in AuthenticationForm.is_valid()). So now we
+        # The user has provided valid credentials
+        # (this was checked in AuthenticationForm.is_valid()). So now we
         # can log him in.
         # """
 
@@ -47,12 +47,14 @@ class SignUpView(CreateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect(reverse('signin:success'))
+            return redirect(reverse("signin:success"))
         return super(SignUpView, self).get(request, *args, **kwargs)
 
 
 class SuccessView(View):
     def get(self, request, *args, **kwargs):
-        return render(request=request,
-                      template_name="register/success.html",
-                      context={"user": request.user})
+        return render(
+            request=request,
+            template_name="register/success.html",
+            context={"user": request.user},
+        )
