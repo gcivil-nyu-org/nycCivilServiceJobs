@@ -1,10 +1,13 @@
-{% extends 'generic_base.html' %}
+{% extends 'landing_base.html' %}
 
 {% load static %}
 
+<br><br><br><br>
 {% block content %}
+<section class="ftco-section bg-light">
+  <div class="container">
     <table class="table">
-        <thead class="thread-dark">
+        <thead class="thread-dark sticky-top">
         <tr>
             <th>Exam Number</th>
             <th>List Title Code</th>
@@ -32,6 +35,11 @@
     </table>
 
 
+    <div class="row mt-5">
+        <div class="col text-center">
+          <div class="block-27">
+
+
     {% if is_paginated %}
 <ul class="pagination">
   {% if page_obj.has_previous %}
@@ -54,5 +62,9 @@
 </ul>
 {% endif %}
 </div>
+</div>
+</div>
+</div>
+</section>
 
 {% endblock %}

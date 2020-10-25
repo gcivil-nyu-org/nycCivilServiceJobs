@@ -1,23 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'landing_base.html' %}
 {% block content %}
 {% load crispy_forms_tags %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'register/signup.css' %}">
 
-<div class="container">
-    <div class="row">
-        <aside class="col-sm-4" style="margin: auto">
-
-            <h1 class="mt-2">nycCivilServiceJobs</h1>
-        </aside>
-    </div>
-</div>
-<div class="container">
+<div class="container" style="margin-block-start: 150pt;">
     <div class="row">
         <aside class="col-sm-8" style="margin: auto">
             <div class="card ">
                 <article class="card-body">
-                    <h4 class="card-title text-center mb-4 mt-1">Create Account</h4>
+                    <h4 class="card-title text-center mb-4 mt-1">Create NewAccount</h4>
                     <hr>
                     </style>
                     {% for message in messages %}
@@ -31,8 +23,8 @@
                         {{ form|crispy }}
 
                         <div class="form-group">
-                            <button class="btn btn-success" type="submit"> Register </button>
-                            <span>Already Registered? <a href="\signin">Login</a></span>
+                            <button class="btn btn-success" type="submit"> Submit </button>
+                            <span>Already have an Account ? <a href="\signin">Sign in</a></span>
                         </div> <!-- form-group// -->
                     </form>
                 </article>

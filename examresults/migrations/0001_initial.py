@@ -47,9 +47,9 @@ class Migration(migrations.Migration):
                     models.CharField(blank=True, max_length=30, null=True),
                 ),
                 ("published_date", models.DateTimeField(null=True)),
-                ("established_date", models.DateTimeField(blank=True, null=True)),
-                ("anniversary_date", models.DateTimeField(blank=True, null=True)),
-                ("extension_date", models.DateTimeField(blank=True, null=True)),
+                ("established_date", models.DateTimeField(null=True)),
+                ("anniversary_date", models.DateTimeField(null=True)),
+                ("extention_date", models.DateTimeField(null=True)),
                 (
                     "veteran_credit",
                     models.CharField(blank=True, max_length=100, null=True),
