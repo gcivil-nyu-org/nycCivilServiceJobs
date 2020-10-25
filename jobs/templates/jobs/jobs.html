@@ -1,4 +1,4 @@
-{% extends 'generic_base.html' %}
+{% extends 'landing_base.html' %}
 {% load static %}
 {% block content %}
 
@@ -10,58 +10,83 @@
     <title>Jobs</title>
 
 </head>
+<br>
+<br>
+<br>
+<br>
+<h4>Filter Jobs</h4>
+<form method="GET" action="{% url 'jobs:results' %}">
+    <div class="form-row">
+        <div class="form-group col-12">
+            <div class="input-group">
+                <input class="form-control py-2 border-right-0 border" type="search" name="q" id="id_q"
+                    value="{{request.GET.q}}" placeholder="Civil Service Title...Or...Business Title...Or...Agency" />
+                <span class="input-group-append">
+                    <div class="input-group-text bg-transparent">
+                        <i class="fa fa-search"></i>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
 
-<body>
 
-    <main role="main" class="container">
 
-        <h4>Filter Jobs</h4>
-        <form method="GET" action="{% url 'jobs:results' %}">
-            <div class="form-row">
-                <div class="form-group col-12">
-                    <div class="input-group">
-                        <input class="form-control py-2 border-right-0 border" type="search" name="q" id="id_q"
-                            value="{{request.GET.q}}"
-                            placeholder="Civil Service Title...Or...Business Title...Or...Agency" />
-                        <span class="input-group-append">
-                            <div class="input-group-text bg-transparent">
-                                <i class="fa fa-search"></i>
-                            </div>
-                        </span>
+    <button type="submit" class="btn btn-primary" method="get" action="{% url 'jobs:results' %}"
+        value="Search">Search</button>
+</form>
+
+<!--Job Card Starts here .//-->
+
+
+<section class="ftco-section bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row justify-content-center pb-3">
+                    <div class="col-md-12 heading-section ftco-animate">
+                        <span class="subheading">Recently Added Jobs</span>
+                        <h2 class="mb-4">Hot Jobs</h2>
                     </div>
                 </div>
-            </div>
-
-
-            <button type="submit" class="btn btn-primary" method="get" action="{% url 'jobs:results' %}"
-                value="Search">Search</button>
-        </form>
-
-        <!--Job Card Starts here .//-->
-        <div class="container">
-            <div class="row">
-                <aside class="col-sm-5" style="margin: auto">
+                <div class="row">
                     {% for job in jobs %}
-                    <div class="card">
-                        <article class="card-body">
-                            <h4 class="card-title text-center mb-4 mt-1">{{ job.business_title }}</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ job.agency }}</h6>
-                            <p class="card-text"><b>Civil Service Title</b> : {{ job.civil_service_title}} <br>
-                                <b>Job Career Level</b> : {{ job.career_level }} <br>
-                                <b>Job Work Location</b> : {{ job.work_location_1 }}<br>
-                                <b>Job Posting Date</b> : {{ job.posting_date }}<br>
-                                <b>Job Post Until</b> : {{ job.post_until }}<br></p>
-                            <a href="#" class="card-link">Apply Now</a>
-                            <a href="#" class="card-link">Read More</a>
-                        </article>
-                    </div>
+
+                    <div class="col-md-12 ftco-animate">
+                        <div class="job-post-item col-md-12 d-block d-lg-flex align-items-center">
+                            <div class="one-third mb-4 mb-md-0">
+                                <div class="job-post-item-header d-flex align-items-center">
+                                    <h2 class="mr-3 text-black"><a href="#">{{job.business_title}}</a></h2>
+                                    <div class="badge-wrap">
+                                        <span class="bg-primary text-white badge py-2 px-3">{{job.career_level}}</span>
+                                    </div>
+                                </div>
+                                <div class="job-post-item-body d-block d-md-flex">
+                                    <div class="mr-3"><span class="icon-layers"></span> <a href="#">{{job.agency}}</a>
+                                    </div>
+                                    <div><span class="icon-my_location"></span>
+                                        <span>{{job.work_location_1}}</span></div>
+                                </div>
+                            </div>
+
+                            <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
+                                <div>
+                                    <a href="#"
+                                        class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                        <span class="icon-heart"></span>
+                                    </a>
+                                </div>
+                                <a href="#" class="btn btn-primary py-2">Apply Job</a>
+                            </div>
+                        </div>
+                    </div><!-- end -->
                     {% endfor %}
-                </aside>
-                <!-- col.// -->
+                </div>
             </div>
-            <!-- row.// -->
         </div>
-        <!--container end.//-->
+    </div>
+
+</section>
 
 
 
@@ -69,4 +94,4 @@
 
 
 
-        {% endblock %}}
+{% endblock %}}
