@@ -42,20 +42,23 @@
                 value="Search">Search</button>
         </form>
 
-        <!--Job Card Starts here .//-->
+
+        <!--Searcg Job Card Starts here .//-->
+
         <div class="container">
             <div class="row">
                 <aside class="col-sm-5" style="margin: auto">
-                    {% for job in jobs %}
+
+                    {% for result in object_list %}
                     <div class="card">
                         <article class="card-body">
-                            <h4 class="card-title text-center mb-4 mt-1">{{ job.business_title }}</h4>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ job.agency }}</h6>
-                            <p class="card-text"><b>Civil Service Title</b> : {{ job.civil_service_title}} <br>
-                                <b>Job Career Level</b> : {{ job.career_level }} <br>
-                                <b>Job Work Location</b> : {{ job.work_location_1 }}<br>
-                                <b>Job Posting Date</b> : {{ job.posting_date }}<br>
-                                <b>Job Post Until</b> : {{ job.post_until }}<br></p>
+                            <h4 class="card-title text-center mb-4 mt-1">{{ result.business_title }}</h4>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ result.agency }}</h6>
+                            <p class="card-text"><b>Civil Service Title</b> : {{ result.civil_service_title}} <br>
+                                <b>Job Career Level</b> : {{ result.career_level }} <br>
+                                <b>Job Work Location</b> : {{ result.work_location_1 }}<br>
+                                <b>Job Posting Date</b> : {{ result.posting_date }}<br>
+                                <b>Job Post Until</b> : {{ result.post_until }}<br></p>
                             <a href="#" class="card-link">Apply Now</a>
                             <a href="#" class="card-link">Read More</a>
                         </article>
@@ -67,11 +70,4 @@
             <!-- row.// -->
         </div>
         <!--container end.//-->
-
-
-
-
-
-
-
         {% endblock %}}
