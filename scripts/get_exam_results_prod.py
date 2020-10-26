@@ -9,8 +9,6 @@ import requests
 import json
 import pandas as pd
 from sodapy import Socrata
-import csv
-import numpy as np
 from examresults.models import ExamResultsActive
 from examresults.models import ExamResultsTerminated
 from django.utils import timezone
