@@ -4,4 +4,4 @@
 max-line-length = 92
 
 # Exclude auto generated files during migration
-exclude = */migrations/*, get_exam_results_prod.py, update_exam_results_prod.py .py
+exclude = */migrations/*, scripts/*
