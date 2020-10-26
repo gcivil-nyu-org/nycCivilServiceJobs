@@ -45,7 +45,7 @@ def get_exam_result_terminated():
 
 def save_exam_result_active():
     ExamResultsActive.objects.all().delete()
-    print("Deleted Previous Entries")
+    print("Deleted Previous Entries for Active Exam Results")
 
     columns = [
         "exam_no",
@@ -79,6 +79,7 @@ def save_exam_result_active():
         except Exception as e:
             print("API Errors", e)
         else:
+            print(".", end="", flush=True)
             exam_result_list_df = pd.DataFrame.from_records(exam_result_list)
             exam_result_list_df = exam_result_list_df.replace(
                 r"^\s*$", None, regex=True
@@ -126,8 +127,7 @@ def save_exam_result_active():
                     print("Error", e)
             offset += limit
             ExamResultsActive.objects.bulk_create(entries, ignore_conflicts=True)
-
-    print("Created Objects in ExamResultsActive: ", ExamResultsActive.objects.count())
+    print("\nCreated Objects in ExamResultsActive: ", ExamResultsActive.objects.count())
 
 
 def save_exam_result_terminated():
@@ -138,6 +138,7 @@ def save_exam_result_terminated():
         print("Client Error", e)
     else:
         ExamResultsTerminated.objects.all().delete()
+        print("\nDeleted Previous Entries for Terminated Exam Results")
         exam_result_list_df = pd.DataFrame.from_records(exam_result_list)
         exam_result_list_df = exam_result_list_df.where(
             exam_result_list_df.notnull(), None
@@ -161,9 +162,13 @@ def save_exam_result_terminated():
                 )
             except Exception as e:
                 print("Error", e)
-                
+
         ExamResultsTerminated.objects.bulk_create(entries, ignore_conflicts=True)
-    print("Created Objects IN ExamResultsTerminated: ", ExamResultsTerminated.objects.count())
+        print(".", end="", flush=True)
+    print(
+        "\nCreated Objects IN ExamResultsTerminated: ",
+        ExamResultsTerminated.objects.count(),
+    )
 
 
 def getAwareDate(inputDate):
