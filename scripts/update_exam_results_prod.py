@@ -1,17 +1,18 @@
-import sys, os, django
-from django.core import serializers
+import sys
+import os
+import django
 
 sys.path.append("../nycCivilServiceJobs")  # here store is root folder(means parent).
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nycCivilServiceJobs.settings")
 django.setup()
 
-import requests
-import json
 import pandas as pd
 from sodapy import Socrata
-from examresults.models import ExamResultsActive, ExamResultsTerminated
+from examresults.models import ExamResultsActive
+from examresults.models import ExamResultsTerminated
 from django.utils import timezone
 import datetime
+
 
 client = Socrata(
     "data.cityofnewyork.us",
@@ -47,7 +48,6 @@ def update_exam_result_active():
     ]
     limit = 10000
     record_count = int(client.get("vx8i-nprf", select="COUNT(*)")[0]["COUNT"])
-    print(record_count)
     offset = 0
 
     entries = []
@@ -112,7 +112,7 @@ def update_exam_result_active():
                 print("Error", e)
         offset += limit
 
-    print("Found ", len(entries), "new entries")
+    print("Found ", len(entries), "new entries for Active")
     ExamResultsActive.objects.bulk_create(entries, ignore_conflicts=True)
 
 
@@ -156,7 +156,7 @@ def update_exam_result_terminated():
             except Exception as e:
                 print("Error", e)
 
-        print("Found ", len(entries), "new entries")
+        print("Found ", len(entries), "new entries in Terminated")
         ExamResultsTerminated.objects.bulk_create(entries, ignore_conflicts=True)
 
 

@@ -5,8 +5,6 @@ sys.path.append("../nycCivilServiceJobs")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nycCivilServiceJobs.settings")
 django.setup()
 
-import requests
-import json
 import pandas as pd
 from sodapy import Socrata
 from examresults.models import ExamResultsActive
@@ -74,7 +72,6 @@ def save_exam_result_active():
 
     limit = 10000
     record_count = int(client.get("vx8i-nprf", select="COUNT(*)")[0]["COUNT"])
-    print(record_count)
     offset = 0
     while offset < record_count:
         try:
@@ -128,8 +125,9 @@ def save_exam_result_active():
                 except Exception as e:
                     print("Error", e)
             offset += limit
-
             ExamResultsActive.objects.bulk_create(entries, ignore_conflicts=True)
+
+    print("Created Objects in ExamResultsActive: ", ExamResultsActive.objects.count())
 
 
 def save_exam_result_terminated():
@@ -163,9 +161,9 @@ def save_exam_result_terminated():
                 )
             except Exception as e:
                 print("Error", e)
-
-        print("Created Objects")
+                
         ExamResultsTerminated.objects.bulk_create(entries, ignore_conflicts=True)
+    print("Created Objects IN ExamResultsTerminated: ", ExamResultsTerminated.objects.count())
 
 
 def getAwareDate(inputDate):
