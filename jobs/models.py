@@ -37,8 +37,8 @@ class job_record(models.Model):
     posting_updated = models.DateTimeField(null=True, blank=True)
     process_date = models.DateTimeField(null=True, blank=True)
 
-    def __int__(self):
-        return self.job_id
+    def __str__(self):
+        return str(self.job_id)
 
     class Meta:
         verbose_name_plural = "Job Records"
