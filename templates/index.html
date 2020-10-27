@@ -26,24 +26,25 @@
                 <div class="tab-content p-5" id="v-pills-tabContent">
 
                   <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
-                    <form action="#" class="search-job">
+                    <form method="GET" action="{% url 'jobs:results' %}" class="search-job">
                       <div class="row no-gutters">
                         <div class="col-md-8">
                           <div class="form-group">
                             <div class="form-field mr-2">
-                              <div class="icon"><span class="icon-briefcase"></span></div>
-                              <input type="text" class="form-control" placeholder="eg.CIvil Service Title OR Business Title ">
-                            </div>
+                              <div class="icon"><span class="icon-pencil"></span></div>
+                                    <input class="form-control border-right-0 border" type="search" name="q" id="id_q"  placeholder="Civil Service Title, Business Title, or Agency" />
+                              
+                                </div>
                           </div>
-                        </div>
-                        <div class="col-md">
-                          <div class="form-group">
-                            <div class="form-field">
-                              <button type="submit" class="form-control btn btn-secondary">Search</button>
-                            </div>
                           </div>
+                            <div class="col-md">
+                              <div class="form-group">
+                                <div class="form-field">
+                                  <button type="submit" class="form-control btn btn-secondary">Search</button>
+                                </div>
+                              </div>
+                            </div>
                         </div>
-                      </div>
                     </form>
                   </div>
                   <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-performance-tab">
