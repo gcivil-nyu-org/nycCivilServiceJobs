@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 # from sodapy import Socrata
 from django.urls import reverse
 from django.db.models import QuerySet
