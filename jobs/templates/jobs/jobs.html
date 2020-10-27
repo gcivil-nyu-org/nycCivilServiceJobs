@@ -1,5 +1,6 @@
 {% extends 'landing_base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
 
 <head>
@@ -20,7 +21,7 @@
         <div class="form-group col-12 col-md-8">
             <div class="input-group">
                 <input class="form-control py-2 border-right-0 border" type="search" name="q" id="id_q"
-                    value="{{request.GET.q}}" placeholder="Civil Service Title...Or...Business Title...Or...Agency" />
+                    value="{{request.GET.q}}" placeholder="Civil Service Title, Business Title, or Agency" />
                 <span class="input-group-append">
                     <div class="input-group-text bg-transparent">
                         <i class="fa fa-search"></i>
@@ -60,28 +61,28 @@
                             <div class="job-post-item-header align-items-center">
                                 <span class="bg-primary text-white badge py-2 px-3">{{job.posting_type}}</span>
                                 <span class="bg-primary text-white badge py-2 px-3"
-                                    style="margin-left: 5px">{{job.career_level }}</span>
+                                style="margin-left: 5px">{{job.career_level }}</span>
                                 {% if job.post_until is None %}
                                 <span class="bg-primary text-white badge py-2 px-3"
-                                    style="margin-left: 5px">Deadline:Until Position is Filled</span>
+                                    style="margin-left: 5px">Deadline: Until Position is Filled</span>
                                 {% else %}
                                 <span class="bg-primary text-white badge py-2 px-3"
-                                    style="margin-left: 5px">Deadline:{{job.post_until }}</span>
+                                    style="margin-left: 5px">Deadline: {{job.post_until }}</span>
                                 {% endif %}
 
-                                <h2 >
-                                <a class="mr-3 text-black" data-toggle="collapse" href="#demo{{job.id}}">{{job.business_title}}</a> </h2>
+                                <h2 ><a class="mr-2 text-black" data-toggle="collapse" href="#demo{{job.id}}">{{job.business_title}}</a> </h2>
 								<div id="demo{{job.id}}" class="collapse">
-                                    {% if job.job.full_time_part_time_indicator is F %}
-                                    <p><b>Full time/PartTime:</b>Full-Time</p>
+                                    <p><b>Title Classification: </b>{{job.title_classification}}</p>
+                                    {% if job.full_time_part_time_indicator == 'F' %}
+                                    <p><b>Full-time/Part-Time: </b>Full-Time</p>
                                     {% else %}
-                                    <p><b>Full time/PartTime:</b>Part-Time</p>
+                                    <p><b>Full-time/Part-Time: </b>Part-Time</p>
                                     {% endif %}
-                                    <p><b>Recidency Requirement:</b>{{job.residency_requirement}}</p>
-                                    <p><b>Last Updated / Date Posted :</b>{{job.posting_date}}</p>
-                                    <p><b>Title Classification:</b>{{job.title_classification}}</p>
-                                    <p><b>Salary Range:</b>{{job.salary_range_from}} - {{job.salary_range_to}}
-                                        {{job.salary_frequency}}</p>
+                                    <p><b>Recidency Requirement: </b>{{job.residency_requirement}}</p>
+                                    <p><b>Last Updated/Date Posted: </b>{{job.posting_date}}</p>
+                                    <p><b>Title Classification: </b>{{job.title_classification}}</p>
+                                    <p><b>Salary Range: </b>$ {{job.salary_range_from|floatformat:2|intcomma }} - $ {{job.salary_range_to|floatformat:2|intcomma }}
+                                        ({{job.salary_frequency}})</p>
                                 </div>
                             </div>
                             <div class="job-post-item-body d-block d-md-flex">
