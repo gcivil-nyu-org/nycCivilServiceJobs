@@ -8,7 +8,7 @@ class JobsView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = {
-            "jobs": job_record.objects.all(),
+            "jobs": job_record.objects.all().order_by("posting_date").reverse()[:10],
         }
         return context
 
