@@ -33,7 +33,7 @@
     <!-- START nav -->
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'index' %}"><img border="0" alt="nycCivilServiceJobs" src="{% static 'images/Logo.png' %}"  height="100"></a>
+        <a class="navbar-brand" href="{% url 'index' %}"><img alt="nycCivilServiceJobs" src="{% static 'images/Logo.png' %}"  height="80"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="oi oi-menu"></span> Menu
         </button>
@@ -57,7 +57,7 @@
         <li class="nav-item cta mr-md-1"><a href="{% url 'logout' %}" class="nav-link">Log Out</a></li>
 
         {% else %}
-      <li class="nav-item cta mr-md-1"><a href="{% url 'signin:signin' %}" class="nav-link">Sign In</a></li>
+      <li class="nav-item cta mr-md-1" id="signin" ><a href="{% url 'signin:signin' %}" class="nav-link">Sign In</a></li>
         {% endif %}
 
         </div>

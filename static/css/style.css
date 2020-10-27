@@ -448,8 +448,8 @@ pre {
 
 .container {
   width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+/*   padding-right: 15px;
+  padding-left: 15px; */
   margin-right: auto;
   margin-left: auto; }
   @media (min-width: 576px) {
@@ -1345,6 +1345,14 @@ pre {
     border-bottom: 2px solid #dee2e6; }
   .table tbody + tbody {
     border-top: 2px solid #dee2e6; }
+
+    th.sticky-header {
+      position: sticky;
+      top: 100px;
+      z-index: 10;
+      padding:10px;
+      background-color: white;
+    }
 
 .table-sm th,
 .table-sm td {
