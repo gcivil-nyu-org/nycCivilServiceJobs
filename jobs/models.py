@@ -17,7 +17,7 @@ class job_record(models.Model):
     full_time_part_time_indicator = models.CharField(
         max_length=50, null=True, blank=True
     )  # Full-time/Part-time
-     = models.CharField(max_length=200, null=True, blank=True)
+    models.CharField(max_length=200, null=True, blank=True)
     salary_range_from = models.FloatField(null=True, blank=True)
     salary_range_to = models.FloatField(null=True, blank=True)
     salary_frequency = models.CharField(max_length=50, null=True, blank=True)
