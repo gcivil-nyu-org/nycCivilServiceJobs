@@ -2,6 +2,12 @@ from django.test import TestCase
 from django.core import mail
 from django.urls import reverse
 from register.models import User
+from signin.apps import SigninConfig
+
+
+class SigninConfigTest(TestCase):
+    def test_apps(self):
+        self.assertEqual(SigninConfig.name, "signin")
 
 
 class SigninTest(TestCase):
@@ -60,6 +66,13 @@ class SigninTest(TestCase):
         messages = list(response.context["messages"])
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), "Invalid username or password.")
+        form = response.context["form"]
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["__all__"][0],
+            "Please enter a correct username and password. "
+            "Note that both fields may be case-sensitive.",
+        )
 
     def test_wrong_password(self):
 
