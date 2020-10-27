@@ -53,7 +53,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="row">
                 {% for result in object_list %}
                 <div class="col-md-12 ftco-animate">
                     <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
@@ -70,9 +69,8 @@
                                     style="margin-left: 5px">Deadline:{{result.post_until }}</span>
                                 {% endif %}
 
-                                <h2 class="mr-3 text-black" data-toggle="collapse" data-target="#demo"><a
-                                        href="#">{{result.business_title}}</a></h2>
-                                <div id="demo" class="collapse">
+                                <h2 ><a class="mr-3 text-black" data-toggle="collapse" href="#demo{{result.id}}">{{result.business_title}}</a> </h2>
+								<div id="demo{{result.id}}" class="collapse">
                                     <p><b>Title Classification:</b>{{job.title_classification}}</p>
                                     {% if result.full_time_part_time_indicator is F %}
                                     <p><b>Full time/PartTime:</b>Full-Time</p>
@@ -87,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="job-post-item-body d-block d-md-flex">
-                                <div class="mr-3"><span class="icon-layers"></span> <a href="#">{{result.agency}}</a>
+                                <div class="mr-3"><span class="icon-layers"></span> <a>{{result.agency}}</a>
                                 </div>
                                 <div><span class="icon-person"></span> <span>{{result.civil_service_title}}</span></div>
                             </div>
@@ -105,11 +103,6 @@
                     </div>
                 </div><!-- end -->
                 {% endfor %}
-
-
-            </div>
-
-
         </div>
     </div>
 </section>
