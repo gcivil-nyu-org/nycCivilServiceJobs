@@ -16,96 +16,100 @@
 <br>
 <br>
 <br>
-<form method="GET" action="{% url 'jobs:results' %}">
-    <div class="form-row">
-        <div class="col"></div>
-        <div class="form-group col-12 col-md-8">
-            <div class="input-group">
-                <input class="form-control py-2 border-right-0 border" type="search" name="q" id="id_q"
-                    value="{{request.GET.q}}" placeholder="Civil Service Title, Business Title, or Agency" />
-                <span class="input-group-append">
-                    <div class="input-group-text bg-transparent">
-                        <i class="fa fa-search"></i>
-                    </div>
-                </span>
-            </div>
-        </div>
-        <div class="col"></div>
-        <button type="submit" class="btn btn-primary col" method="get" action="{% url 'jobs:results' %}"
-            value="Search">Search</button>
-        <div class="col"></div>
 
-    </div>
-
-
-
-
-</form>
-
-<!--Job Card Starts here .//-->
 
 <section class="ftco-section bg-light">
+    <form method="GET" action="{% url 'jobs:results' %}">
+        <div class="form-row">
+            <div class="col"></div>
+            <div class="form-group col-10">
+                <div class="input-group">
+                    <input class="form-control border-right-0 border" type="search" name="q" id="id_q"
+                        value="{{request.GET.q}}" placeholder="Civil Service Title, Business Title, or Agency" />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <button type="submit" class="form-group btn btn-primary" method="get" action="{% url 'jobs:results' %}"
+                value="Search">Search</button>
+            <div class="col"></div>
+        </div>
+    </form>
+    <!--Job Card Starts here .//-->
     <div class="container">
         <div class="col-md-12">
             <div class="row justify-content-center pb-3">
                 <div class="col-md-12 heading-section ftco-animate">
-                    <span class="subheading">Searched Results</span>
-                    <h2 class="mb-4">Searched Jobs present in NYC-Civil-Services</h2>
+                    <h2 class="mb-4">Found {{object_list.count}} matching jobs: </h2>
                 </div>
             </div>
         </div>
         <div class="row">
-                {% for result in object_list %}
-                <div class="col-md-12 ftco-animate">
-                    <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-                        <div class="one-third mb-4 mb-md-0">
-                            <div class="job-post-item-header align-items-center">
-                                <span class="bg-primary text-white badge py-2 px-3">{{result.posting_type}}</span>
-                                <span class="bg-primary text-white badge py-2 px-3"
-                                    style="margin-left: 5px">{{result.career_level }}</span>
-                                {% if result.post_until is None %}
-                                <span class="bg-primary text-white badge py-2 px-3"
-                                    style="margin-left: 5px">Deadline: Until Position is Filled</span>
-                                {% else %}
-                                <span class="bg-primary text-white badge py-2 px-3"
-                                    style="margin-left: 5px">Deadline: {{result.post_until }}</span>
-                                {% endif %}
+            {% if object_list %}
+            {% for result in object_list %}
+            <div class="col-md-12 ftco-animate">
+                <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+                    <div class="one-third mb-4 mb-md-0">
+                        <div class="job-post-item-header align-items-center">
+                            <span class="bg-primary text-white badge py-2 px-3">{{result.posting_type}}</span>
+                            <span class="bg-primary text-white badge py-2 px-3"
+                                style="margin-left: 5px">{{result.career_level }}</span>
+                            {% if result.post_until is None %}
+                            <span class="bg-primary text-white badge py-2 px-3" style="margin-left: 5px">Deadline:
+                                Until
+                                Position is Filled</span>
+                            {% else %}
+                            <span class="bg-primary text-white badge py-2 px-3" style="margin-left: 5px">Deadline:
+                                {{result.post_until }}</span>
+                            {% endif %}
 
-                                <h2 ><a class="mr-2 text-black" data-toggle="collapse" href="#demo{{result.id}}">{{result.business_title}}</a> </h2>
-								<div id="demo{{result.id}}" class="collapse">
-                                    <p><b>Title Classification: </b>{{result.title_classification}}</p>
-                                    {% if result.full_time_part_time_indicator == 'F' %}
-                                    <p><b>Full-time/Part-Time: </b>Full-Time</p>
-                                    {% else %}
-                                    <p><b>Full-time/Part-Time: </b>Part-Time</p>
-                                    {% endif %}
-                                    <p><b>Recidency Requirement: </b>{{result.residency_requirement}}</p>
-                                    <p><b>Last Updated/Date Posted: </b>{{result.posting_date}}</p>
-                                    <p><b>Title Classification: </b>{{result.title_classification}}</p>
-                                    <p><b>Salary Range: </b>$ {{result.salary_range_from|floatformat:2|intcomma }} - $ {{result.salary_range_to|floatformat:2|intcomma }}
-                                        ({{result.salary_frequency}})</p>
-                                </div>
-                            </div>
-                            <div class="job-post-item-body d-block d-md-flex">
-                                <div class="mr-3"><span class="icon-layers"></span> <a>{{result.agency}}</a>
-                                </div>
-                                <div><span class="icon-person"></span> <span>{{result.civil_service_title}}</span></div>
+                            <h2><a class="mr-2 text-black" data-toggle="collapse"
+                                    href="#demo{{result.id}}">{{result.business_title}}</a> </h2>
+                            <div id="demo{{result.id}}" class="collapse">
+                                <p><b>Title Classification: </b>{{result.title_classification}}</p>
+                                {% if result.full_time_part_time_indicator == 'F' %}
+                                <p><b>Full-time/Part-Time: </b>Full-Time</p>
+                                {% else %}
+                                <p><b>Full-time/Part-Time: </b>Part-Time</p>
+                                {% endif %}
+                                <p><b>Recidency Requirement: </b>{{result.residency_requirement}}</p>
+                                {% if result.posting_updated %}
+                                <p><b>Last Updated: </b> {{result.posting_updated}}</p>
+                                {% else %}
+                                <p><b>Posted Dated: </b> {{result.posting_date}}</p>
+                                {% endif %}
+                                <p><b>Title Classification: </b>{{result.title_classification}}</p>
+                                <p><b>Salary Range: </b>${{result.salary_range_from|floatformat:2|intcomma }} -
+                                    ${{result.salary_range_to|floatformat:2|intcomma }}
+                                    ({{result.salary_frequency}})</p>
                             </div>
                         </div>
-
-                        <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-                            <div>
-                                <a href="#"
-                                    class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                                    <span class="icon-heart"></span>
-                                </a>
+                        <div class="job-post-item-body d-block d-md-flex">
+                            <div class="mr-3"><span class="icon-layers"></span> <a>{{result.agency}}</a>
                             </div>
-                            <a href="#" class="btn btn-primary py-2">Apply Job</a>
+                            <div><span class="icon-person"></span> <span>{{result.civil_service_title}}</span></div>
                         </div>
                     </div>
-                </div><!-- end -->
-                {% endfor %}
+
+                    <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
+                        <div>
+                            <a href="#"
+                                class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                <span class="icon-heart"></span>
+                            </a>
+                        </div>
+                        <a href="#" class="btn btn-primary py-2">Apply Job</a>
+                    </div>
+                </div>
+            </div><!-- end -->
+            {% endfor %}
         </div>
+        {% else %}
+        <h2 class="mb-4">No results found at this time.</h2>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

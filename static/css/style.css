@@ -8601,9 +8601,9 @@ h1, h2, h3, h4, h5,
         background: #28a745;
         color: #fff; }
   .btn.btn-secondary {
-    border: 1px solid #ff6347 !important;
-    color: #fff !important;
-    background: #ff6347 !important; }
+    border: 1px solid #28a745 !important;
+    color: #28a745 !important;
+    background: #28a745 !important; }
     .btn.btn-secondary:hover {
       border: 1px solid #28a745;
       background: transparent;
@@ -9090,7 +9090,6 @@ h1, h2, h3, h4, h5,
     background-repeat: no-repeat;
     background-position: center center;
     position: relative;
-    padding: 4em 0;
     background: #28a745; }
   .ftco-section-parallax .heading-section-white h2 {
     font-weight: 400 !important; }
@@ -9156,11 +9155,11 @@ textarea.form-control {
   font-size: 24px; }
 
 .ftco-section {
-  padding: 7em 0;
-  position: relative; }
+  padding: 0.75em;
+  position: relative;}
   @media (max-width: 767.98px) {
     .ftco-section {
-      padding: 6em 0; } }
+      padding: 0.75em 0; } }
 
 .ftco-no-pt {
   padding-top: 0; }
