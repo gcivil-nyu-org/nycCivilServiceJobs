@@ -96,8 +96,12 @@ def save_Jobs():
                             posting_type=row["posting_type"],
                             num_positions=row["number_of_positions"],
                             business_title=row["business_title"],
-                            civil_service_title=row["civil_service_title"],
-                            title_classification=row["title_classification"],
+                            civil_service_title=civil_service_title_cleanup(
+                                row["civil_service_title"]
+                            ),
+                            title_classification=title_classification_cleanup(
+                                row["title_classification"]
+                            ),
                             title_code_no=row["title_code_no"],
                             level=row["level"],
                             job_category=row["job_category"],
@@ -156,6 +160,17 @@ def convertDateFormat(inputDate):
     if not inputDate:
         return
     return datetime.datetime.strptime(inputDate, "%d-%b-%Y").strftime("%Y-%m-%d")
+
+
+def civil_service_title_cleanup(s):
+    if s[-1] == "(":
+        s = s[: len(s) - 1]
+    return s
+
+
+def title_classification_cleanup(s):
+    s = s[: len(s) - 2]
+    return s
 
 
 if __name__ == "__main__":
