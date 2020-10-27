@@ -20,7 +20,6 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         query = self.request.GET.get("q", None)
         if not query:
-            template_name = "jobs/jobs.html"
 
             def get_context_data(self, *args, **kwargs):
                 context = {

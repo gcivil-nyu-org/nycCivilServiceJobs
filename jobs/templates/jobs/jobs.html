@@ -21,15 +21,10 @@
     <form method="GET" action="{% url 'jobs:results' %}">
         <div class="form-row">
             <div class="col"></div>
-            <div class="form-group col-10">
+            <div class="form-group col col-md-6">
                 <div class="input-group">
-                    <input class="form-control border-right-0 border" type="search" name="q" id="id_q"
+                    <input class="form-control" type="search" name="q" id="id_q"
                         value="{{request.GET.q}}" placeholder="Civil Service Title, Business Title, or Agency" />
-                    <span class="input-group-append">
-                        <div class="input-group-text bg-transparent">
-                            <i class="fa fa-search"></i>
-                        </div>
-                    </span>
                 </div>
             </div>
             <button type="submit" class="form-group btn btn-primary" method="get" action="{% url 'jobs:results' %}"
