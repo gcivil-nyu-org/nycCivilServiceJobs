@@ -4,3 +4,7 @@ django-heroku
 gunicorn
 sodapy
 pandas
+black
+flake8
+coverage
+coveralls
