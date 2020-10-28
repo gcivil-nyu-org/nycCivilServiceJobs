@@ -16,7 +16,7 @@ class JobFilter(FilterSet):
     def getacgencies():
         return  [(i,item[0]) for i,item in enumerate(agencies)]
 
-    wild_query = CharFilter(method='wild_search',label='Wild Search')
+    q = CharFilter(method='wild_search',label='Wild Search')
     civil_service_title= ChoiceFilter(choices=getcivilservicetitle(),method='custom_search',label='Civil Service Title',empty_label='Civil Service Title')
 
     # business_title = department = ModelChoiceFilter(

@@ -23,8 +23,8 @@
         <div class="col"></div>
     <div class="form-group col col-md-6">
         <div class="input-group">
-          <input class="form-control" type="search" name="wild_query" id="id_q"
-              value="{{request.GET.wild_query}}" placeholder="Civil Service Title, Business Title, or Agency" />
+          <input class="form-control" type="search" name="q" id="id_q"
+              value="{{request.GET.q}}" placeholder="Civil Service Title, Business Title, or Agency" />
           </div>
           </div>
 
@@ -80,67 +80,76 @@
   </form>
 
   <section class="ftco-section bg-light">
-      <div class="container">
-          <div class="col-md-12">
-              <div class="row justify-content-center pb-3">
-                  <div class="col-md-12 heading-section ftco-animate">
-                      <span class="subheading">Searched Results</span>
-                      <h2 class="mb-4">Searched Jobs present in NYC-Civil-Services</h2>
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-                  {% for result in filter.qs %}
-                  <div class="col-md-12 ftco-animate">
-                      <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-                          <div class="one-third mb-4 mb-md-0">
-                              <div class="job-post-item-header align-items-center">
-                                  <span class="bg-primary text-white badge py-2 px-3">{{result.posting_type}}</span>
-                                  <span class="bg-primary text-white badge py-2 px-3"
-                                      style="margin-left: 5px">{{result.career_level }}</span>
-                                  {% if result.post_until is None %}
-                                  <span class="bg-primary text-white badge py-2 px-3"
-                                      style="margin-left: 5px">Deadline: Until Position is Filled</span>
-                                  {% else %}
-                                  <span class="bg-primary text-white badge py-2 px-3"
-                                      style="margin-left: 5px">Deadline: {{result.post_until }}</span>
-                                  {% endif %}
+    <div class="container">
+        <div class="col-md-12">
+            <div class="row justify-content-center pb-3">
+                <div class="col-md-12 heading-section ftco-animate">
+                    <h2 class="mb-4">Found {{filter.qs.count}} matching jobs: </h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% if filter.qs %}
+            {% for result in filter.qs %}
+            <div class="col-md-12 ftco-animate">
+                <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+                    <div class="one-third mb-4 mb-md-0">
+                        <div class="job-post-item-header align-items-center">
+                            <span class="bg-primary text-white badge py-2 px-3">{{result.posting_type}}</span>
+                            <span class="bg-primary text-white badge py-2 px-3"
+                                style="margin-left: 5px">{{result.career_level }}</span>
+                            {% if result.post_until is None %}
+                            <span class="bg-primary text-white badge py-2 px-3" style="margin-left: 5px">Deadline:
+                                Until
+                                Position is Filled</span>
+                            {% else %}
+                            <span class="bg-primary text-white badge py-2 px-3" style="margin-left: 5px">Deadline:
+                                {{result.post_until }}</span>
+                            {% endif %}
 
-                                  <h2 ><a class="mr-2 text-black" data-toggle="collapse" href="#demo{{result.id}}">{{result.business_title}}</a> </h2>
-  								<div id="demo{{result.id}}" class="collapse">
-                                      <p><b>Title Classification: </b>{{result.title_classification}}</p>
-                                      {% if result.full_time_part_time_indicator == 'F' %}
-                                      <p><b>Full-time/Part-Time: </b>Full-Time</p>
-                                      {% else %}
-                                      <p><b>Full-time/Part-Time: </b>Part-Time</p>
-                                      {% endif %}
-                                      <p><b>Recidency Requirement: </b>{{result.residency_requirement}}</p>
-                                      <p><b>Last Updated/Date Posted: </b>{{result.posting_date}}</p>
-                                      <p><b>Title Classification: </b>{{result.title_classification}}</p>
-                                      <p><b>Salary Range: </b>$ {{result.salary_range_from|floatformat:2|intcomma }} - $ {{result.salary_range_to|floatformat:2|intcomma }}
-                                          ({{result.salary_frequency}})</p>
-                                  </div>
-                              </div>
-                              <div class="job-post-item-body d-block d-md-flex">
-                                  <div class="mr-3"><span class="icon-layers"></span> <a>{{result.agency}}</a>
-                                  </div>
-                                  <div><span class="icon-person"></span> <span>{{result.civil_service_title}}</span></div>
-                              </div>
-                          </div>
+                            <h2><a class="mr-2 text-black" data-toggle="collapse"
+                                    href="#demo{{result.id}}">{{result.business_title}}</a> </h2>
+                            <div id="demo{{result.id}}" class="collapse">
+                                <p><b>Title Classification: </b>{{result.title_classification}}</p>
+                                {% if result.full_time_part_time_indicator == 'F' %}
+                                <p><b>Full-time/Part-Time: </b>Full-Time</p>
+                                {% else %}
+                                <p><b>Full-time/Part-Time: </b>Part-Time</p>
+                                {% endif %}
+                                <p><b>Recidency Requirement: </b>{{result.residency_requirement}}</p>
+                                {% if result.posting_updated %}
+                                <p><b>Last Updated: </b> {{result.posting_updated}}</p>
+                                {% else %}
+                                <p><b>Posted Dated: </b> {{result.posting_date}}</p>
+                                {% endif %}
+                                <p><b>Title Classification: </b>{{result.title_classification}}</p>
+                                <p><b>Salary Range: </b>${{result.salary_range_from|floatformat:2|intcomma }} -
+                                    ${{result.salary_range_to|floatformat:2|intcomma }}
+                                    ({{result.salary_frequency}})</p>
+                            </div>
+                        </div>
+                        <div class="job-post-item-body d-block d-md-flex">
+                            <div class="mr-3"><span class="icon-layers"></span> <a>{{result.agency}}</a>
+                            </div>
+                            <div><span class="icon-person"></span> <span>{{result.civil_service_title}}</span></div>
+                        </div>
+                    </div>
 
-                          <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-                              <div>
-                                  <a href="#"
-                                      class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                                      <span class="icon-heart"></span>
-                                  </a>
-                              </div>
-                              <a href="#" class="btn btn-primary py-2">Apply Job</a>
-                          </div>
-                      </div>
-                  </div><!-- end -->
-                  {% endfor %}
-          </div>
+                    <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
+                        <div>
+                            <a href="#"
+                                class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                <span class="icon-heart"></span>
+                            </a>
+                        </div>
+                        <a href="#" class="btn btn-primary py-2">Apply Job</a>
+                    </div>
+                </div>
+            </div><!-- end -->
+            {% endfor %}
+        </div>
+        
+        {% endif %}
       </div>
   </section>
   {% endblock %}
