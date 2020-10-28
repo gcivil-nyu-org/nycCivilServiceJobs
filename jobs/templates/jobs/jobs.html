@@ -38,7 +38,7 @@
         <div class="col-md-12">
             <div class="row justify-content-center pb-3">
                 <div class="col-md-12 heading-section ftco-animate">
-                    <h2 class="mb-4">Top 10 Recent Jobs present in NYC-Civil-Services</h2>
+                    <h2 class="mb-4">Top 10 Recent Jobs </h2>
                 </div>
             </div>
         </div>
@@ -75,7 +75,6 @@
                                 {% else %}
                                 <p><b>Posted Date: </b>{{job.posting_date}}</p>
                                 {% endif %}
-                                <p><b>Title Classification: </b>{{job.title_classification}}</p>
                                 <p><b>Salary Range: </b>${{job.salary_range_from|floatformat:2|intcomma }} -
                                     ${{job.salary_range_to|floatformat:2|intcomma }}
                                     ({{job.salary_frequency}})</p>

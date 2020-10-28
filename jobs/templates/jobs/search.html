@@ -76,7 +76,6 @@
                                 {% else %}
                                 <p><b>Posted Dated: </b> {{result.posting_date}}</p>
                                 {% endif %}
-                                <p><b>Title Classification: </b>{{result.title_classification}}</p>
                                 <p><b>Salary Range: </b>${{result.salary_range_from|floatformat:2|intcomma }} -
                                     ${{result.salary_range_to|floatformat:2|intcomma }}
                                     ({{result.salary_frequency}})</p>
