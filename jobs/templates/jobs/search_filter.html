@@ -1,0 +1,146 @@
+{% extends 'landing_base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Jobs</title>
+
+</head>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+  <form method="get">
+     <!-- {{ filter.form.as_p }} -->
+    <div class="form-row">
+        <div class="col"></div>
+    <div class="form-group col col-md-6">
+        <div class="input-group">
+          <input class="form-control" type="search" name="wild_query" id="id_q"
+              value="{{request.GET.wild_query}}" placeholder="Civil Service Title, Business Title, or Agency" />
+          </div>
+          </div>
+
+    <button type="submit" class="form-group btn btn-primary" method="get" action="{% url 'jobs:results' %}"
+        value="Search">Search</button>
+    <div class="col"></div>
+    </div>
+
+    <div class="form-row ">
+      <div class="col-md-3"></div>
+    <div class="form-group col col-md-2">
+      <div class="form-field">
+        <div class="select-wrap">
+
+          <select name="business_title" id="" value="Business Title " class="form-control">
+            {% for choice in filter.form.business_title%}
+            {{ choice.tag }}{{choice.choice_label}}
+              {% endfor %}
+
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col col-md-2">
+      <div class="form-field">
+        <div class="select-wrap">
+
+          <select name="civil_service_title" id="" class="form-control">
+            {% for choice in filter.form.civil_service_title %}
+            {{ choice.tag }}{{choice.choice_label}}
+              {% endfor %}
+
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group col col-md-2">
+      <div class="form-field">
+        <div class="select-wrap">
+
+          <select name="agency" id="" class="form-control">
+            {% for choice in filter.form.agency %}
+            {{ choice.tag }}{{choice.choice_label}}
+              {% endfor %}
+
+          </select>
+        </div>
+      </div>
+    </div>
+</div>
+
+  </form>
+
+  <section class="ftco-section bg-light">
+      <div class="container">
+          <div class="col-md-12">
+              <div class="row justify-content-center pb-3">
+                  <div class="col-md-12 heading-section ftco-animate">
+                      <span class="subheading">Searched Results</span>
+                      <h2 class="mb-4">Searched Jobs present in NYC-Civil-Services</h2>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+                  {% for result in filter.qs %}
+                  <div class="col-md-12 ftco-animate">
+                      <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+                          <div class="one-third mb-4 mb-md-0">
+                              <div class="job-post-item-header align-items-center">
+                                  <span class="bg-primary text-white badge py-2 px-3">{{result.posting_type}}</span>
+                                  <span class="bg-primary text-white badge py-2 px-3"
+                                      style="margin-left: 5px">{{result.career_level }}</span>
+                                  {% if result.post_until is None %}
+                                  <span class="bg-primary text-white badge py-2 px-3"
+                                      style="margin-left: 5px">Deadline: Until Position is Filled</span>
+                                  {% else %}
+                                  <span class="bg-primary text-white badge py-2 px-3"
+                                      style="margin-left: 5px">Deadline: {{result.post_until }}</span>
+                                  {% endif %}
+
+                                  <h2 ><a class="mr-2 text-black" data-toggle="collapse" href="#demo{{result.id}}">{{result.business_title}}</a> </h2>
+  								<div id="demo{{result.id}}" class="collapse">
+                                      <p><b>Title Classification: </b>{{result.title_classification}}</p>
+                                      {% if result.full_time_part_time_indicator == 'F' %}
+                                      <p><b>Full-time/Part-Time: </b>Full-Time</p>
+                                      {% else %}
+                                      <p><b>Full-time/Part-Time: </b>Part-Time</p>
+                                      {% endif %}
+                                      <p><b>Recidency Requirement: </b>{{result.residency_requirement}}</p>
+                                      <p><b>Last Updated/Date Posted: </b>{{result.posting_date}}</p>
+                                      <p><b>Title Classification: </b>{{result.title_classification}}</p>
+                                      <p><b>Salary Range: </b>$ {{result.salary_range_from|floatformat:2|intcomma }} - $ {{result.salary_range_to|floatformat:2|intcomma }}
+                                          ({{result.salary_frequency}})</p>
+                                  </div>
+                              </div>
+                              <div class="job-post-item-body d-block d-md-flex">
+                                  <div class="mr-3"><span class="icon-layers"></span> <a>{{result.agency}}</a>
+                                  </div>
+                                  <div><span class="icon-person"></span> <span>{{result.civil_service_title}}</span></div>
+                              </div>
+                          </div>
+
+                          <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
+                              <div>
+                                  <a href="#"
+                                      class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                      <span class="icon-heart"></span>
+                                  </a>
+                              </div>
+                              <a href="#" class="btn btn-primary py-2">Apply Job</a>
+                          </div>
+                      </div>
+                  </div><!-- end -->
+                  {% endfor %}
+          </div>
+      </div>
+  </section>
+  {% endblock %}
