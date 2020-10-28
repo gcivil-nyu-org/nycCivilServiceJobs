@@ -2,8 +2,8 @@ from django.views.generic import TemplateView, ListView
 from .filters import JobFilter
 from .models import job_record
 from django.db.models import Q
-from .filters import JobFilter
 from django_filters.views import FilterView
+
 
 class JobsView(TemplateView):
     template_name = "jobs/jobs.html"
@@ -39,7 +39,8 @@ class SearchResultsView(ListView):
             )
             return object_list
 
+
 class JobFilterView(FilterView):
-    filterset_class=JobFilter
-    template_name='jobs/search_filter.html'
+    filterset_class = JobFilter
+    template_name = "jobs/search_filter.html"
     queryset = job_record.objects.all()
