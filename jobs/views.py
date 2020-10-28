@@ -21,23 +21,12 @@ class SearchResultsView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get("q", None)
-        if not query:
-
-            def get_context_data(self, *args, **kwargs):
-                context = {
-                    "jobs": job_record.objects.all()
-                    .order_by("posting_date")
-                    .reverse()[:10],
-                }
-                return context
-
-        else:
-            object_list = job_record.objects.filter(
-                Q(agency__icontains=query)
-                | Q(business_title__icontains=query)
-                | Q(civil_service_title__icontains=query)
-            )
-            return object_list
+        object_list = job_record.objects.filter(
+            Q(agency__icontains=query)
+            | Q(business_title__icontains=query)
+            | Q(civil_service_title__icontains=query)
+        )
+        return object_list
 
 
 class JobFilterView(FilterView):
