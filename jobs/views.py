@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView, ListView
+from .filters import JobFilter
 from .models import job_record
 from django.db.models import Q
 from .filters import JobFilter
