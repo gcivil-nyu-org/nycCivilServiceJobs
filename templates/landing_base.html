@@ -47,7 +47,7 @@
                 <a class="nav-link" href="{% url 'jobs:jobs' %}">Jobs</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'examresults:exams' %}">Exam Results</a>
+                <a class="nav-link" href="{% url 'examresults:exams' %}">Exams</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">About Us</a>
@@ -57,7 +57,7 @@
         <li class="nav-item cta mr-md-1"><a href="{% url 'logout' %}" class="nav-link">Log Out</a></li>
 
         {% else %}
-      <li class="nav-item cta mr-md-1" id="signin" ><a href="{% url 'signin:signin' %}" class="nav-link">Sign In</a></li>
+      <li class="nav-item cta mr-md-1"><a href="{% url 'signin:signin' %}" class="nav-link">Sign In</a></li>
         {% endif %}
 
         </div>
