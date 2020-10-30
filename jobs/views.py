@@ -27,9 +27,3 @@ class SearchResultsView(ListView):
             | Q(civil_service_title__icontains=query)
         )
         return object_list
-
-
-class JobFilterView(FilterView):
-    filterset_class = JobFilter
-    template_name = "jobs/search_filter.html"
-    queryset = job_record.objects.all()
