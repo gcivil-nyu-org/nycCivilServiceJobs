@@ -1,6 +1,6 @@
-# Team (Python-Pirates) Project repo - nycCivilServiceJobs
+# Team Project repo
 
-## Production URL
+## Production
 https://nyc-civil-service-jobs.herokuapp.com/
 
 ### Develop

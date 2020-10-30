@@ -1346,14 +1346,6 @@ pre {
   .table tbody + tbody {
     border-top: 2px solid #dee2e6; }
 
-    th.sticky-header {
-      position: sticky;
-      top: 100px;
-      z-index: 10;
-      padding:10px;
-      background-color: white;
-    }
-
 .table-sm th,
 .table-sm td {
   padding: 0.3rem; }
