@@ -1,6 +1,9 @@
 from django.views.generic import TemplateView, ListView
 from .models import job_record
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 
 
 class JobsView(TemplateView):
@@ -11,6 +14,31 @@ class JobsView(TemplateView):
             "jobs": job_record.objects.all().order_by("posting_date").reverse()[:10],
         }
         return context
+
+    @login_required
+    def add_favorite(request, id):
+        job = get_object_or_404(job_record, id=id)
+        if job.favorites.filter(id=request.user.id).exists():
+            job.favorites.remove(request.user)
+        else:
+            job.favorites.add(request.user)
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+    @login_required
+    def favorite_list(request):
+        new = job_record.newmanager.filter(favorites=request.user)
+        return render(request,
+                      'jobs/favorites.html',
+                      {'new': new})
+
+    def job_single(request, job):
+        job = get_object_or_404(job_record)
+        is_fav = bool
+
+        if job.favorites.filter(id=request.user.id).exists():
+            is_fav = True
+
+        return render(request, 'jobs/jobs.html', {'job': job, 'is_fav': is_fav})
 
 
 class SearchResultsView(ListView):

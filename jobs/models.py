@@ -36,6 +36,7 @@ class job_record(models.Model):
     post_until = models.DateField(null=True, blank=True)
     posting_updated = models.DateTimeField(null=True, blank=True)
     process_date = models.DateTimeField(null=True, blank=True)
+    # favorites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
 
     def __str__(self):
         return str(self.job_id)

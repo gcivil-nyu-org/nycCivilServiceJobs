@@ -69,7 +69,7 @@
                                 {% else %}
                                 <p><b>Full-time/Part-Time: </b>Part-Time</p>
                                 {% endif %}
-                                <p><b>Recidency Requirement: </b>{{job.residency_requirement}}</p>
+                                <p><b>Residency Requirement: </b>{{job.residency_requirement}}</p>
                                 {% if job.posting_updated %}
                                 <p><b>Last Updated: </b>{{job.posting_updated}}</p>
                                 {% else %}
@@ -88,12 +88,35 @@
                     </div>
 
                     <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-                        <div>
-                            <a href="#"
-                                class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                                <span class="icon-heart"></span>
-                            </a>
-                        </div>
+                        {% if request.user.is_authenticated %}
+
+                            {% if is_fav %}
+                                <div>
+                                    <a href="{% url 'jobs:favorite_list' %}"
+                                        class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                        <span class="icon-heart"></span>
+                                    </a>
+                                </div>
+
+                            {% else %}
+                                <div>
+                                    <a href="{% url 'jobs:add_favorite' job.job_id %}"
+                                        class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                        <span class="icon-heart"></span>
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                        {% else %}
+                                <div>
+                                    <a href="{% url 'signin:signin' %}"
+                                        class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                        <span class="icon-heart"></span>
+                                    </a>
+                                </div>
+
+                        {% endif %}
+
                         <a href="#" class="btn btn-primary py-2">Apply Job</a>
                     </div>
                 </div>
