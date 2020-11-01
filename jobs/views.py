@@ -80,7 +80,7 @@ class SearchFilterView(ListView):
                 form_filters["posting_type"] = posting_type
             if date:
                 form_filters["posting_date__gte"] = date
-            if agency:
+            if agency and len(self.agencies):
                 form_filters["agency"] = self.agencies[int(agency)]
             if fp:
                 form_filters["full_time_part_time_indicator"] = fp
