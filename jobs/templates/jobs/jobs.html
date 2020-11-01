@@ -49,20 +49,30 @@
                 <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
                     <div class="one-third mb-4 mb-md-0">
                         <div class="job-post-item-header align-items-center">
-                            <span class="bg-primary text-white badge py-2 px-3">{{job.posting_type}}</span>
-                            <span class="bg-primary text-white badge py-2 px-3"
-                                style="margin-left: 5px">{{job.career_level }}</span>
+                            {% if job.posting_type == "Internal" %}
+                            <span class="text-white badge py-2 px-3" style="background-color:palevioletred">{{job.posting_type}}</span>
+                            {% else %}
+                            <span class="text-white badge py-2 px-3" style="background-color:steelblue">{{job.posting_type}}</span>
+                            {% endif %}
+                            <span class="text-white badge py-2 px-3"
+                                style="margin-left: 5px; background-color:olive">{{job.career_level }}</span>
                             {% if job.post_until is None %}
-                            <span class="bg-primary text-white badge py-2 px-3" style="margin-left: 5px">Deadline: Until
+                            <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:salmon">Deadline: Until
                                 Position is Filled</span>
                             {% else %}
-                            <span class="bg-primary text-white badge py-2 px-3" style="margin-left: 5px">Deadline:
+                            <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:salmon">Deadline:
                                 {{job.post_until }}</span>
                             {% endif %}
 
                             <h2><a class="mr-2 text-black" data-toggle="collapse"
                                     href="#demo{{job.id}}">{{job.business_title}}</a> </h2>
-                            <div id="demo{{job.id}}" class="collapse">
+                            <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; scroll:auto; max-height: 40vh">
+                                <p><b>Job Id: </b>{{job.job_id}}</p>
+                                {% if job.posting_updated %}
+                                <p><b>Last Updated: </b>{{job.posting_updated}}</p>
+                                {% else %}
+                                <p><b>Posted Date: </b>{{job.posting_date}}</p>
+                                {% endif %}
                                 <p><b>Title Classification: </b>{{job.title_classification}}</p>
                                 {% if job.full_time_part_time_indicator == 'F' %}
                                 <p><b>Full-time/Part-Time: </b>Full-Time</p>
@@ -70,14 +80,19 @@
                                 <p><b>Full-time/Part-Time: </b>Part-Time</p>
                                 {% endif %}
                                 <p><b>Residency Requirement: </b>{{job.residency_requirement}}</p>
-                                {% if job.posting_updated %}
-                                <p><b>Last Updated: </b>{{job.posting_updated}}</p>
-                                {% else %}
-                                <p><b>Posted Date: </b>{{job.posting_date}}</p>
-                                {% endif %}
                                 <p><b>Salary Range: </b>${{job.salary_range_from|floatformat:2|intcomma }} -
                                     ${{job.salary_range_to|floatformat:2|intcomma }}
                                     ({{job.salary_frequency}})</p>
+                                <p><b>Description: </b>{{job.job_description}}</p>
+                                {% if result.minimum_qual_requirements%}
+                                <p><b>Minimum Qualification: </b>{{job.minimum_qual_requirements}}</p>
+                                {% endif %}
+                                {% if result.preferred_skills%}
+                                <p><b>Preferred Skill: </b>{{job.preferred_skills}}</p>
+                                {% endif %}
+                                {% if job.additional_information%}
+                                <p><b>Additional Information: </b>{{job.additional_information}}</p>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="job-post-item-body d-block d-md-flex">
