@@ -1,4 +1,5 @@
 from django.db import models
+from register.models import User
 
 # Create your models here.
 
@@ -36,10 +37,17 @@ class job_record(models.Model):
     post_until = models.DateField(null=True, blank=True)
     posting_updated = models.DateTimeField(null=True, blank=True)
     process_date = models.DateTimeField(null=True, blank=True)
-    # favorites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
 
     def __str__(self):
         return str(self.job_id)
 
     class Meta:
         verbose_name_plural = "Job Records"
+
+
+class UserSavedJob(models.Model):
+    job = models.ForeignKey(job_record, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("job", "user")
