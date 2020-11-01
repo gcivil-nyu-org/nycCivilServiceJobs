@@ -146,7 +146,6 @@ def is_nan(x):
 
 
 def getAwareDate(inputDate):
-    # print(inputDate)
     if not inputDate:
         return
     tz = timezone.get_default_timezone()
@@ -156,15 +155,27 @@ def getAwareDate(inputDate):
 
 
 def convertDateFormat(inputDate):
-    # print(inputDate)
     if not inputDate:
         return
     return datetime.datetime.strptime(inputDate, "%d-%b-%Y").strftime("%Y-%m-%d")
 
 
 def civil_service_title_cleanup(s):
-    if s[-1] == "(":
-        s = s[: len(s) - 1]
+    return trim_parenthesis(s)
+
+
+def trim_parenthesis(s):
+    stack = []
+    for i in range(len(s)):
+        if s[i] == "(":
+            stack.append(i)
+        elif s[i] == ")":
+            stack.pop()
+
+    if len(stack) != 0:
+        index = stack.pop(0)
+        return s[:index]
+
     return s
 
 
