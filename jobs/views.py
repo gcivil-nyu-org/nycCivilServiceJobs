@@ -36,8 +36,13 @@ class SearchFilterView(ListView):
     career_level = []
 
     def dispatch(self, request, *args, **kwargs):
-        self.agencies = [x["agency"] for x in job_record.objects.values("agency").distinct()]
-        self.career_level = career_level = [x["career_level"] for x in job_record.objects.values("career_level").distinct()]
+        self.agencies = [
+            x["agency"] for x in job_record.objects.values("agency").distinct()
+        ]
+        self.career_level = [
+            x["career_level"]
+            for x in job_record.objects.values("career_level").distinct()
+        ]
         return super(SearchFilterView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
