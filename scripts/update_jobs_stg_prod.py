@@ -112,17 +112,23 @@ def update_Jobs():
                                 salary_frequency=row["salary_frequency"],
                                 work_location=fix_text_encoding(row["work_location"]),
                                 division_work_unit=row["division_work_unit"],
-                                job_description=fix_text_encoding(row["job_description"]),
+                                job_description=fix_text_encoding(
+                                    row["job_description"]
+                                ),
                                 minimum_qual_requirements=fix_text_encoding(
                                     row["minimum_qual_requirements"]
                                 ),
-                                preferred_skills=fix_text_encoding(row["preferred_skills"]),
+                                preferred_skills=fix_text_encoding(
+                                    row["preferred_skills"]
+                                ),
                                 additional_information=fix_text_encoding(
                                     row["additional_information"]
                                 ),
                                 to_apply=fix_text_encoding(row["to_apply"]),
                                 hours_shift=row["hours_shift"],
-                                work_location_1=fix_text_encoding(row["work_location_1"]),
+                                work_location_1=fix_text_encoding(
+                                    row["work_location_1"]
+                                ),
                                 recruitment_contact=fix_text_encoding(
                                     row["recruitment_contact"]
                                 ),
