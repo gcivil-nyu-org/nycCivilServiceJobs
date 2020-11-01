@@ -64,5 +64,3 @@ class SaveJobsView(View):
                 # print ('inside post else')
                 response_data["response_data"] = "User not authenticated"
                 return JsonResponse(response_data, status=200)
-
-            return JsonResponse({"error": ""}, status=400)
