@@ -87,47 +87,122 @@
                         </div>
                     </div>
 
-                    <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-                        {% if request.user.is_authenticated %}
-
-                            {% if is_fav %}
-                                <div>
-                                    <a href="{% url 'jobs:favorite_list' %}"
-                                        class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                                        <span class="icon-heart"></span>
-                                    </a>
-                                </div>
-
-                            {% else %}
-                                <div>
-                                    <a href="{% url 'jobs:add_favorite' job.job_id %}"
-                                        class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                                        <span class="icon-heart"></span>
-                                    </a>
-                                </div>
-                            {% endif %}
-
-                        {% else %}
-                                <div>
-                                    <a href="{% url 'signin:signin' %}"
-                                        class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                                        <span class="icon-heart"></span>
-                                    </a>
-                                </div>
-
-                        {% endif %}
-
-                        <a href="#" class="btn btn-primary py-2">Apply Job</a>
+                    <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0" style="
+                    width: auto">
+                    <div id= "alert{{job.id}}" class="alert alert-warning alert-dismissible fade show" role="alert" style = "display: none;">
+                        You need to <a href="{% url 'signin:signin'%}" ><strong><u>Sign In</u></strong></a> to be able to save a job.
+                        <button type="button" class="close" onclick="$('#alert{{job.id}}').css('display','none');" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                        <div>
+                            <form action="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
+                                {% csrf_token %}
+                                <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
+                                <button type="submit" class="btn">
+                                    {%if saved_jobs_user is not None and job.id in saved_jobs_user%}
+                                    <i id="favBtnID{{job.id}}" class=" icon text-center d-flex justify-content-center align-items-center icon mr-2" title="Unsave" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                                        <span class="icon-heart" style="color:#fdab44;"></span>
+                                    </i>
+                                    {% else %}
+                                    <i id="favBtnID{{job.id}}" class=" icon text-center d-flex justify-content-center align-items-center icon mr-2" title="Save" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                                        <span class="icon-heart" style="color: rgb(255, 255, 255);"></span>
+                                    </i>
+                                    {% endif %}
+                                </button>
+                                <!-- <a type="button" class=" icon text-center d-flex justify-content-center align-items-center icon mr-2 ">
+                                    <span class="icon-heart"></span>
+                                </a> -->
+                            </form>
+                        </div>
+                        <div>
+                            <form action="/" method=POST id="ApplyJob">
+                                {% csrf_token %}
+                                <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
+                                <button type="submit" class="btn btn-primary py-2">Apply</button>
+                            </form>
+                            <!-- <div>
+                                <a href="#"
+                                    class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                    <span class="icon-heart"></span>
+                                </a>
+                            </div>
+                                <a href="#" class="btn btn-primary py-2">Apply Job</a>
+                            </div> -->
+                        </div>
                     </div>
                 </div>
-            </div><!-- end -->
+            </div>
+            <!-- end -->
             {% endfor %}
         </div>
         {% else %}
         <h2 class="mb-4">No Available Jobs present in NYC-Civil-Services</h2>
         {% endif %}
 
-
     </div>
 </section>
 {% endblock %}
+{% block javascript %}
+<script>
+    //$(document).ready(function() {
+        var form = $('.favJob');
+        var formMessages = $('#form-messages');
+        $(form).submit(function(event) {
+
+            // Current form
+            var currentForm = $(this);
+            // Stop the browser from submitting the form.
+            event.preventDefault();
+
+            // Serialize the form data.
+            var formData = currentForm.serialize();
+            var user = "{{user}}";
+            //alert(user);
+
+            $.ajax({
+                type: 'POST',
+                url: currentForm.attr('action'),
+                data: formData
+            }).done(function(response) {
+                debugger;
+                //$("#favBtnID" + response["job_id"]).css("opacity", 1);
+                if (response["response_data"] == "Job Saved") {
+                    $('#favBtnID' + response["job_id"]).css({
+                        'cssText': 'background-color: #28a745 !important; opacity:1'
+                    });
+                    // $('#favBtnID' + response["job_id"]).css({
+                    //     'cssText': 'background-color: #28a745 !important; opacity:1'
+                    // });
+                    $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
+                    $("#favBtnID" + response["job_id"]).attr('title','Unsave');
+                } else if (response["response_data"] == "Job Unsaved") {
+                    $('#favBtnID' + response["job_id"]).css({
+                        'cssText': 'background-color: #28a745 !important; opacity:1'
+                    });
+                    // $('#favBtnID' + response["job_id"]).css({
+                    //     'cssText': 'background-color: #FFFFFF !important; opacity:1'
+                    // });
+                    $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
+                   // $("#favBtnID" + response["job_id"]).removeAttr("style");
+                    $("#favBtnID" + response["job_id"]).attr('title','Save');
+                } else if (response["response_data"] == "User not authenticated") {
+                    if ($("#alert"+ response["job_id"]).css('display')=='none')
+                    {
+                        $("#alert"+ response["job_id"]).css('display','block');
+                    }
+                    //alert("Please sign in to favorite a job");
+                }
+
+                console.log("response")
+                    //Do something
+            }).fail(function(data) {
+                //Do something
+                console.log("fail")
+                debugger;
+
+            });
+        });
+  //  });
+</script>
+{% endblock javascript %}
