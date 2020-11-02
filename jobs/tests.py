@@ -199,6 +199,25 @@ class JobDataTest(TestCase):
         self.assertTemplateUsed(response, "jobs/table_content.html")
         self.assertTemplateUsed(response, "landing_base.html")
 
+    def test_search_jobs_results_page_jobs_saved (self):
+        
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)       
+        response = self.client.post(
+            reverse("jobs:saveJob", kwargs={"pk": job_record.objects.get(id=1).id})
+        )
+        self.assertEqual(json.loads(response.content)["response_data"], "Job Saved")
+        response = self.client.get(reverse("jobs:results"), data={"q": ""})
+        user_saved_jobs = list(
+            UserSavedJob.objects.filter(user=self.test_user).values_list(
+                "job", flat=True
+            )
+        )
+        self.assertListEqual(user_saved_jobs, response.context["saved_jobs_user"])
+
+
     def test_filter_jobs_POST_response_correct_JSON(self):
 
         self.maxDiff = None
@@ -235,6 +254,7 @@ class JobDataTest(TestCase):
                 "posting_type": "External",
                 "date": timezone.now(),
                 "agency": 0,
+                "full_time_part_time_indicator" : "F",
                 "asc": "false",
                 "sort_order": "sort-posting",
             },
