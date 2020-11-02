@@ -16,92 +16,314 @@
 <br>
 <br>
 <br>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+var date_asc=false;
+  function putTableData(data) {
+        console.log()
+        $("#listing").html(data.rendered_table);
 
+    }
+  $(document).ready(function() {
+
+    $( "#posting-type" ).change(function(event) {
+      senddata()
+    });
+    $('#post-after').change(function() {
+      senddata()
+    });
+    $('#agency').change(function() {
+      senddata()
+    });
+    $( "#fp" ).change(function(event) {
+      senddata()
+    });
+
+});
+
+function sort(id){
+  var button_text="Sort "
+  if(id=="sort-posting"){
+    date_asc = !date_asc
+
+    if(date_asc)
+      {
+        button_text+=": Date Posted "+"<i class='fa fa-sort-amount-asc'></i>"
+        document.getElementById("sort-posting").innerHTML="Date Posted "+"<i class='fa fa-sort-amount-desc'></i>"}
+    else
+      {
+        button_text+=": Date Posted "+"<i class='fa fa-sort-amount-desc'></i>"
+        document.getElementById("sort-posting").innerHTML="Date Posted "+"<i class='fa fa-sort-amount-asc'></i>"}
+  }
+  document.getElementById("sort-order").value = id
+  document.getElementById("sort-order").innerHTML = button_text
+  senddata()
+
+  console.log(id,date_asc)
+}
+function senddata(){
+  var query = $('#id_q').val()
+  var posting_type= $('#posting-type').find(":selected").val()
+  var date = $('#post-after').val();
+  var agency = $('#agency').find(":selected").val()
+  var sort_order = $("#sort-order").val()
+  var fp = $("#fp").val()
+  console.log("sort-order",sort_order)
+  var asc;
+  if(sort_order=="sort-posting")
+    asc=date_asc
+  else if (sort_order=="") {
+    asc = ""
+  }
+
+  var ids = new Array();
+        $('input[name="ids[]"]:checked').each(function(){
+           ids.push($(this).val());
+        });
+
+
+
+  var dataString = 'ids='+ ids;
+  console.log(dataString);
+  console.log(posting_type,date);
+  $.ajax({
+   url: "{% url 'jobs:results' %}",
+   method: "POST",
+   data: {
+     csrfmiddlewaretoken: "{{ csrf_token }}",
+     state:"inactive",
+     posting_type:posting_type,
+     date:date,
+     agency:agency,
+     sort_order:sort_order,
+     asc:asc,
+     query:query,
+     fp:fp
+   },
+   success: function(json){
+      putTableData(json);
+   },
+   error: function(xhr, errmsg, err){
+       console.log("error")
+   }
+});
+}
+
+</script>
 
 <section class="ftco-section bg-light">
-    <form method="GET" action="{% url 'jobs:results' %}">
+    <form id="form" method="GET" action="{% url 'jobs:results' %}">
         <div class="form-row">
             <div class="col"></div>
             <div class="form-group col col-md-6">
                 <div class="input-group">
-                    <input class="form-control" type="search" name="q" id="id_q"
-                        value="{{request.GET.q}}" placeholder="Civil Service Title, Business Title, or Agency" />
+                    <input class="form-control" type="search" name="q" id="id_q" value="{{request.GET.q}}"
+                        placeholder="Civil Service Title, Business Title, or Agency" />
                 </div>
             </div>
             <button type="submit" class="form-group btn btn-primary" method="get" action="{% url 'jobs:results' %}"
                 value="Search">Search</button>
             <div class="col"></div>
+
+
         </div>
     </form>
-    <!--Job Card Starts here .//-->
-    <div class="container">
-        <div class="col-md-12">
-            <div class="row justify-content-center pb-3">
-                <div class="col-md-12 heading-section ftco-animate">
-                    <h2 class="mb-4">Found {{object_list.count}} matching jobs: </h2>
+
+    <!-- Modal if user is  authenticated  -->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Apply Job</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you meet the Civil Service Requirement?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">No</button>
+                    <a href="https://www1.nyc.gov/jobs/index.page" target="_blank">
+                        <button type="button" class="btn btn-primary">Yes</button></a>
                 </div>
             </div>
         </div>
-        <div class="row">
-            {% if object_list %}
-            {% for result in object_list %}
-            <div class="col-md-12 ftco-animate">
-                <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
-                    <div class="one-third mb-4 mb-md-0">
-                        <div class="job-post-item-header align-items-center">
-                            <span class="bg-primary text-white badge py-2 px-3">{{result.posting_type}}</span>
-                            <span class="bg-primary text-white badge py-2 px-3"
-                                style="margin-left: 5px">{{result.career_level }}</span>
-                            {% if result.post_until is None %}
-                            <span class="bg-primary text-white badge py-2 px-3" style="margin-left: 5px">Deadline:
-                                Until
-                                Position is Filled</span>
-                            {% else %}
-                            <span class="bg-primary text-white badge py-2 px-3" style="margin-left: 5px">Deadline:
-                                {{result.post_until }}</span>
-                            {% endif %}
+    </div>
+    <!-- End of Modal if user is  authenticated  -->
 
-                            <h2><a class="mr-2 text-black" data-toggle="collapse"
-                                    href="#demo{{result.id}}">{{result.business_title}}</a> </h2>
-                            <div id="demo{{result.id}}" class="collapse">
-                                <p><b>Title Classification: </b>{{result.title_classification}}</p>
-                                {% if result.full_time_part_time_indicator == 'F' %}
-                                <p><b>Full-time/Part-Time: </b>Full-Time</p>
-                                {% else %}
-                                <p><b>Full-time/Part-Time: </b>Part-Time</p>
-                                {% endif %}
-                                <p><b>Recidency Requirement: </b>{{result.residency_requirement}}</p>
-                                {% if result.posting_updated %}
-                                <p><b>Last Updated: </b> {{result.posting_updated}}</p>
-                                {% else %}
-                                <p><b>Posted Dated: </b> {{result.posting_date}}</p>
-                                {% endif %}
-                                <p><b>Salary Range: </b>${{result.salary_range_from|floatformat:2|intcomma }} -
-                                    ${{result.salary_range_to|floatformat:2|intcomma }}
-                                    ({{result.salary_frequency}})</p>
-                            </div>
-                        </div>
-                        <div class="job-post-item-body d-block d-md-flex">
-                            <div class="mr-3"><span class="icon-layers"></span> <a>{{result.agency}}</a>
-                            </div>
-                            <div><span class="icon-person"></span> <span>{{result.civil_service_title}}</span></div>
-                        </div>
-                    </div>
 
-                    <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0">
-                        <div>
-                            <a href="#"
-                                class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                                <span class="icon-heart"></span>
-                            </a>
-                        </div>
-                        <a href="#" class="btn btn-primary py-2">Apply Job</a>
-                    </div>
+    <!-- Modal if user is not authenticated  -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Looking for Jobs?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div><!-- end -->
-            {% endfor %}
+                <div class="modal-body">
+                    Sign In to save / apply for jobs.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">Close</button>
+                    <a href="{% url 'signin:signin' %}">
+                        <button type="button" class="btn btn-primary" href>Sign In</button>
+                    </a>
+                </div>
+            </div>
         </div>
-        {% endif %}
+    </div>
+
+    <!-- End of Modal if user is not authenticated  -->
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <div class="col-lg-3 sidebar">
+
+              <div class="row justify-content-center pb-3">
+                  <div class="col-md-12 heading-section">
+                    <h2 class="mb-4">&nbsp<h2>
+                  </div>
+              </div>
+            <div class="sidebar-box bg-white p-4 ftco-animate">
+              <h3 class="heading-sidebar">Filters </h3>
+              <div class="btn-group sort-btn">
+            <button class="btn btn-primary dropdown-toggle " type="button" id="sort-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Sort  </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" onclick="sort(this.id)" id="" href="#">Default</a>
+              <a class="dropdown-item" onclick="sort(this.id)" id="sort-posting" href="#">Posting Date<i class="fa fa-sort-amount-asc"></i> </a>
+
+            </div>
+          </div>
+          <hr class="mt-2 mb-3"/>
+
+
+                  <select class="form-control"  name="posting-type" id="posting-type">
+                  <option value=""> Posting Type </option>
+                  <option value="External">External </option>
+                  <option value="Internal">Internal </option>
+
+                  </select>
+                  <hr class="mt-2 mb-3"/>
+
+                  <select class="form-control"  name="fp" id="fp">
+                  <option value=""> Part, Full </option>
+                  <option value="P">Part-Time </option>
+                  <option value="F">Full-Time </option>
+
+                  </select>
+                  <hr class="mt-2 mb-3"/>
+
+                  <select class="form-control"  name="agency" id="agency">
+                    <option value=""> Agency </option>
+                    {% for agency in agencies %}
+                      <option value={{forloop.counter0}}> {{agency}} </option>
+                    {% endfor %}
+                  </select>
+
+                  <label for="post-after">  Posted After: </label>
+                  <input class="form-control"  type="date" id="post-after" name="post-after">
+
+            </div>
+          </div>
+          <div class="col-lg-9 pr-lg-4">
+
+        <div class="row" id="listing">
+
+          {% include "jobs/table_content.html" with jobs=object_list %}
+        </div>
+        </div>
+
+        </div>
+
     </div>
 </section>
 {% endblock %}
+
+{% block javascript %}
+<script>
+    //$(document).ready(function() {
+    var form = $('.favJob');
+    var formMessages = $('#form-messages');
+    $(form).submit(function (event) {
+
+        // Current form
+        var currentForm = $(this);
+        // Stop the browser from submitting the form.
+        event.preventDefault();
+
+        // Serialize the form data.
+        var formData = currentForm.serialize();
+        var user = "{{user}}";
+        //alert(user);
+
+        $.ajax({
+            type: 'POST',
+            url: currentForm.attr('action'),
+            data: formData
+        }).done(function (response) {
+            debugger;
+            //$("#favBtnID" + response["job_id"]).css("opacity", 1);
+            if (response["response_data"] == "Job Saved") {
+                $('#favBtnID' + response["job_id"]).css({
+                    'cssText': 'background-color: #28a745 !important; opacity:1'
+                });
+                // $('#favBtnID' + response["job_id"]).css({
+                //     'cssText': 'background-color: #28a745 !important; opacity:1'
+                // });
+                $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
+                $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+            } else if (response["response_data"] == "Job Unsaved") {
+                $('#favBtnID' + response["job_id"]).css({
+                    'cssText': 'background-color: #28a745 !important; opacity:1'
+                });
+                // $('#favBtnID' + response["job_id"]).css({
+                //     'cssText': 'background-color: #FFFFFF !important; opacity:1'
+                // });
+                $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
+                // $("#favBtnID" + response["job_id"]).removeAttr("style");
+                $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+            } else if (response["response_data"] == "User not authenticated") {
+                // if ($("#alert" + response["job_id"]).css('display') == 'none') {
+                //     $("#alert" + response["job_id"]).css('display', 'block');
+                // }
+                $('#exampleModal').modal('toggle');
+                //alert("Please sign in to favorite a job");
+            }
+
+            console.log("response")
+            //Do something
+        }).fail(function (data) {
+            //Do something
+            console.log("fail")
+            debugger;
+
+        });
+    });
+  //  });
+
+    $('#exampleModal1').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var civilServiceTitle = button.data('civilservicetitle') ;
+    var businessTitle = button.data('businesstitle') ;
+    var modal = $(this);
+    debugger;
+    modal.find('.modal-title').text(businessTitle);
+    modal.find('.modal-body').text(civilServiceTitle+ ' title is required for applying to this job. Do you want to continue?');
+    });
+</script>
+{% endblock javascript %}

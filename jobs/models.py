@@ -1,4 +1,5 @@
 from django.db import models
+from register.models import User
 
 # Create your models here.
 
@@ -42,3 +43,11 @@ class job_record(models.Model):
 
     class Meta:
         verbose_name_plural = "Job Records"
+
+
+class UserSavedJob(models.Model):
+    job = models.ForeignKey(job_record, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("job", "user")
