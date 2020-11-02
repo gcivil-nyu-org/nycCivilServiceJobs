@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.db.models import QuerySet
 from jobs.models import job_record, UserSavedJob
 from django.utils import timezone
-from jobs.views import SearchResultsView,SearchFilterView
+from jobs.views import SearchResultsView, SearchFilterView
 from register.models import User
 import json
 from django.template.loader import render_to_string
@@ -122,7 +122,6 @@ class JobDataTest(TestCase):
         self.assertListEqual(
             list(correct_queryset), list(response.context["object_list"])
         )
-
 
     def test_save_jobs_view(self):
         response = self.client.post(
@@ -250,4 +249,3 @@ class JobDataTest(TestCase):
     def test_filter_jobs_GET_response_returns_correct_view_in_context(self):
         response = self.client.get(reverse("jobs:filter"), data={"q": ""})
         self.assertIsInstance(response.context["view"], SearchFilterView)
-
