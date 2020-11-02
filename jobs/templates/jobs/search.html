@@ -82,15 +82,15 @@
                             <p><b>Salary Range: </b>${{result.salary_range_from|floatformat:2|intcomma }} -
                                 ${{result.salary_range_to|floatformat:2|intcomma }}
                                 ({{result.salary_frequency}})</p>
-                            <p><b>Description: </b>{{result.job_description}}</p>
+                            <p><b>Description: </b>{{result.job_description|linebreaksbr}}</p>
                             {% if result.minimum_qual_requirements%}
-                            <p><b>Minimum Qualification: </b>{{result.minimum_qual_requirements}}</p>
+                            <p><b>Minimum Qualification: </b>{{result.minimum_qual_requirements|linebreaksbr}}</p>
                             {% endif %}
                             {% if result.preferred_skills%}
-                            <p><b>Preferred Skill: </b>{{result.preferred_skills}}</p>
+                            <p><b>Preferred Skill: </b>{{result.preferred_skills|linebreaksbr}}</p>
                             {% endif %}
                             {% if result.additional_information%}
-                            <p><b>Additional Information: </b>{{result.additional_information}}</p>
+                            <p><b>Additional Information: </b>{{result.additional_information|linebreaksbr}}</p>
                             {% endif %}
                             </div>
                         </div>
