@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <title>Jobs</title>
-
 </head>
 <br>
 <br>
@@ -39,8 +38,8 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header text-center">
-                    <h5 class="modal-title text-center" id="exampleModalLabel1">Apply Job</h5>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Apply Job</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -49,10 +48,12 @@
                     Are you sure you meet the Civil Service Requirement?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" 
+                    style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">No</button>
                     <a href="https://www1.nyc.gov/jobs/index.page" target="_blank">
                         <button type="button" class="btn btn-primary">Yes</button></a>
-
                 </div>
             </div>
         </div>
@@ -66,18 +67,22 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Apply</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Exploring Jobs?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Please Sign In to Apply
+                    Register with us to save/apply for jobs. 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" 
+                    style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">Close</button>
                     <a href="{% url 'signin:signin' %}">
-                        <button type="button" class="btn btn-primary" href>Sign In</button></a>
+                        <button type="button" class="btn btn-primary" href>Sign In</button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -198,14 +203,14 @@
                             {% if request.user.is_authenticated %}
 
                             <!-- Button trigger modal -->
-                            <a href="#" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal1">
-                                Apply</a>
+                            <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal1" data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}">
+                                Apply</button>
 
                             {% else %}
 
                             <!-- Button trigger modal -->
-                            <a href="#" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal">
-                                Apply</a>
+                            <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal" data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}">
+                                Apply</button>
                             {% endif %}
 
 
@@ -291,5 +296,15 @@
         });
     });
   //  });
+
+    $('#exampleModal1').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var civilServiceTitle = button.data('civilservicetitle') ;
+    var businessTitle = button.data('businesstitle') ;
+    var modal = $(this);
+    debugger;
+    modal.find('.modal-title').text(businessTitle);
+    modal.find('.modal-body').text(civilServiceTitle+ ' title is required for applying to this job. Do you want to continue?');
+    });
 </script>
 {% endblock javascript %}
