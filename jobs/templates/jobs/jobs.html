@@ -67,13 +67,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Exploring Jobs?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Looking for Jobs?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Register with us to save/apply for jobs. 
+                    Sign In to save / apply for jobs. 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" 
@@ -165,7 +165,7 @@
 
                     <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0" style="
                     width: auto">
-                        <div id="alert{{job.id}}" class="alert alert-warning alert-dismissible fade show" role="alert"
+                        <!-- <div id="alert{{job.id}}" class="alert alert-warning alert-dismissible fade show" role="alert"
                             style="display: none;">
                             You need to <a href="{% url 'signin:signin'%}"><strong><u>Sign In</u></strong></a> to be
                             able to save a job.
@@ -173,7 +173,7 @@
                                 aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                        </div>
+                        </div> -->
                         <div>
                             <form action="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
                                 {% csrf_token %}
@@ -280,9 +280,10 @@
                 // $("#favBtnID" + response["job_id"]).removeAttr("style");
                 $("#favBtnID" + response["job_id"]).attr('title', 'Save');
             } else if (response["response_data"] == "User not authenticated") {
-                if ($("#alert" + response["job_id"]).css('display') == 'none') {
-                    $("#alert" + response["job_id"]).css('display', 'block');
-                }
+                // if ($("#alert" + response["job_id"]).css('display') == 'none') {
+                //     $("#alert" + response["job_id"]).css('display', 'block');
+                // }
+                $('#exampleModal').modal('toggle');
                 //alert("Please sign in to favorite a job");
             }
 
