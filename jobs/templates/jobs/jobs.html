@@ -23,8 +23,8 @@
             <div class="col"></div>
             <div class="form-group col col-md-6">
                 <div class="input-group">
-                    <input class="form-control" type="search" name="q" id="id_q"
-                        value="{{request.GET.q}}" placeholder="Civil Service Title, Business Title, or Agency" />
+                    <input class="form-control" type="search" name="q" id="id_q" value="{{request.GET.q}}"
+                        placeholder="Civil Service Title, Business Title, or Agency" />
                 </div>
             </div>
             <button type="submit" class="form-group btn btn-primary" method="get" action="{% url 'jobs:results' %}"
@@ -33,6 +33,57 @@
         </div>
     </form>
     <!--Job Card Starts here .//-->
+
+    <!-- Modal if user is  authenticated  -->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title text-center" id="exampleModalLabel1">Apply Job</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you meet the Civil Service Requirement?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                    <a href="https://www1.nyc.gov/jobs/index.page" target="_blank">
+                        <button type="button" class="btn btn-primary">Yes</button></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Modal if user is  authenticated  -->
+
+
+    <!-- Modal if user is not authenticated  -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Apply</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Please Sign In to Apply
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    <a href="{% url 'signin:signin' %}">
+                        <button type="button" class="btn btn-primary" href>Sign In</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- End of Modal if user is not authenticated  -->
 
     <div class="container">
         <div class="col-md-12">
@@ -50,23 +101,28 @@
                     <div class="one-third mb-4 mb-md-0">
                         <div class="job-post-item-header align-items-center">
                             {% if job.posting_type == "Internal" %}
-                            <span class="text-white badge py-2 px-3" style="background-color:palevioletred">{{job.posting_type}}</span>
+                            <span class="text-white badge py-2 px-3"
+                                style="background-color:palevioletred">{{job.posting_type}}</span>
                             {% else %}
-                            <span class="text-white badge py-2 px-3" style="background-color:steelblue">{{job.posting_type}}</span>
+                            <span class="text-white badge py-2 px-3"
+                                style="background-color:steelblue">{{job.posting_type}}</span>
                             {% endif %}
                             <span class="text-white badge py-2 px-3"
                                 style="margin-left: 5px; background-color:olive">{{job.career_level }}</span>
                             {% if job.post_until is None %}
-                            <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:salmon">Deadline: Until
+                            <span class="text-white badge py-2 px-3"
+                                style="margin-left: 5px; background-color:salmon">Deadline: Until
                                 Position is Filled</span>
                             {% else %}
-                            <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:salmon">Deadline:
+                            <span class="text-white badge py-2 px-3"
+                                style="margin-left: 5px; background-color:salmon">Deadline:
                                 {{job.post_until }}</span>
                             {% endif %}
 
                             <h2><a class="mr-2 text-black" data-toggle="collapse"
                                     href="#demo{{job.id}}">{{job.business_title}}</a> </h2>
-                            <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; scroll:auto; max-height: 40vh">
+                            <div id="demo{{job.id}}" class="collapse"
+                                style="overflow-y: auto; scroll:auto; max-height: 40vh">
                                 <p><b>Job Id: </b>{{job.job_id}}</p>
                                 {% if job.posting_updated %}
                                 <p><b>Last Updated: </b>{{job.posting_updated}}</p>
@@ -104,23 +160,31 @@
 
                     <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0" style="
                     width: auto">
-                    <div id= "alert{{job.id}}" class="alert alert-warning alert-dismissible fade show" role="alert" style = "display: none;">
-                        You need to <a href="{% url 'signin:signin'%}" ><strong><u>Sign In</u></strong></a> to be able to save a job.
-                        <button type="button" class="close" onclick="$('#alert{{job.id}}').css('display','none');" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                        <div id="alert{{job.id}}" class="alert alert-warning alert-dismissible fade show" role="alert"
+                            style="display: none;">
+                            You need to <a href="{% url 'signin:signin'%}"><strong><u>Sign In</u></strong></a> to be
+                            able to save a job.
+                            <button type="button" class="close" onclick="$('#alert{{job.id}}').css('display','none');"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         <div>
                             <form action="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
                                 {% csrf_token %}
                                 <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
                                 <button type="submit" class="btn">
                                     {%if saved_jobs_user is not None and job.id in saved_jobs_user%}
-                                    <i id="favBtnID{{job.id}}" class=" icon text-center d-flex justify-content-center align-items-center icon mr-2" title="Unsave" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                                    <i id="favBtnID{{job.id}}"
+                                        class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
+                                        title="Unsave"
+                                        style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                                         <span class="icon-heart" style="color:#fdab44;"></span>
                                     </i>
                                     {% else %}
-                                    <i id="favBtnID{{job.id}}" class=" icon text-center d-flex justify-content-center align-items-center icon mr-2" title="Save" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                                    <i id="favBtnID{{job.id}}"
+                                        class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
+                                        title="Save" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                                         <span class="icon-heart" style="color: rgb(255, 255, 255);"></span>
                                     </i>
                                     {% endif %}
@@ -131,11 +195,20 @@
                             </form>
                         </div>
                         <div>
-                            <form action="/" method=POST id="ApplyJob">
-                                {% csrf_token %}
-                                <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
-                                <button type="submit" class="btn btn-primary py-2">Apply</button>
-                            </form>
+                            {% if request.user.is_authenticated %}
+
+                            <!-- Button trigger modal -->
+                            <a href="#" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal1">
+                                Apply</a>
+
+                            {% else %}
+
+                            <!-- Button trigger modal -->
+                            <a href="#" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal">
+                                Apply</a>
+                            {% endif %}
+
+
                             <!-- <div>
                                 <a href="#"
                                     class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
@@ -161,63 +234,62 @@
 {% block javascript %}
 <script>
     //$(document).ready(function() {
-        var form = $('.favJob');
-        var formMessages = $('#form-messages');
-        $(form).submit(function(event) {
+    var form = $('.favJob');
+    var formMessages = $('#form-messages');
+    $(form).submit(function (event) {
 
-            // Current form
-            var currentForm = $(this);
-            // Stop the browser from submitting the form.
-            event.preventDefault();
+        // Current form
+        var currentForm = $(this);
+        // Stop the browser from submitting the form.
+        event.preventDefault();
 
-            // Serialize the form data.
-            var formData = currentForm.serialize();
-            var user = "{{user}}";
-            //alert(user);
+        // Serialize the form data.
+        var formData = currentForm.serialize();
+        var user = "{{user}}";
+        //alert(user);
 
-            $.ajax({
-                type: 'POST',
-                url: currentForm.attr('action'),
-                data: formData
-            }).done(function(response) {
-                debugger;
-                //$("#favBtnID" + response["job_id"]).css("opacity", 1);
-                if (response["response_data"] == "Job Saved") {
-                    $('#favBtnID' + response["job_id"]).css({
-                        'cssText': 'background-color: #28a745 !important; opacity:1'
-                    });
-                    // $('#favBtnID' + response["job_id"]).css({
-                    //     'cssText': 'background-color: #28a745 !important; opacity:1'
-                    // });
-                    $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
-                    $("#favBtnID" + response["job_id"]).attr('title','Unsave');
-                } else if (response["response_data"] == "Job Unsaved") {
-                    $('#favBtnID' + response["job_id"]).css({
-                        'cssText': 'background-color: #28a745 !important; opacity:1'
-                    });
-                    // $('#favBtnID' + response["job_id"]).css({
-                    //     'cssText': 'background-color: #FFFFFF !important; opacity:1'
-                    // });
-                    $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
-                   // $("#favBtnID" + response["job_id"]).removeAttr("style");
-                    $("#favBtnID" + response["job_id"]).attr('title','Save');
-                } else if (response["response_data"] == "User not authenticated") {
-                    if ($("#alert"+ response["job_id"]).css('display')=='none')
-                    {
-                        $("#alert"+ response["job_id"]).css('display','block');
-                    }
-                    //alert("Please sign in to favorite a job");
+        $.ajax({
+            type: 'POST',
+            url: currentForm.attr('action'),
+            data: formData
+        }).done(function (response) {
+            debugger;
+            //$("#favBtnID" + response["job_id"]).css("opacity", 1);
+            if (response["response_data"] == "Job Saved") {
+                $('#favBtnID' + response["job_id"]).css({
+                    'cssText': 'background-color: #28a745 !important; opacity:1'
+                });
+                // $('#favBtnID' + response["job_id"]).css({
+                //     'cssText': 'background-color: #28a745 !important; opacity:1'
+                // });
+                $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
+                $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+            } else if (response["response_data"] == "Job Unsaved") {
+                $('#favBtnID' + response["job_id"]).css({
+                    'cssText': 'background-color: #28a745 !important; opacity:1'
+                });
+                // $('#favBtnID' + response["job_id"]).css({
+                //     'cssText': 'background-color: #FFFFFF !important; opacity:1'
+                // });
+                $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
+                // $("#favBtnID" + response["job_id"]).removeAttr("style");
+                $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+            } else if (response["response_data"] == "User not authenticated") {
+                if ($("#alert" + response["job_id"]).css('display') == 'none') {
+                    $("#alert" + response["job_id"]).css('display', 'block');
                 }
+                //alert("Please sign in to favorite a job");
+            }
 
-                console.log("response")
-                    //Do something
-            }).fail(function(data) {
-                //Do something
-                console.log("fail")
-                debugger;
+            console.log("response")
+            //Do something
+        }).fail(function (data) {
+            //Do something
+            console.log("fail")
+            debugger;
 
-            });
         });
+    });
   //  });
 </script>
 {% endblock javascript %}
