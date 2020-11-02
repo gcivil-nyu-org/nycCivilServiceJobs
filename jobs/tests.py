@@ -3,10 +3,13 @@ from django.test import TestCase
 # from sodapy import Socrata
 from django.urls import reverse
 from django.db.models import QuerySet
-from jobs.models import job_record
+from jobs.models import job_record, UserSavedJob
 from django.utils import timezone
-from jobs.views import SearchResultsView, SearchFilterView
+from jobs.views import SearchResultsView,SearchFilterView
+from register.models import User
+import json
 from django.template.loader import render_to_string
+
 
 # client_socrata = Socrata(
 #     "data.cityofnewyork.us",
@@ -22,6 +25,15 @@ from django.template.loader import render_to_string
 class JobDataTest(TestCase):
     def setUp(self):
         self.createJob()
+        self.test_user = User.objects.create_user(
+            is_hiring_manager="False",
+            username="testjane",
+            first_name="Jane",
+            last_name="Doe",
+            dob="1994-10-02",
+            email="testjane@test.com",
+            password="thisisapassword",
+        )
 
     def createJob(self):
         job = job_record(
@@ -111,6 +123,76 @@ class JobDataTest(TestCase):
             list(correct_queryset), list(response.context["object_list"])
         )
 
+
+    def test_save_jobs_view(self):
+        response = self.client.post(
+            reverse("jobs:saveJob", kwargs={"pk": job_record.objects.get(id=1).id})
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_save_jobs_user_not_logged_in_save(self):
+        response = self.client.post(
+            reverse("jobs:saveJob", kwargs={"pk": job_record.objects.get(id=1).id})
+        )
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "User not authenticated"
+        )
+
+    def test_save_jobs_user_logged_in_save(self):
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+        response = self.client.post(
+            reverse("jobs:saveJob", kwargs={"pk": job_record.objects.get(id=1).id})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)["response_data"], "Job Saved")
+        saved_job_count = (
+            UserSavedJob.objects.filter(user=self.test_user)
+            .filter(job=job_record.objects.get(id=1))
+            .count()
+        )
+        self.assertEqual(saved_job_count, 1)
+
+    def test_jobs_GET_saved_jobs(self):
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+        response = self.client.post(
+            reverse("jobs:saveJob", kwargs={"pk": job_record.objects.get(id=1).id})
+        )
+        self.assertEqual(json.loads(response.content)["response_data"], "Job Saved")
+        response = self.client.get(reverse("jobs:jobs"), data={})
+        user_saved_jobs = list(
+            UserSavedJob.objects.filter(user=self.test_user).values_list(
+                "job", flat=True
+            )
+        )
+        self.assertListEqual(user_saved_jobs, response.context["saved_jobs_user"])
+
+    def test_save_jobs_user_logged_in_unsave(self):
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+        response = self.client.post(
+            reverse("jobs:saveJob", kwargs={"pk": job_record.objects.get(id=1).id})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)["response_data"], "Job Saved")
+        response = self.client.post(
+            reverse("jobs:saveJob", kwargs={"pk": job_record.objects.get(id=1).id})
+        )
+        self.assertEqual(json.loads(response.content)["response_data"], "Job Unsaved")
+        saved_job_count = (
+            UserSavedJob.objects.filter(user=self.test_user)
+            .filter(job=job_record.objects.get(id=1))
+            .count()
+        )
+        self.assertEqual(saved_job_count, 0)
+
     def test_filter_jobs_results_page(self):
         response = self.client.get(reverse("jobs:filter"), data={"q": ""})
         self.assertEqual(response.status_code, 200)
@@ -168,3 +250,4 @@ class JobDataTest(TestCase):
     def test_filter_jobs_GET_response_returns_correct_view_in_context(self):
         response = self.client.get(reverse("jobs:filter"), data={"q": ""})
         self.assertIsInstance(response.context["view"], SearchFilterView)
+

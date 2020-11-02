@@ -5,6 +5,7 @@ import pandas as pd
 from sodapy import Socrata
 from django.utils import timezone
 import datetime
+import ftfy
 
 sys.path.append("../nycCivilServiceJobs")  # here store is root folder(means parent).
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nycCivilServiceJobs.settings")
@@ -95,7 +96,7 @@ def save_Jobs():
                             agency=row["agency"],
                             posting_type=row["posting_type"],
                             num_positions=row["number_of_positions"],
-                            business_title=row["business_title"],
+                            business_title=fix_text_encoding(row["business_title"]),
                             civil_service_title=civil_service_title_cleanup(
                                 row["civil_service_title"]
                             ),
@@ -112,17 +113,25 @@ def save_Jobs():
                             salary_range_from=row["salary_range_from"],
                             salary_range_to=row["salary_range_to"],
                             salary_frequency=row["salary_frequency"],
-                            work_location=row["work_location"],
+                            work_location=fix_text_encoding(row["work_location"]),
                             division_work_unit=row["division_work_unit"],
-                            job_description=row["job_description"],
-                            minimum_qual_requirements=row["minimum_qual_requirements"],
-                            preferred_skills=row["preferred_skills"],
-                            additional_information=row["additional_information"],
-                            to_apply=row["to_apply"],
+                            job_description=fix_text_encoding(row["job_description"]),
+                            minimum_qual_requirements=fix_text_encoding(
+                                row["minimum_qual_requirements"]
+                            ),
+                            preferred_skills=fix_text_encoding(row["preferred_skills"]),
+                            additional_information=fix_text_encoding(
+                                row["additional_information"]
+                            ),
+                            to_apply=fix_text_encoding(row["to_apply"]),
                             hours_shift=row["hours_shift"],
-                            work_location_1=row["work_location_1"],
-                            recruitment_contact=row["recruitment_contact"],
-                            residency_requirement=row["residency_requirement"],
+                            work_location_1=fix_text_encoding(row["work_location_1"]),
+                            recruitment_contact=fix_text_encoding(
+                                row["recruitment_contact"]
+                            ),
+                            residency_requirement=fix_text_encoding(
+                                row["residency_requirement"]
+                            ),
                             posting_date=getAwareDate(row["posting_date"]),
                             post_until=convertDateFormat(
                                 row["post_until"]
@@ -146,7 +155,6 @@ def is_nan(x):
 
 
 def getAwareDate(inputDate):
-    # print(inputDate)
     if not inputDate:
         return
     tz = timezone.get_default_timezone()
@@ -156,15 +164,33 @@ def getAwareDate(inputDate):
 
 
 def convertDateFormat(inputDate):
-    # print(inputDate)
     if not inputDate:
         return
     return datetime.datetime.strptime(inputDate, "%d-%b-%Y").strftime("%Y-%m-%d")
 
 
 def civil_service_title_cleanup(s):
-    if s[-1] == "(":
-        s = s[: len(s) - 1]
+    return trim_parenthesis(s)
+
+
+def trim_parenthesis(s):
+    stack = []
+    for i in range(len(s)):
+        if s[i] == "(":
+            stack.append(i)
+        elif s[i] == ")":
+            stack.pop()
+
+    if len(stack) != 0:
+        index = stack.pop(0)
+        return s[:index]
+
+    return s
+
+
+def fix_text_encoding(s):
+    if s is not None:
+        return ftfy.fix_text(s)
     return s
 
 

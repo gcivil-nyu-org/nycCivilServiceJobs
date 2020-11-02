@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import job_record
+from .models import job_record, UserSavedJob
 
 
 class JobsAdmin(admin.ModelAdmin):
@@ -42,3 +42,4 @@ class JobsAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(job_record, JobsAdmin)
+admin.site.register(UserSavedJob)
