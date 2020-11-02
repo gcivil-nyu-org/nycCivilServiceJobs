@@ -51,6 +51,14 @@ class SearchResultsView(ListView):
         context["agencies"] = self.agencies
         context["career_level"] = self.career_level
         context["cs_titles"] = self.cs_titles
+        if self.request.user.is_authenticated:
+            context["saved_jobs_user"] = list(
+                UserSavedJob.objects.filter(user=self.request.user).values_list(
+                    "job", flat=True
+                )
+            )
+        else:
+            context["saved_jobs_user"] = None
         return context
 
     def get_queryset(self):
@@ -108,9 +116,22 @@ class SearchResultsView(ListView):
                 jobs = jobs.order_by(sort_field)
 
             context = {"jobs": jobs}
+
+            if self.request.user.is_authenticated:
+                context["saved_jobs_user"] = list(
+                    UserSavedJob.objects.filter(user=self.request.user).values_list(
+                        "job", flat=True
+                    )
+                )
+            else:
+                context["saved_jobs_user"] = None
+
+            # csrf_token = request.POST.get("csrfmiddlewaretoken")
+            # context["csrf_token"] = csrf_token
+            # print(context)
             data = {
                 "rendered_table": render_to_string(
-                    "jobs/table_content.html", context=context
+                    "jobs/table_content.html", context=context, request=request
                 )
             }
             # data = serializers.serialize('json', data)

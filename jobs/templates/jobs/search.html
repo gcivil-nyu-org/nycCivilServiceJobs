@@ -16,100 +16,7 @@
 <br>
 <br>
 <br>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript">
-var date_asc=false;
-  function putTableData(data) {
-        console.log()
-        $("#listing").html(data.rendered_table);
 
-    }
-  $(document).ready(function() {
-
-    $( "#posting-type" ).change(function(event) {
-      senddata()
-    });
-    $('#post-after').change(function() {
-      senddata()
-    });
-    $('#agency').change(function() {
-      senddata()
-    });
-    $( "#fp" ).change(function(event) {
-      senddata()
-    });
-
-});
-
-function sort(id){
-  var button_text="Sort "
-  if(id=="sort-posting"){
-    date_asc = !date_asc
-
-    if(date_asc)
-      {
-        button_text+=": Date Posted "+"<i class='fa fa-sort-amount-asc'></i>"
-        document.getElementById("sort-posting").innerHTML="Date Posted "+"<i class='fa fa-sort-amount-desc'></i>"}
-    else
-      {
-        button_text+=": Date Posted "+"<i class='fa fa-sort-amount-desc'></i>"
-        document.getElementById("sort-posting").innerHTML="Date Posted "+"<i class='fa fa-sort-amount-asc'></i>"}
-  }
-  document.getElementById("sort-order").value = id
-  document.getElementById("sort-order").innerHTML = button_text
-  senddata()
-
-  console.log(id,date_asc)
-}
-function senddata(){
-  var query = $('#id_q').val()
-  var posting_type= $('#posting-type').find(":selected").val()
-  var date = $('#post-after').val();
-  var agency = $('#agency').find(":selected").val()
-  var sort_order = $("#sort-order").val()
-  var fp = $("#fp").val()
-  console.log("sort-order",sort_order)
-  var asc;
-  if(sort_order=="sort-posting")
-    asc=date_asc
-  else if (sort_order=="") {
-    asc = ""
-  }
-
-  var ids = new Array();
-        $('input[name="ids[]"]:checked').each(function(){
-           ids.push($(this).val());
-        });
-
-
-
-  var dataString = 'ids='+ ids;
-  console.log(dataString);
-  console.log(posting_type,date);
-  $.ajax({
-   url: "{% url 'jobs:results' %}",
-   method: "POST",
-   data: {
-     csrfmiddlewaretoken: "{{ csrf_token }}",
-     state:"inactive",
-     posting_type:posting_type,
-     date:date,
-     agency:agency,
-     sort_order:sort_order,
-     asc:asc,
-     query:query,
-     fp:fp
-   },
-   success: function(json){
-      putTableData(json);
-   },
-   error: function(xhr, errmsg, err){
-       console.log("error")
-   }
-});
-}
-
-</script>
 
 <section class="ftco-section bg-light">
     <form id="form" method="GET" action="{% url 'jobs:results' %}">
@@ -255,8 +162,149 @@ function senddata(){
 {% endblock %}
 
 {% block javascript %}
-<script>
-    //$(document).ready(function() {
+<script >
+$(window).on('load', function () {
+    var date_asc = false;
+    function putTableData(data) {
+        console.log()
+        $("#listing").html(data.rendered_table);
+
+        var form = $('.favJob');
+        var formMessages = $('#form-messages');
+        $(form).submit(function (event) {
+
+            // Current form
+            var currentForm = $(this);
+            // Stop the browser from submitting the form.
+            event.preventDefault();
+
+            // Serialize the form data.
+            var formData = currentForm.serialize();
+
+            debugger;
+            var user = "{{user}}";
+            //alert(user);
+
+            $.ajax({
+                type: 'POST',
+                url: currentForm.attr('action'),
+                data: formData
+            }).done(function (response) {
+                //debugger;
+                //$("#favBtnID" + response["job_id"]).css("opacity", 1);
+                if (response["response_data"] == "Job Saved") {
+                    $('#favBtnID' + response["job_id"]).css({
+                        'cssText': 'background-color: #28a745 !important; opacity:1'
+                    });
+                    // $('#favBtnID' + response["job_id"]).css({
+                    //     'cssText': 'background-color: #28a745 !important; opacity:1'
+                    // });
+                    $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
+                    $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                } else if (response["response_data"] == "Job Unsaved") {
+                    $('#favBtnID' + response["job_id"]).css({
+                        'cssText': 'background-color: #28a745 !important; opacity:1'
+                    });
+                    // $('#favBtnID' + response["job_id"]).css({
+                    //     'cssText': 'background-color: #FFFFFF !important; opacity:1'
+                    // });
+                    $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
+                    // $("#favBtnID" + response["job_id"]).removeAttr("style");
+                    $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                } else if (response["response_data"] == "User not authenticated") {
+                    // if ($("#alert" + response["job_id"]).css('display') == 'none') {
+                    //     $("#alert" + response["job_id"]).css('display', 'block');
+                    // }
+                    $('#exampleModal').modal('toggle');
+                    //alert("Please sign in to favorite a job");
+                }
+
+                console.log("response")
+                //Do something
+            }).fail(function (data) {
+                //Do something
+                console.log("fail")
+                //debugger;
+            });
+        });
+    }
+
+    $("#posting-type").change(function (event) {
+        senddata()
+    });
+    $('#post-after').change(function () {
+        senddata()
+    });
+    $('#agency').change(function () {
+        senddata()
+    });
+    $("#fp").change(function (event) {
+        senddata()
+    });
+
+    function senddata() {
+        var query = $('#id_q').val()
+            var posting_type = $('#posting-type').find(":selected").val()
+            var date = $('#post-after').val();
+        var agency = $('#agency').find(":selected").val()
+            var sort_order = $("#sort-order").val()
+            var fp = $("#fp").val()
+            console.log("sort-order", sort_order)
+            var asc;
+        if (sort_order == "sort-posting")
+            asc = date_asc 
+        else if (sort_order == "") {
+                    asc = ""
+              }
+
+        var ids = new Array();
+
+        $('input[name="ids[]"]:checked').each(function () {
+            ids.push($(this).val());
+        });
+
+        var dataString = 'ids=' + ids;
+        console.log(dataString);
+        console.log(posting_type, date);
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url: "{% url 'jobs:results' %}",
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: csrftoken,
+                state: "inactive",
+                posting_type: posting_type,
+                date: date,
+                agency: agency,
+                sort_order: sort_order,
+                asc: asc,
+                query: query,
+                fp: fp
+            },
+            success: function (json) {
+                putTableData(json);
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("error")
+            }
+        });
+    }
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     var form = $('.favJob');
     var formMessages = $('#form-messages');
     $(form).submit(function (event) {
@@ -268,6 +316,8 @@ function senddata(){
 
         // Serialize the form data.
         var formData = currentForm.serialize();
+
+        debugger;
         var user = "{{user}}";
         //alert(user);
 
@@ -276,7 +326,7 @@ function senddata(){
             url: currentForm.attr('action'),
             data: formData
         }).done(function (response) {
-            debugger;
+            //debugger;
             //$("#favBtnID" + response["job_id"]).css("opacity", 1);
             if (response["response_data"] == "Job Saved") {
                 $('#favBtnID' + response["job_id"]).css({
@@ -310,20 +360,20 @@ function senddata(){
         }).fail(function (data) {
             //Do something
             console.log("fail")
-            debugger;
+            //debugger;
 
         });
     });
-  //  });
-
+});
     $('#exampleModal1').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var civilServiceTitle = button.data('civilservicetitle') ;
-    var businessTitle = button.data('businesstitle') ;
-    var modal = $(this);
-    debugger;
-    modal.find('.modal-title').text(businessTitle);
-    modal.find('.modal-body').text(civilServiceTitle+ ' title is required for applying to this job. Do you want to continue?');
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var civilServiceTitle = button.data('civilservicetitle');
+        var businessTitle = button.data('businesstitle');
+        var modal = $(this);
+        //debugger;
+        modal.find('.modal-title').text(businessTitle);
+        modal.find('.modal-body').text(civilServiceTitle + ' title is required for applying to this job. Do you want to continue?');
     });
-</script>
+</script >
+
 {% endblock javascript %}
