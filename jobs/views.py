@@ -34,6 +34,7 @@ class SearchFilterView(ListView):
     template_name = "jobs/search_filter.html"
     agencies = []
     career_level = []
+    cs_titles = []
 
     def dispatch(self, request, *args, **kwargs):
         self.agencies = [
@@ -43,12 +44,17 @@ class SearchFilterView(ListView):
             x["career_level"]
             for x in job_record.objects.values("career_level").distinct()
         ]
+        self.cs_titles = [
+            x["civil_service_title"]
+            for x in job_record.objects.values("civil_service_title").distinct()
+        ]
         return super(SearchFilterView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["agencies"] = self.agencies
         context["career_level"] = self.career_level
+        context["cs_titles"] = self.cs_titles
         return context
 
     def get_queryset(self):

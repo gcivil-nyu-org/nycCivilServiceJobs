@@ -38,6 +38,14 @@ var date_asc=false;
     $( "#fp" ).change(function(event) {
       senddata()
     });
+
+
+  $("#cs_title").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $(".dropdown-menu li").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
 });
 
 function sort(id){
@@ -161,6 +169,81 @@ function senddata(){
     <div class="container">
 
         <div class="row">
+
+          <div class="col-lg-3 sidebar">
+
+              <div class="row justify-content-center pb-3">
+                  <div class="col-md-12 heading-section">
+                    <h2 class="mb-4">&nbsp<h2>
+                  </div>
+              </div>
+            <div class="sidebar-box bg-white p-4 ftco-animate">
+              <h3 class="heading-sidebar">Filters </h3>
+              <div class="btn-group sort-btn">
+            <button class="btn btn-primary dropdown-toggle " type="button" id="sort-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Sort  </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" onclick="sort(this.id)" id="" href="#">Default</a>
+              <a class="dropdown-item" onclick="sort(this.id)" id="sort-posting" href="#">Posting Date<i class="fa fa-sort-amount-asc"></i> </a>
+
+            </div>
+          </div>
+          <hr class="mt-2 mb-3"/>
+
+          <!-- <label for="option-job-1"><input type="checkbox" id="option-job-1" name="vehicle" value="" checked> Website &amp; Software</label><br>
+          <label for="option-job-2"><input type="checkbox" id="option-job-2" name="vehicle" value=""> Education &amp; Training</label><br>
+          <label for="option-job-3"><input type="checkbox" id="option-job-3" name="vehicle" value=""> Graphics Design</label><br>
+          <label for="option-job-4"><input type="checkbox" id="option-job-4" name="vehicle" value=""> Accounting &amp; Finance</label><br>
+          <label for="option-job-5"><input type="checkbox" id="option-job-5" name="vehicle" value=""> Restaurant &amp; Food</label><br>
+          <label for="option-job-6"><input type="checkbox" id="option-job-6" name="vehicle" value=""> Health &amp; Hospital</label><br>
+          <label for="option-job-1"><input type="checkbox" id="option-job-1" class="ids" name="ids[]" value="Part"> Part Time </label>
+          <input type="checkbox" class="ids" name="ids[]" value="3">
+          <input type="checkbox" class="ids" name="ids[]" value="4">
+          <input type="checkbox" class="ids" name="ids[]" value="5">
+          <input type="checkbox" class="ids" name="ids[]" value="6"> -->
+
+                  <select class="form-control"  name="posting-type" id="posting-type">
+                  <option value=""> Posting Type </option>
+                  <option value="External">External </option>
+                  <option value="Internal">Internal </option>
+
+                  </select>
+                  <hr class="mt-2 mb-3"/>
+
+                  <select class="form-control"  name="fp" id="fp">
+                  <option value=""> Part, Full </option>
+                  <option value="P">Part-Time </option>
+                  <option value="F">Full-Time </option>
+
+                  </select>
+                  <hr class="mt-2 mb-3"/>
+
+                  <select class="form-control"  name="agency" id="agency">
+                    <option value=""> Agency </option>
+                    {% for agency in agencies %}
+                      <option value={{forloop.counter0}}> {{agency}} </option>
+                    {% endfor %}
+                  </select>
+
+
+                  <hr class="mt-2 mb-3"/>
+
+                  <!-- <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Civil Service Title
+                  <ul class="dropdown-menu">
+                    <input class="form-control" id="cs_title" type="text" placeholder="Search..">
+                    <li><a href="#">Blah</a></li>
+                    {% for title in cs_titles %}
+                      <li><a href="#">{{title}}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div> -->
+
+                  <label for="post-after">  Posted After: </label>
+                  <input class="form-control"  type="date" id="post-after" name="post-after">
+
+            </div>
+          </div>
           <div class="col-lg-9 pr-lg-4">
 
         <div class="row" id="listing">
@@ -168,60 +251,7 @@ function senddata(){
           {% include "jobs/table_content.html" with jobs=object_list %}
         </div>
         </div>
-        <div class="col-lg-3 sidebar">
-          <div class="sidebar-box bg-white p-4 ftco-animate">
-            <h3 class="heading-sidebar">Filters </h3>
-            <div class="btn-group sort-btn">
-          <button class="btn btn-primary dropdown-toggle " type="button" id="sort-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Sort  </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" onclick="sort(this.id)" id="" href="#">Default</a>
-            <a class="dropdown-item" onclick="sort(this.id)" id="sort-posting" href="#">Posting Date<i class="fa fa-sort-amount-asc"></i> </a>
 
-          </div>
-        </div>
-        <hr class="mt-2 mb-3"/>
-
-        <!-- <label for="option-job-1"><input type="checkbox" id="option-job-1" name="vehicle" value="" checked> Website &amp; Software</label><br>
-        <label for="option-job-2"><input type="checkbox" id="option-job-2" name="vehicle" value=""> Education &amp; Training</label><br>
-        <label for="option-job-3"><input type="checkbox" id="option-job-3" name="vehicle" value=""> Graphics Design</label><br>
-        <label for="option-job-4"><input type="checkbox" id="option-job-4" name="vehicle" value=""> Accounting &amp; Finance</label><br>
-        <label for="option-job-5"><input type="checkbox" id="option-job-5" name="vehicle" value=""> Restaurant &amp; Food</label><br>
-        <label for="option-job-6"><input type="checkbox" id="option-job-6" name="vehicle" value=""> Health &amp; Hospital</label><br>
-        <label for="option-job-1"><input type="checkbox" id="option-job-1" class="ids" name="ids[]" value="Part"> Part Time </label>
-        <input type="checkbox" class="ids" name="ids[]" value="3">
-        <input type="checkbox" class="ids" name="ids[]" value="4">
-        <input type="checkbox" class="ids" name="ids[]" value="5">
-        <input type="checkbox" class="ids" name="ids[]" value="6"> -->
-
-                <select class="form-control"  name="posting-type" id="posting-type">
-                <option value=""> Posting Type </option>
-                <option value="External">External </option>
-                <option value="Internal">Internal </option>
-
-                </select>
-                <hr class="mt-2 mb-3"/>
-
-                <select class="form-control"  name="fp" id="fp">
-                <option value=""> Part, Full </option>
-                <option value="P">Part-Time </option>
-                <option value="F">Full-Time </option>
-
-                </select>
-                <hr class="mt-2 mb-3"/>
-
-                <select class="form-control"  name="agency" id="agency">
-                  <option value=""> Agency </option>
-                  {% for agency in agencies %}
-                    <option value={{forloop.counter0}}> {{agency}} </option>
-                  {% endfor %}
-                </select>
-                <hr class="mt-2 mb-3"/>
-                <label for="post-after">  Posted After: </label>
-                <input class="form-control"  type="date" id="post-after" name="post-after">
-
-          </div>
-        </div>
         </div>
         <!-- <div class="row" >
 {% if object_list %}
