@@ -5,9 +5,10 @@ from django.urls import reverse
 from django.db.models import QuerySet
 from jobs.models import job_record, UserSavedJob
 from django.utils import timezone
-from jobs.views import SearchResultsView
+from jobs.views import SearchResultsView,SearchFilterView
 from register.models import User
 import json
+from django.template.loader import render_to_string
 
 
 # client_socrata = Socrata(
@@ -122,6 +123,7 @@ class JobDataTest(TestCase):
             list(correct_queryset), list(response.context["object_list"])
         )
 
+
     def test_save_jobs_view(self):
         response = self.client.post(
             reverse("jobs:saveJob", kwargs={"pk": job_record.objects.get(id=1).id})
@@ -190,3 +192,62 @@ class JobDataTest(TestCase):
             .count()
         )
         self.assertEqual(saved_job_count, 0)
+
+    def test_filter_jobs_results_page(self):
+        response = self.client.get(reverse("jobs:filter"), data={"q": ""})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "jobs/search_filter.html")
+        self.assertTemplateUsed(response, "jobs/table_content.html")
+        self.assertTemplateUsed(response, "landing_base.html")
+
+    def test_filter_jobs_POST_response_correct_JSON(self):
+        response = self.client.post(
+            reverse("jobs:filter"),
+            data={"query": "test_business_title"},
+            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
+        )
+
+        context = {
+            "jobs": job_record.objects.filter(
+                business_title__icontains="test_business_title"
+            )
+        }
+
+        correctJSON = {
+            "rendered_table": render_to_string(
+                "jobs/table_content.html", context=context
+            )
+        }
+        self.assertJSONEqual(str(response.content, encoding="utf8"), correctJSON)
+
+        response = self.client.post(
+            reverse("jobs:filter"),
+            data={
+                "query": "test_business_title",
+                "posting_type": "External",
+                "date": timezone.now(),
+                "agency": 0,
+                "asc": "false",
+                "sort_order": "sort-posting",
+            },
+            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
+        )
+
+        context = {
+            "jobs": job_record.objects.filter(
+                business_title__icontains="test_business_title",
+                posting_type="External",
+            )
+        }
+
+        correctJSON = {
+            "rendered_table": render_to_string(
+                "jobs/table_content.html", context=context
+            )
+        }
+        self.assertJSONEqual(str(response.content, encoding="utf8"), correctJSON)
+
+    def test_filter_jobs_GET_response_returns_correct_view_in_context(self):
+        response = self.client.get(reverse("jobs:filter"), data={"q": ""})
+        self.assertIsInstance(response.context["view"], SearchFilterView)
+
