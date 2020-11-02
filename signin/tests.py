@@ -47,6 +47,11 @@ class SigninTest(TestCase):
         self.assertRedirects(
             response, reverse("signin:success"), fetch_redirect_response=False
         )
+        # check if redirects user to success page when already logged in 
+        response = self.client.get(reverse("signin:signin"))
+        self.assertRedirects(
+            response, reverse("signin:success"), fetch_redirect_response=False
+        )
 
     # def test_get_success_page(self):
     #     response = self.client.get(reverse("signin:success"))

@@ -104,7 +104,7 @@ class RegisterFormTest(BaseTest):
         )
 
 
-class RegisterTest(BaseTest):
+class RegisterTestView(BaseTest):
 
     # Setup for the test
     def test_can_view_register_page(self):
@@ -119,3 +119,6 @@ class RegisterTest(BaseTest):
         self.assertEqual(User.objects.count(), user_count)
         self.assertEqual(response.status_code, 302)
         self.assertTemplateUsed(response, "register/account_activated.html")
+        self.assertRedirects(
+            response, reverse("register:success"), fetch_redirect_response=True
+        )
