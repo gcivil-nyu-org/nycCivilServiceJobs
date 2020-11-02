@@ -66,6 +66,7 @@ class SaveJobsView(View):
                 response_data["response_data"] = "User not authenticated"
                 return JsonResponse(response_data, status=200)
 
+
 class SearchFilterView(ListView):
     model = job_record
     template_name = "jobs/search_filter.html"
