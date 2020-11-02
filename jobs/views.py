@@ -93,7 +93,6 @@ class SearchResultsView(ListView):
             sort_order = request.POST.get("sort_order")
             asc = request.POST.get("asc")
             fp = request.POST.get("fp")
-            print(sort_order, asc)
             if posting_type:
                 form_filters["posting_type"] = posting_type
             if date:

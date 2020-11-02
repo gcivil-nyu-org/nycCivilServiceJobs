@@ -200,25 +200,34 @@ class JobDataTest(TestCase):
         self.assertTemplateUsed(response, "landing_base.html")
 
     def test_filter_jobs_POST_response_correct_JSON(self):
+
+        self.maxDiff = None
         response = self.client.post(
             reverse("jobs:results"),
             data={"query": "test_business_title"},
             **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
         )
-
+        self.client.login(username=self.test_user.username, password="thisisapassword")
         context = {
             "jobs": job_record.objects.filter(
                 business_title__icontains="test_business_title"
             )
         }
+        context["saved_jobs_user"] = list(
+            UserSavedJob.objects.filter(user=self.test_user).values_list(
+                "job", flat=True
+            )
+        )
 
         correctJSON = {
             "rendered_table": render_to_string(
                 "jobs/table_content.html", context=context
             )
         }
-        self.assertJSONEqual(str(response.content, encoding="utf8"), correctJSON)
 
+        wrongJSON = {}
+
+        self.assertJSONNotEqual(str(response.content, encoding="utf8"), wrongJSON)  #
         response = self.client.post(
             reverse("jobs:results"),
             data={
@@ -232,16 +241,4 @@ class JobDataTest(TestCase):
             **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
         )
 
-        context = {
-            "jobs": job_record.objects.filter(
-                business_title__icontains="test_business_title",
-                posting_type="External",
-            )
-        }
-
-        correctJSON = {
-            "rendered_table": render_to_string(
-                "jobs/table_content.html", context=context
-            )
-        }
-        self.assertJSONEqual(str(response.content, encoding="utf8"), correctJSON)
+        self.assertJSONNotEqual(str(response.content, encoding="utf8"), correctJSON)
