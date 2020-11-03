@@ -31,6 +31,7 @@ class SearchResultsView(ListView):
     agencies = []
     career_level = []
     cs_titles = []
+    salary_ranges = []
 
     def dispatch(self, request, *args, **kwargs):
         self.agencies = [
@@ -39,11 +40,14 @@ class SearchResultsView(ListView):
         self.career_level = [
             x["career_level"]
             for x in job_record.objects.values("career_level").distinct()
+            if x["career_level"]
         ]
+
         self.cs_titles = [
             x["civil_service_title"]
             for x in job_record.objects.values("civil_service_title").distinct()
         ]
+        self.salary_ranges = [[0, 10000], [10000, 20000], [20000, 45000], [450000, "+"]]
         return super(SearchResultsView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -90,6 +94,11 @@ class SearchResultsView(ListView):
             posting_type = request.POST.get("posting_type")
             date = request.POST.get("date")
             agency = request.POST.get("agency")
+            career_level = request.POST.get("career_level")
+            salary_range = request.POST.get("salary_range")
+            cs_title_index = request.POST.get("cs_title")
+            # print("Career Level: ",salary_range)
+
             sort_order = request.POST.get("sort_order")
             asc = request.POST.get("asc")
             fp = request.POST.get("fp")
@@ -101,6 +110,15 @@ class SearchResultsView(ListView):
                 form_filters["agency"] = self.agencies[int(agency)]
             if fp:
                 form_filters["full_time_part_time_indicator"] = fp
+            if career_level and len(self.career_level):
+                form_filters["career_level"] = self.career_level[int(career_level)]
+            if salary_range:
+                form_filters["salary_range_from__gte"] = int(salary_range)
+            if cs_title_index and len(self.cs_titles):
+                form_filters["civil_service_title"] = self.cs_titles[
+                    int(cs_title_index)
+                ]
+
             # print(posting_type,date,self.agencies[int(agency)])
             jobs = jobs.filter(**form_filters)
 
@@ -111,7 +129,6 @@ class SearchResultsView(ListView):
 
                 if asc == "false":
                     sort_field = "-" + sort_field
-                print("Order By: ", sort_field)
                 jobs = jobs.order_by(sort_field)
 
             context = {"jobs": jobs}
