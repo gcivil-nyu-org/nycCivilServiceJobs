@@ -264,3 +264,22 @@ class JobDataTest(TestCase):
         )
 
         self.assertJSONNotEqual(str(response.content, encoding="utf8"), correctJSON)
+
+        response = self.client.post(
+            reverse("jobs:results"),
+            data={
+                "query": "test_business_title",
+                "posting_type": "External",
+                "date": timezone.now(),
+                "agency": 0,
+                "full_time_part_time_indicator": "F",
+                "cs_title": 0,
+                "salary_range": 2500,
+                "career_level": 0,
+                "asc": "false",
+                "sort_order": "sort-salary",
+            },
+            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
+        )
+
+        self.assertJSONNotEqual(str(response.content, encoding="utf8"), correctJSON)

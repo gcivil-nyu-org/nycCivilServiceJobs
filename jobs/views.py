@@ -76,7 +76,8 @@ class SearchResultsView(ListView):
             Q(agency__icontains=query)
             | Q(business_title__icontains=query)
             | Q(civil_service_title__icontains=query)
-        )
+        ).order_by("-posting_date")
+
         self.query_set = object_list
         return object_list
 
@@ -126,7 +127,8 @@ class SearchResultsView(ListView):
             if sort_order:
                 if sort_order == "sort-posting":
                     sort_field = "posting_date"
-
+                elif sort_order == "sort-salary":
+                    sort_field = "salary_range_from"
                 if asc == "false":
                     sort_field = "-" + sort_field
                 jobs = jobs.order_by(sort_field)

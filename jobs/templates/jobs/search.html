@@ -113,7 +113,7 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" onclick="sort(this.id)" id="" href="#">Default</a>
               <a class="dropdown-item" onclick="sort(this.id)" id="sort-posting" href="#">Posting Date<i class="fa fa-sort-amount-asc"></i> </a>
-
+              <a class="dropdown-item" onclick="sort(this.id)" id="sort-salary" href="#">Salary <i class="fa fa-sort-amount-asc"></i> </a>
             </div>
           </div>
           <hr class="mt-2 mb-3"/>
@@ -198,6 +198,7 @@
 {% block javascript %}
 <script >
   var date_asc = false;
+  var salary_asc = false;
   var cs_title = "";
   function sort(id){
     var button_text="Sort "
@@ -212,6 +213,21 @@
         {
           button_text+=": Date Posted "+"<i class='fa fa-sort-amount-desc'></i>"
           document.getElementById("sort-posting").innerHTML="Date Posted "+"<i class='fa fa-sort-amount-asc'></i>"}
+    }
+    else if(id=="sort-salary")
+    {
+      salary_asc = !salary_asc
+
+      if(salary_asc)
+        {
+          button_text+=": Salary "+"<i class='fa fa-sort-amount-asc'></i>"
+          document.getElementById("sort-salary").innerHTML="Salary "+"<i class='fa fa-sort-amount-desc'></i>"
+        }
+      else
+        {
+          button_text+=": Salary "+"<i class='fa fa-sort-amount-desc'></i>"
+          document.getElementById("sort-salary").innerHTML="Salary "+"<i class='fa fa-sort-amount-asc'></i>"
+        }
     }
     document.getElementById("sort-order").value = id
     document.getElementById("sort-order").innerHTML = button_text
@@ -232,6 +248,8 @@
       var asc;
       if (sort_order == "sort-posting")
           asc = date_asc
+      else if(sort_order == "sort-salary")
+          asc = salary_asc
       else if (sort_order == "") {
                   asc = ""
             }
