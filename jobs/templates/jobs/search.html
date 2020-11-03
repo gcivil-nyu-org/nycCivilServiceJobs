@@ -129,23 +129,25 @@
                     </div>
                     <br>
 
-                    <div class="form-group ">  Civil Service Title
-                        <a class="form-control" href="#" role="button" id="dropdownMenuLink"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Civil Service Title
+                    <div class="form-group "> Civil Service Title
+                        <a class="form-control" style="overflow:hidden; text-overflow:ellipsis; white-space: nowrap;"
+                            href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            All
                         </a>
 
-                        <div class="dropdown-menu pre-scrollable"
-                            style="width:100%; overflow:scroll;text-overflow: ellipsis; " id="myDropdown"
-                            aria-labelledby="dropdownMenuLink">
-                            <input type="text" placeholder="Type to Search.." id="myInput" onkeyup="filterFunction()">
+                        <div class=" from-control dropdown-menu pre-scrollable"
+                            style="width:90%; overflow:scroll; text-overflow: ellipsis; white-space: nowrap; "
+                            id="myDropdown" aria-labelledby="dropdownMenuLink">
+                            <input class="form-control" type="text" placeholder="Type to Search.." id="myInput"
+                                onkeyup="filterFunction()">
                             <a class="dropdown-item csdrop" href="#" id="">All</a>
                             {% for cs_title in cs_titles %}
                             <a class="dropdown-item csdrop" href="#" id={{forloop.counter0}}>{{cs_title}}</a>
                             {% endfor %}
                         </div>
                     </div>
-        
+
                     <div>Posting Type
                         <select class="form-control" name="posting-type" id="posting-type">
                             <option value=""> Any </option>
@@ -172,11 +174,11 @@
                     </div>
                     <br>
                     <div class="form-group"> Starting Salary <span class="badge badge-dark" id="salary-badge">0+</span>
-                        <input type="range" class="form-control-range" min=0 value=10000 max=300000 id="salary-range">
+                        <input type="range" class="form-control-range" min=0 value=0 max=300000 id="salary-range">
                     </div>
                     <br>
                     <div> Posted After
-                    <input class="form-control" type="date" id="post-after" name="post-after">
+                        <input class="form-control" type="date" id="post-after" name="post-after">
                     </div>
                     <br>
 
@@ -403,8 +405,10 @@
             cs_title = $(this).attr("id");
             console.log("CS", cs_title);
             senddata()
+            document.getElementById('dropdownMenuLink').innerHTML = $(this).html();;
 
         })
+
 
         $("#salary-range").change(function () {
             document.getElementById('salary-badge').innerHTML = this.value + "+";
