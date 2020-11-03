@@ -48,15 +48,17 @@
                     Are you sure you meet the Civil Service Requirement?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal"
-                    style=" background-color: #6c757d !important;
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" style=" background-color: #6c757d !important;
                     color: #fff !important;
                     border-color: #6c757d !important;">No</button>
-                    <a href="https://www1.nyc.gov/jobs/index.page" target="_blank">
-                        <button type="button" class="btn btn-primary">Yes</button></a>
+
+                    <div class="modal-link">
+                        <button type="button" class="btn btn-primary" id="redirectbutton">Yes</button>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <!-- End of Modal if user is  authenticated  -->
 
@@ -76,8 +78,7 @@
                     Sign In to save / apply for jobs.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                    style=" background-color: #6c757d !important;
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" background-color: #6c757d !important;
                     color: #fff !important;
                     border-color: #6c757d !important;">Close</button>
                     <a href="{% url 'signin:signin' %}">
@@ -202,14 +203,30 @@
                         <div>
                             {% if request.user.is_authenticated %}
 
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal1" data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}">
+                            {% if job.title_classification == "Competitive-1" %}
+
+                            <!-- Button trigger modal for competetive -->
+                            <i></i><button type="button" class="btn btn-primary py-2" data-toggle="modal"
+                                data-target="#exampleModal1" data-civilServiceTitle="{{job.civil_service_title}}"
+                                data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
                                 Apply</button>
 
                             {% else %}
+                            <!-- Button trigger redirect for non-competitive -->
 
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal" data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}">
+                            <a href="https://a127-jobs.nyc.gov/index_new.html?keyword={{job.job_id}}"
+                                target="_blank"><button type="button" class="btn btn-primary py-2"
+                                    id="redirectbutton1{{job.id}}" data-civilServiceTitle="{{job.civil_service_title}}"
+                                    data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
+                                    Apply</button></a>
+                            {% endif %}
+
+                            {% else %}
+
+                            <!-- Button trigger modal if user is not authenticated -->
+                            <button type="button" class="btn btn-primary py-2" data-toggle="modal"
+                                data-target="#exampleModal" data-civilServiceTitle="{{job.civil_service_title}}"
+                                data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
                                 Apply</button>
                             {% endif %}
 
@@ -296,16 +313,45 @@
 
         });
     });
-  //  });
+    //  });
 
     $('#exampleModal1').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var civilServiceTitle = button.data('civilservicetitle') ;
-    var businessTitle = button.data('businesstitle') ;
-    var modal = $(this);
-    debugger;
-    modal.find('.modal-title').text(businessTitle);
-    modal.find('.modal-body').text(civilServiceTitle+ ' title is required for applying to this job. Do you want to continue?');
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var civilServiceTitle = button.data('civilservicetitle');
+        var businessTitle = button.data('businesstitle');
+        var jobID = button.data('jobid');
+        var modal = $(this);
+        console.log(modal.find('.modal-link'));
+        debugger;
+        modal.find('.modal-title').text(businessTitle);
+        modal.find('.modal-body').text('The job you have selected requires ' + civilServiceTitle + ' to apply for this job.In order to apply, you must be an existing title holder or awaiting the examination result for the title.Do you still want to continue?');
+        $(function () {
+            $('#redirectbutton').click(function () {
+                var win = window.open("https://a127-jobs.nyc.gov/index_new.html?keyword=" + jobID, '_blank');
+                if (win) {
+                    //Browser has allowed it to be opened
+                    win.focus();
+                } else {
+                    //Browser has blocked it
+                    alert('Please allow popups for this website');
+                }
+
+
+            });
+        });
+
+
     });
+
+
+
+
+
+
+
+
+
+
+
 </script>
 {% endblock javascript %}
