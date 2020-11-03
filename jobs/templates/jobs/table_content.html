@@ -30,7 +30,7 @@
 
                 <h2><a class="mr-2 text-black" data-toggle="collapse" href="#demo{{job.id}}">{{job.business_title}}</a>
                 </h2>
-                <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; scroll:auto; max-height: 40vh">
+                <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; max-height: 40vh">
                     <p><b>Job Id: </b>{{job.job_id}}</p>
                     {% if job.posting_updated %}
                     <p><b>Last Updated: </b>{{job.posting_updated}}</p>
@@ -78,7 +78,7 @@
                 </button>
             </div> -->
             <div>
-                <form action="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
+                <form onsubmit="return false;" save_unsave_url="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
                     {% csrf_token %}
                     <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
                     <button type="submit" class="btn">

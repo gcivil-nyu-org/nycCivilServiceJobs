@@ -175,7 +175,7 @@
                             </button>
                         </div> -->
                         <div>
-                            <form action="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
+                            <form onsubmit="return false;" save_unsave_url="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
                                 {% csrf_token %}
                                 <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
                                 <button type="submit" class="btn">
@@ -271,7 +271,7 @@
 
         $.ajax({
             type: 'POST',
-            url: currentForm.attr('action'),
+            url: currentForm.attr('save_unsave_url'),
             data: formData
         }).done(function (response) {
             debugger;

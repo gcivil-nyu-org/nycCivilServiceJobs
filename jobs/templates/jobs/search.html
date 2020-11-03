@@ -303,7 +303,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: currentForm.attr('action'),
+                url: currentForm.attr('save_unsave_url'),
                 data: formData
             }).done(function (response) {
                 //debugger;
@@ -435,7 +435,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: currentForm.attr('action'),
+                url: currentForm.attr('save_unsave_url'),
                 data: formData
             }).done(function (response) {
                 //debugger;
