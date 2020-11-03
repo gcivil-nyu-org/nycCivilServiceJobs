@@ -127,8 +127,7 @@
 
                             <h2><a class="mr-2 text-black" data-toggle="collapse"
                                     href="#demo{{job.id}}">{{job.business_title}}</a> </h2>
-                            <div id="demo{{job.id}}" class="collapse"
-                                style="overflow-y: auto; max-height: 40vh">
+                            <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; max-height: 40vh">
                                 <p><b>Job Id: </b>{{job.job_id}}</p>
                                 {% if job.posting_updated %}
                                 <p><b>Last Updated: </b>{{job.posting_updated}}</p>
@@ -216,7 +215,7 @@
 
                             <a href="https://a127-jobs.nyc.gov/index_new.html?keyword={{job.job_id}}"
                                 target="_blank"><button type="button" class="btn btn-primary py-2"
-                                     data-civilServiceTitle="{{job.civil_service_title}}"
+                                    data-civilServiceTitle="{{job.civil_service_title}}"
                                     data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
                                     Apply</button></a>
                             {% endif %}
@@ -327,23 +326,23 @@
         modal.find('.modal-body').text('The job you have selected requires ' + civilServiceTitle + ' to apply for this job. In order to apply, you must be an existing title holder or awaiting the examination result for the title. Do you still want to continue?');
         modal.find('.modal-link button').click(function () {
             //alert(jobID);
-                win = window.open("https://a127-jobs.nyc.gov/index_new.html?keyword=" + jobID, '_blank');
-                if (win) {
-                    //Browser has allowed it to be opened
-                    win.focus();
-                } else {
-                    //Browser has blocked it
-                    alert('Please allow popups for this website');
-                }
-                modal.modal('toggle');
+            win = window.open("https://a127-jobs.nyc.gov/index_new.html?keyword=" + jobID, '_blank');
+            if (win) {
+                //Browser has allowed it to be opened
+                win.focus();
+            } else {
+                //Browser has blocked it
+                alert('Please allow popups for this website');
+            }
+            modal.modal('toggle');
 
 
-            });
+        });
     });
 
     $('#exampleModal1').on('hide.bs.modal', function (e) {
-            var modal = $(this);
-            modal.find('.modal-link button').prop("onclick", null).off("click");
+        var modal = $(this);
+        modal.find('.modal-link button').prop("onclick", null).off("click");
     });
 
 </script>
