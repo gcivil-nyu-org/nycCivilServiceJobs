@@ -34,12 +34,12 @@
                     Are you sure you meet the Civil Service Requirement?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" 
-                    style=" background-color: #6c757d !important;
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" style=" background-color: #6c757d !important;
                     color: #fff !important;
                     border-color: #6c757d !important;">No</button>
-                    <a href="https://www1.nyc.gov/jobs/index.page" target="_blank">
+                    <div class="modal-link">
                         <button type="button" class="btn btn-primary">Yes</button></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,11 +59,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Sign In to save / apply for jobs. 
+                    Sign In to save / apply for jobs.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" 
-                    style=" background-color: #6c757d !important;
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" background-color: #6c757d !important;
                     color: #fff !important;
                     border-color: #6c757d !important;">Close</button>
                     <a href="{% url 'signin:signin' %}">
@@ -113,8 +112,7 @@
 
                             <h2><a class="mr-2 text-black" data-toggle="collapse"
                                     href="#demo{{job.id}}">{{job.business_title}}</a> </h2>
-                            <div id="demo{{job.id}}" class="collapse"
-                                style="overflow-y: auto; max-height: 40vh">
+                            <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; max-height: 40vh">
                                 <p><b>Job Id: </b>{{job.job_id}}</p>
                                 {% if job.posting_updated %}
                                 <p><b>Last Updated: </b>{{job.posting_updated}}</p>
@@ -189,17 +187,32 @@
                         <div>
                             {% if request.user.is_authenticated %}
 
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal1" data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}">
+                            {% if job.title_classification == "Competitive" %}
+
+                            <!-- Button trigger modal for competetive -->
+                            <button type="button" class="btn btn-primary py-2" data-toggle="modal"
+                                data-target="#exampleModal1" data-civilServiceTitle="{{job.civil_service_title}}"
+                                data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
                                 Apply</button>
 
                             {% else %}
+                            <!-- Button trigger redirect for non-competitive -->
 
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal" data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}">
-                                Apply</button>
+                            <a href="https://a127-jobs.nyc.gov/index_new.html?keyword={{job.job_id}}"
+                                target="_blank"><button type="button" class="btn btn-primary py-2"
+                                    data-civilServiceTitle="{{job.civil_service_title}}"
+                                    data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
+                                    Apply</button></a>
                             {% endif %}
 
+                            {% else %}
+
+                            <!-- Button trigger modal if user is not authenticated -->
+                            <button type="button" class="btn btn-primary py-2" data-toggle="modal"
+                                data-target="#exampleModal" data-civilServiceTitle="{{job.civil_service_title}}"
+                                data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
+                                Apply</button>
+                            {% endif %}
 
                             <!-- <div>
                                 <a href="#"
@@ -283,16 +296,37 @@
 
         });
     });
-  //  });
+    //  });
 
     $('#exampleModal1').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var civilServiceTitle = button.data('civilservicetitle') ;
-    var businessTitle = button.data('businesstitle') ;
-    var modal = $(this);
-    debugger;
-    modal.find('.modal-title').text(businessTitle);
-    modal.find('.modal-body').text(civilServiceTitle+ ' title is required for applying to this job. Do you want to continue?');
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var civilServiceTitle = button.data('civilservicetitle');
+        var businessTitle = button.data('businesstitle');
+        var jobID = button.data('jobid');
+        var modal = $(this);
+        //console.log(modal.find('.modal-link'));
+        //debugger;
+        modal.find('.modal-title').text(businessTitle);
+        modal.find('.modal-body').text('The job you have selected requires ' + civilServiceTitle + ' to apply for this job. In order to apply, you must be an existing title holder or awaiting the examination result for the title. Do you still want to continue?');
+        modal.find('.modal-link button').click(function () {
+            //alert(jobID);
+            win = window.open("https://a127-jobs.nyc.gov/index_new.html?keyword=" + jobID, '_blank');
+            if (win) {
+                //Browser has allowed it to be opened
+                win.focus();
+            } else {
+                //Browser has blocked it
+                alert('Please allow popups for this website');
+            }
+            modal.modal('toggle');
+
+
+        });
+    });
+
+    $('#exampleModal1').on('hide.bs.modal', function (e) {
+        var modal = $(this);
+        modal.find('.modal-link button').prop("onclick", null).off("click");
     });
 </script>
 {% endblock javascript %}
