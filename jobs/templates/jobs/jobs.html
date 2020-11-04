@@ -175,7 +175,8 @@
                             </button>
                         </div> -->
                         <div>
-                            <form onsubmit="return false;" save_unsave_url="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
+                            <form onsubmit="return false;" save_unsave_url="{% url 'jobs:saveJob' job.id %}" method=POST
+                                class="favJob">
                                 {% csrf_token %}
                                 <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
                                 <button type="submit" class="btn">
@@ -323,7 +324,7 @@
         console.log(modal.find('.modal-link'));
         debugger;
         modal.find('.modal-title').text(businessTitle);
-        modal.find('.modal-body').text('The job you have selected requires ' + civilServiceTitle + ' to apply for this job. In order to apply, you must be an existing title holder or awaiting the examination result for the title. Do you still want to continue?');
+        modal.find('.modal-body').text('The job you selected requires Civil Service Title: ' + civilServiceTitle + '. In order to apply, you must be an existing title holder or awaiting the examination result for the title. Do you still want to continue?');
         modal.find('.modal-link button').click(function () {
             //alert(jobID);
             win = window.open("https://a127-jobs.nyc.gov/index_new.html?keyword=" + jobID, '_blank');
