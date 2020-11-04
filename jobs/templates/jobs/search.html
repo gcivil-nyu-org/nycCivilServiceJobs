@@ -51,12 +51,12 @@
                     Are you sure you meet the Civil Service Requirement?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal"
-                    style=" background-color: #6c757d !important;
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" style=" background-color: #6c757d !important;
                     color: #fff !important;
                     border-color: #6c757d !important;">No</button>
-                    <a href="https://www1.nyc.gov/jobs/index.page" target="_blank">
-                        <button type="button" class="btn btn-primary">Yes</button></a>
+                    <div class="modal-link">
+                        <button type="button" class="btn btn-primary">Yes</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -79,8 +79,7 @@
                     Sign In to save / apply for jobs.
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                    style=" background-color: #6c757d !important;
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" background-color: #6c757d !important;
                     color: #fff !important;
                     border-color: #6c757d !important;">Close</button>
                     <a href="{% url 'signin:signin' %}">
@@ -94,66 +93,104 @@
     <!-- End of Modal if user is not authenticated  -->
 
 
-    <div class="container">
+    <div class="container col-11">
 
         <div class="row">
+            <div class="col-lg-3 sidebar">
+                <div class="row justify-content-center pb-3">
+                    <div class="col-md-12 heading-section">
+                        <h2 class="mb-4">&nbsp<h2>
+                    </div>
+                </div>
+                <div class="sidebar-box bg-white p-4 ftco-animate">
+                    <h4 class="heading-sidebar">Filters
+                        <div class="btn-group sort-btn" style="float:right;">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="sort-order"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Sort </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" onclick="sort(this.id)" id="" href="#">Default</a>
+                                <a class="dropdown-item" onclick="sort(this.id)" id="sort-posting" href="#">Date
+                                    Posted<i class="fa fa-sort-amount-asc"></i> </a>
+                                <a class="dropdown-item" onclick="sort(this.id)" id="sort-salary" href="#">Starting
+                                    Salary <i class="fa fa-sort-amount-asc"></i> </a>
+                            </div>
+                        </div>
+                    </h4>
+                    <hr class="mt-2 mb-3" />
 
-          <div class="col-lg-3 sidebar">
+                    <div>Agency
+                        <select class="form-control" name="agency" id="agency">
+                            <option value=""> Any </option>
+                            {% for agency in agencies %}
+                            <option value={{forloop.counter0}}> {{agency}} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
 
-              <div class="row justify-content-center pb-3">
-                  <div class="col-md-12 heading-section">
-                    <h2 class="mb-4">&nbsp<h2>
-                  </div>
-              </div>
-            <div class="sidebar-box bg-white p-4 ftco-animate">
-              <h3 class="heading-sidebar">Filters </h3>
-              <div class="btn-group sort-btn">
-            <button class="btn btn-primary dropdown-toggle " type="button" id="sort-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Sort  </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" onclick="sort(this.id)" id="" href="#">Default</a>
-              <a class="dropdown-item" onclick="sort(this.id)" id="sort-posting" href="#">Posting Date<i class="fa fa-sort-amount-asc"></i> </a>
+                    <div class="form-group "> Civil Service Title
+                        <a class="form-control" style="overflow:hidden; text-overflow:ellipsis; white-space: nowrap;"
+                            href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            All
+                        </a>
 
+                        <div class=" from-control dropdown-menu pre-scrollable"
+                            style="width:90%; overflow:scroll; text-overflow: ellipsis; white-space: nowrap; "
+                            id="myDropdown" aria-labelledby="dropdownMenuLink">
+                            <input class="form-control" type="text" placeholder="Type to Search.." id="myInput"
+                                onkeyup="filterFunction()">
+                            <a class="dropdown-item csdrop" href="#" id="">All</a>
+                            {% for cs_title in cs_titles %}
+                            <a class="dropdown-item csdrop" href="#" id={{forloop.counter0}}>{{cs_title}}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div>Posting Type
+                        <select class="form-control" name="posting-type" id="posting-type">
+                            <option value=""> Any </option>
+                            <option value="External">External </option>
+                            <option value="Internal">Internal </option>
+                        </select>
+                    </div>
+                    <br>
+                    <div> Part-Time/Full-time
+                        <select class="form-control" name="fp" id="fp">
+                            <option value=""> Any </option>
+                            <option value="P">Part-Time </option>
+                            <option value="F">Full-Time </option>
+                        </select>
+                    </div>
+                    <br>
+                    <div>Careel Level
+                        <select class="form-control" name="career-level" id="career-level">
+                            <option value=""> Any </option>
+                            {% for level in career_level %}
+                            <option value={{forloop.counter0}}> {{level}} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group"> Starting Salary <span class="badge badge-dark" id="salary-badge">0+</span>
+                        <input type="range" class="form-control-range" min=0 value=0 max=300000 id="salary-range">
+                    </div>
+                    <br>
+                    <div> Posted After
+                        <input class="form-control" type="date" id="post-after" name="post-after">
+                    </div>
+                    <br>
+
+                </div>
             </div>
-          </div>
-          <hr class="mt-2 mb-3"/>
+            <div class="col-lg-9 pr-lg-4">
 
+                <div class="row" id="listing">
 
-                  <select class="form-control"  name="posting-type" id="posting-type">
-                  <option value=""> Posting Type </option>
-                  <option value="External">External </option>
-                  <option value="Internal">Internal </option>
-
-                  </select>
-                  <hr class="mt-2 mb-3"/>
-
-                  <select class="form-control"  name="fp" id="fp">
-                  <option value=""> Part, Full </option>
-                  <option value="P">Part-Time </option>
-                  <option value="F">Full-Time </option>
-
-                  </select>
-                  <hr class="mt-2 mb-3"/>
-
-                  <select class="form-control"  name="agency" id="agency">
-                    <option value=""> Agency </option>
-                    {% for agency in agencies %}
-                      <option value={{forloop.counter0}}> {{agency}} </option>
-                    {% endfor %}
-                  </select>
-
-                  <label for="post-after">  Posted After: </label>
-                  <input class="form-control"  type="date" id="post-after" name="post-after">
-
+                    {% include "jobs/table_content.html" with jobs=object_list %}
+                </div>
             </div>
-          </div>
-          <div class="col-lg-9 pr-lg-4">
-
-        <div class="row" id="listing">
-
-          {% include "jobs/table_content.html" with jobs=object_list %}
-        </div>
-        </div>
 
         </div>
 
@@ -162,9 +199,88 @@
 {% endblock %}
 
 {% block javascript %}
-<script >
-$(window).on('load', function () {
+<script>
     var date_asc = false;
+    var salary_asc = false;
+    var cs_title = "";
+    function sort(id) {
+        var button_text = "Sort "
+        if (id == "sort-posting") {
+            date_asc = !date_asc
+
+            if (date_asc) {
+                button_text += ": Date Posted " + "<i class='fa fa-sort-amount-asc'></i>"
+                document.getElementById("sort-posting").innerHTML = "Date Posted " + "<i class='fa fa-sort-amount-desc'></i>"
+            }
+            else {
+                button_text += ": Date Posted " + "<i class='fa fa-sort-amount-desc'></i>"
+                document.getElementById("sort-posting").innerHTML = "Date Posted " + "<i class='fa fa-sort-amount-asc'></i>"
+            }
+        }
+        else if (id == "sort-salary") {
+            salary_asc = !salary_asc
+
+            if (salary_asc) {
+                button_text += ": Salary " + "<i class='fa fa-sort-amount-asc'></i>"
+                document.getElementById("sort-salary").innerHTML = "Salary " + "<i class='fa fa-sort-amount-desc'></i>"
+            }
+            else {
+                button_text += ": Salary " + "<i class='fa fa-sort-amount-desc'></i>"
+                document.getElementById("sort-salary").innerHTML = "Salary " + "<i class='fa fa-sort-amount-asc'></i>"
+            }
+        }
+        document.getElementById("sort-order").value = id
+        document.getElementById("sort-order").innerHTML = button_text
+        senddata()
+
+        console.log(id, date_asc)
+    }
+    function senddata() {
+        var query = $('#id_q').val()
+        var posting_type = $('#posting-type').find(":selected").val()
+        var date = $('#post-after').val();
+        var agency = $('#agency').find(":selected").val()
+        var career_level = $('#career-level').find(":selected").val()
+        var salary_range = $('#salary-range').val();
+        var sort_order = $("#sort-order").val()
+        var fp = $("#fp").val()
+        console.log("sort-order", sort_order)
+        var asc;
+        if (sort_order == "sort-posting")
+            asc = date_asc
+        else if (sort_order == "sort-salary")
+            asc = salary_asc
+        else if (sort_order == "") {
+            asc = ""
+        }
+
+        console.log(posting_type, date);
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url: "{% url 'jobs:results' %}",
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: csrftoken,
+                state: "inactive",
+                posting_type: posting_type,
+                date: date,
+                agency: agency,
+                career_level: career_level,
+                salary_range: salary_range,
+                cs_title: cs_title,
+                sort_order: sort_order,
+                asc: asc,
+                query: query,
+                fp: fp
+            },
+            success: function (json) {
+                putTableData(json);
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("error")
+            }
+        });
+    }
     function putTableData(data) {
         console.log()
         $("#listing").html(data.rendered_table);
@@ -187,7 +303,7 @@ $(window).on('load', function () {
 
             $.ajax({
                 type: 'POST',
-                url: currentForm.attr('action'),
+                url: currentForm.attr('save_unsave_url'),
                 data: formData
             }).done(function (response) {
                 //debugger;
@@ -228,67 +344,6 @@ $(window).on('load', function () {
             });
         });
     }
-
-    $("#posting-type").change(function (event) {
-        senddata()
-    });
-    $('#post-after').change(function () {
-        senddata()
-    });
-    $('#agency').change(function () {
-        senddata()
-    });
-    $("#fp").change(function (event) {
-        senddata()
-    });
-
-    function senddata() {
-        var query = $('#id_q').val()
-            var posting_type = $('#posting-type').find(":selected").val()
-            var date = $('#post-after').val();
-        var agency = $('#agency').find(":selected").val()
-            var sort_order = $("#sort-order").val()
-            var fp = $("#fp").val()
-            console.log("sort-order", sort_order)
-            var asc;
-        if (sort_order == "sort-posting")
-            asc = date_asc 
-        else if (sort_order == "") {
-                    asc = ""
-              }
-
-        var ids = new Array();
-
-        $('input[name="ids[]"]:checked').each(function () {
-            ids.push($(this).val());
-        });
-
-        var dataString = 'ids=' + ids;
-        console.log(dataString);
-        console.log(posting_type, date);
-        const csrftoken = getCookie('csrftoken');
-        $.ajax({
-            url: "{% url 'jobs:results' %}",
-            method: "POST",
-            data: {
-                csrfmiddlewaretoken: csrftoken,
-                state: "inactive",
-                posting_type: posting_type,
-                date: date,
-                agency: agency,
-                sort_order: sort_order,
-                asc: asc,
-                query: query,
-                fp: fp
-            },
-            success: function (json) {
-                putTableData(json);
-            },
-            error: function (xhr, errmsg, err) {
-                console.log("error")
-            }
-        });
-    }
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -304,76 +359,155 @@ $(window).on('load', function () {
         }
         return cookieValue;
     }
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
 
-    var form = $('.favJob');
-    var formMessages = $('#form-messages');
-    $(form).submit(function (event) {
 
-        // Current form
-        var currentForm = $(this);
-        // Stop the browser from submitting the form.
-        event.preventDefault();
+    function filterFunction() {
 
-        // Serialize the form data.
-        var formData = currentForm.serialize();
-
-        debugger;
-        var user = "{{user}}";
-        //alert(user);
-
-        $.ajax({
-            type: 'POST',
-            url: currentForm.attr('action'),
-            data: formData
-        }).done(function (response) {
-            //debugger;
-            //$("#favBtnID" + response["job_id"]).css("opacity", 1);
-            if (response["response_data"] == "Job Saved") {
-                $('#favBtnID' + response["job_id"]).css({
-                    'cssText': 'background-color: #28a745 !important; opacity:1'
-                });
-                // $('#favBtnID' + response["job_id"]).css({
-                //     'cssText': 'background-color: #28a745 !important; opacity:1'
-                // });
-                $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
-            } else if (response["response_data"] == "Job Unsaved") {
-                $('#favBtnID' + response["job_id"]).css({
-                    'cssText': 'background-color: #28a745 !important; opacity:1'
-                });
-                // $('#favBtnID' + response["job_id"]).css({
-                //     'cssText': 'background-color: #FFFFFF !important; opacity:1'
-                // });
-                $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
-                // $("#favBtnID" + response["job_id"]).removeAttr("style");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Save');
-            } else if (response["response_data"] == "User not authenticated") {
-                // if ($("#alert" + response["job_id"]).css('display') == 'none') {
-                //     $("#alert" + response["job_id"]).css('display', 'block');
-                // }
-                $('#exampleModal').modal('toggle');
-                //alert("Please sign in to favorite a job");
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("myDropdown");
+        a = div.getElementsByTagName("a");
+        for (i = 1; i < a.length; i++) {
+            txtValue = a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+            } else {
+                a[i].style.display = "none";
             }
+        }
+    }
+    $(window).on('load', function () {
 
-            console.log("response")
-            //Do something
-        }).fail(function (data) {
-            //Do something
-            console.log("fail")
-            //debugger;
 
+
+        $("#posting-type").change(function (event) {
+            senddata()
+        });
+        $('#post-after').change(function () {
+            senddata()
+        });
+        $('#agency').change(function () {
+            senddata()
+        });
+        $("#fp").change(function (event) {
+            senddata()
+        });
+
+        $("#career-level").change(function (event) {
+            senddata()
+        });
+
+        $('.csdrop').on("click", function () {
+            cs_title = $(this).attr("id");
+            console.log("CS", cs_title);
+            senddata()
+            document.getElementById('dropdownMenuLink').innerHTML = $(this).html();;
+
+        })
+
+
+        $("#salary-range").change(function () {
+            document.getElementById('salary-badge').innerHTML = this.value + "+";
+            senddata();
+        });
+
+
+
+        var form = $('.favJob');
+        var formMessages = $('#form-messages');
+        $(form).submit(function (event) {
+
+            // Current form
+            var currentForm = $(this);
+            // Stop the browser from submitting the form.
+            event.preventDefault();
+
+            // Serialize the form data.
+            var formData = currentForm.serialize();
+
+            debugger;
+            var user = "{{user}}";
+            //alert(user);
+
+            $.ajax({
+                type: 'POST',
+                url: currentForm.attr('save_unsave_url'),
+                data: formData
+            }).done(function (response) {
+                //debugger;
+                //$("#favBtnID" + response["job_id"]).css("opacity", 1);
+                if (response["response_data"] == "Job Saved") {
+                    $('#favBtnID' + response["job_id"]).css({
+                        'cssText': 'background-color: #28a745 !important; opacity:1'
+                    });
+                    // $('#favBtnID' + response["job_id"]).css({
+                    //     'cssText': 'background-color: #28a745 !important; opacity:1'
+                    // });
+                    $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
+                    $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                } else if (response["response_data"] == "Job Unsaved") {
+                    $('#favBtnID' + response["job_id"]).css({
+                        'cssText': 'background-color: #28a745 !important; opacity:1'
+                    });
+                    // $('#favBtnID' + response["job_id"]).css({
+                    //     'cssText': 'background-color: #FFFFFF !important; opacity:1'
+                    // });
+                    $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
+                    // $("#favBtnID" + response["job_id"]).removeAttr("style");
+                    $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                } else if (response["response_data"] == "User not authenticated") {
+                    // if ($("#alert" + response["job_id"]).css('display') == 'none') {
+                    //     $("#alert" + response["job_id"]).css('display', 'block');
+                    // }
+                    $('#exampleModal').modal('toggle');
+                    //alert("Please sign in to favorite a job");
+                }
+
+                console.log("response")
+                //Do something
+            }).fail(function (data) {
+                //Do something
+                console.log("fail")
+                //debugger;
+
+            });
         });
     });
-});
     $('#exampleModal1').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var civilServiceTitle = button.data('civilservicetitle');
         var businessTitle = button.data('businesstitle');
+        var jobID = button.data('jobid');
         var modal = $(this);
+        //console.log(modal.find('.modal-link'));
         //debugger;
         modal.find('.modal-title').text(businessTitle);
-        modal.find('.modal-body').text(civilServiceTitle + ' title is required for applying to this job. Do you want to continue?');
+        modal.find('.modal-body').text('The job you selected requires Civil Service Title: ' + civilServiceTitle + '. In order to apply, you must be an existing title holder or awaiting the examination result for the title. Do you still want to continue?');
+        modal.find('.modal-link button').click(function () {
+            //alert(jobID);
+            win = window.open("https://a127-jobs.nyc.gov/index_new.html?keyword=" + jobID, '_blank');
+            if (win) {
+                //Browser has allowed it to be opened
+                win.focus();
+            } else {
+                //Browser has blocked it
+                alert('Please allow popups for this website');
+            }
+            modal.modal('toggle');
+
+
+        });
     });
-</script >
+
+    $('#exampleModal1').on('hide.bs.modal', function (e) {
+        var modal = $(this);
+        modal.find('.modal-link button').prop("onclick", null).off("click");
+    });
+</script>
+
 
 {% endblock javascript %}

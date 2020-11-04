@@ -15,25 +15,22 @@
                 <span class="text-white badge py-2 px-3"
                     style="background-color:palevioletred">{{job.posting_type}}</span>
                 {% else %}
-                <span class="text-white badge py-2 px-3"
-                    style="background-color:steelblue">{{job.posting_type}}</span>
+                <span class="text-white badge py-2 px-3" style="background-color:steelblue">{{job.posting_type}}</span>
                 {% endif %}
                 <span class="text-white badge py-2 px-3"
                     style="margin-left: 5px; background-color:olive">{{job.career_level }}</span>
                 {% if job.post_until is None %}
-                <span class="text-white badge py-2 px-3"
-                    style="margin-left: 5px; background-color:salmon">Deadline: Until
+                <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:salmon">Deadline:
+                    Until
                     Position is Filled</span>
                 {% else %}
-                <span class="text-white badge py-2 px-3"
-                    style="margin-left: 5px; background-color:salmon">Deadline:
+                <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:salmon">Deadline:
                     {{job.post_until }}</span>
                 {% endif %}
 
-                <h2><a class="mr-2 text-black" data-toggle="collapse"
-                        href="#demo{{job.id}}">{{job.business_title}}</a> </h2>
-                <div id="demo{{job.id}}" class="collapse"
-                    style="overflow-y: auto; scroll:auto; max-height: 40vh">
+                <h2><a class="mr-2 text-black" data-toggle="collapse" href="#demo{{job.id}}">{{job.business_title}}</a>
+                </h2>
+                <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; max-height: 40vh">
                     <p><b>Job Id: </b>{{job.job_id}}</p>
                     {% if job.posting_updated %}
                     <p><b>Last Updated: </b>{{job.posting_updated}}</p>
@@ -81,15 +78,14 @@
                 </button>
             </div> -->
             <div>
-                <form action="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
+                <form onsubmit="return false;" save_unsave_url="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
                     {% csrf_token %}
                     <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
                     <button type="submit" class="btn">
                         {%if saved_jobs_user is not None and job.id in saved_jobs_user%}
                         <i id="favBtnID{{job.id}}"
                             class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
-                            title="Unsave"
-                            style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                            title="Unsave" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                             <span class="icon-heart" style="color:#fdab44;"></span>
                         </i>
                         {% else %}
@@ -108,14 +104,29 @@
             <div>
                 {% if request.user.is_authenticated %}
 
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal1" data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}">
+                {% if job.title_classification == "Competitive" %}
+
+                <!-- Button trigger modal for competetive -->
+                <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal1"
+                    data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}"
+                    data-jobid="{{job.job_id}}">
                     Apply</button>
 
                 {% else %}
+                <!-- Button trigger redirect for non-competitive -->
 
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal" data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}">
+                <a href="https://a127-jobs.nyc.gov/index_new.html?keyword={{job.job_id}}" target="_blank"><button
+                        type="button" class="btn btn-primary py-2" data-civilServiceTitle="{{job.civil_service_title}}"
+                        data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
+                        Apply</button></a>
+                {% endif %}
+
+                {% else %}
+
+                <!-- Button trigger modal if user is not authenticated -->
+                <button type="button" class="btn btn-primary py-2" data-toggle="modal" data-target="#exampleModal"
+                    data-civilServiceTitle="{{job.civil_service_title}}" data-businessTitle="{{job.business_title}}"
+                    data-jobid="{{job.job_id}}">
                     Apply</button>
                 {% endif %}
 
