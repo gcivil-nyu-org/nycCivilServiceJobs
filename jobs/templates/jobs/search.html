@@ -5,6 +5,7 @@
 
 
 <head>
+    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -93,8 +94,9 @@
     <!-- End of Modal if user is not authenticated  -->
 
 
+    <!-- Start of Filter and Job Card Container  -->
     <div class="container col-11">
-
+    
         <div class="row">
             <div class="col-lg-3 sidebar">
                 <div class="row justify-content-center pb-3">
@@ -118,9 +120,10 @@
                         </div>
                     </h4>
                     <hr class="mt-2 mb-3" />
-
-                    <div>Agency
-                        <select class="form-control" name="agency" id="agency">
+    
+                    <div>Agency</div>
+                    <div>
+                        <select class="js-example-basic-single form-control" name="agency" id="agency">
                             <option value=""> Any </option>
                             {% for agency in agencies %}
                             <option value={{forloop.counter0}}> {{agency}} </option>
@@ -128,44 +131,54 @@
                         </select>
                     </div>
                     <br>
-
-                    <div class="form-group "> Civil Service Title
-                        <a class="form-control" style="overflow:hidden; text-overflow:ellipsis; white-space: nowrap;"
-                            href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            All
-                        </a>
-
-                        <div class=" from-control dropdown-menu pre-scrollable"
-                            style="width:90%; overflow:scroll; text-overflow: ellipsis; white-space: nowrap; "
-                            id="myDropdown" aria-labelledby="dropdownMenuLink">
-                            <input class="form-control" type="text" placeholder="Type to Search.." id="myInput"
-                                onkeyup="filterFunction()">
-                            <a class="dropdown-item csdrop" href="#" id="">All</a>
+    
+                    <div> Civil Service Title</div>
+                    <div>
+                        <!-- <a class="form-control" style="overflow:hidden; text-overflow:ellipsis; white-space: nowrap;"
+                                href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                All
+                            </a> -->
+                        <select class="js-example-basic-single form-control" name="cs_title" id="cs_title">
+                            <option value="">All</option>
                             {% for cs_title in cs_titles %}
-                            <a class="dropdown-item csdrop" href="#" id={{forloop.counter0}}>{{cs_title}}</a>
+                            <option value={{forloop.counter0}}>{{cs_title}}</option>
                             {% endfor %}
-                        </div>
+                        </select>
+                        <!-- 
+                            <div class=" from-control dropdown-menu pre-scrollable"
+                                style="width:90%; overflow:scroll; text-overflow: ellipsis; white-space: nowrap; "
+                                id="myDropdown" aria-labelledby="dropdownMenuLink">
+                                <input class="form-control" type="text" placeholder="Type to Search.." id="myInput"
+                                    onkeyup="filterFunction()">
+                                <a class="dropdown-item csdrop" href="#" id="">All</a>
+                                {% for cs_title in cs_titles %}
+                                <a class="dropdown-item csdrop" href="#" id={{forloop.counter0}}>{{cs_title}}</a>
+                                {% endfor %}
+                            </div> -->
                     </div>
-
-                    <div>Posting Type
-                        <select class="form-control" name="posting-type" id="posting-type">
+                    <br>
+                    <div>Posting Type</div>
+                    <div>
+                        <select class="js-hide-search form-control" name="posting-type" id="posting-type">
                             <option value=""> Any </option>
                             <option value="External">External </option>
                             <option value="Internal">Internal </option>
                         </select>
                     </div>
                     <br>
-                    <div> Part-Time/Full-time
-                        <select class="form-control" name="fp" id="fp">
+                    <div> Part-Time/Full-time</div>
+                    <div>
+                        <select class="js-hide-search form-control" name="fp" id="fp">
                             <option value=""> Any </option>
                             <option value="P">Part-Time </option>
                             <option value="F">Full-Time </option>
                         </select>
                     </div>
                     <br>
-                    <div>Careel Level
-                        <select class="form-control" name="career-level" id="career-level">
+                    <div>Careel Level</div>
+                    <div>
+                        <select class="js-hide-search form-control" name="career-level" id="career-level">
                             <option value=""> Any </option>
                             {% for level in career_level %}
                             <option value={{forloop.counter0}}> {{level}} </option>
@@ -176,26 +189,23 @@
                     <div class="form-group"> Starting Salary <span class="badge badge-dark" id="salary-badge">0+</span>
                         <input type="range" class="form-control-range" min=0 value=0 max=300000 id="salary-range">
                     </div>
-                    <br>
                     <div> Posted After
-                        <input class="form-control" type="date" id="post-after" name="post-after">
+                        <input class="form-control" style="height:fit-content !important; font-size: 15px !important; color:#2b2a2a !important;" type="date" id="post-after" name="post-after">
                     </div>
                     <br>
-
                 </div>
             </div>
             <div class="col-lg-9 pr-lg-4">
-
                 <div class="row" id="listing">
-
                     {% include "jobs/table_content.html" with jobs=object_list %}
                 </div>
             </div>
-
         </div>
-
     </div>
+    <!-- End of Filter and Job Card Container  -->
+
 </section>
+
 {% endblock %}
 
 {% block javascript %}
@@ -244,6 +254,7 @@
         var salary_range = $('#salary-range').val();
         var sort_order = $("#sort-order").val()
         var fp = $("#fp").val()
+        var cs_title=$('#cs_title').find(":selected").val()
         console.log("sort-order", sort_order)
         var asc;
         if (sort_order == "sort-posting")
@@ -359,27 +370,31 @@
         }
         return cookieValue;
     }
-    function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
+    // function myFunction() {
+    //     document.getElementById("myDropdown").classList.toggle("show");
+    // }
 
 
-    function filterFunction() {
+    // function filterFunction() {
 
-        var input, filter, ul, li, a, i;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        div = document.getElementById("myDropdown");
-        a = div.getElementsByTagName("a");
-        for (i = 1; i < a.length; i++) {
-            txtValue = a[i].innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                a[i].style.display = "";
-            } else {
-                a[i].style.display = "none";
-            }
-        }
-    }
+    //     var input, filter, ul, li, a, i;
+    //     input = document.getElementById("myInput");
+    //     filter = input.value.toUpperCase();
+    //     div = document.getElementById("myDropdown");
+    //     a = div.getElementsByTagName("a");
+    //     for (i = 1; i < a.length; i++) {
+    //         txtValue = a[i].innerText;
+    //         if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    //             a[i].style.display = "";
+    //         } else {
+    //             a[i].style.display = "none";
+    //         }
+    //     }
+    // }
+
+
+
+
     $(window).on('load', function () {
 
 
@@ -401,13 +416,13 @@
             senddata()
         });
 
-        $('.csdrop').on("click", function () {
-            cs_title = $(this).attr("id");
-            console.log("CS", cs_title);
-            senddata()
-            document.getElementById('dropdownMenuLink').innerHTML = $(this).html();;
+        // $('.csdrop').on("click", function () {
+        //     cs_title = $(this).attr("id");
+        //     console.log("CS", cs_title);
+        //     senddata()
+        //     document.getElementById('dropdownMenuLink').innerHTML = $(this).html();;
 
-        })
+        // })
 
 
         $("#salary-range").change(function () {
@@ -415,7 +430,22 @@
             senddata();
         });
 
+        $('#cs_title').change(function() {
+            senddata();
+        });
 
+        $('.js-example-basic-single').select2({
+            width: '100%'
+        });
+
+        $('.js-hide-search').select2({
+            minimumResultsForSearch: Infinity,
+           width: '100%'
+        });
+
+           
+
+       
 
         var form = $('.favJob');
         var formMessages = $('#form-messages');
