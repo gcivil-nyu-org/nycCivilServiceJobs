@@ -187,7 +187,7 @@
                     </div>
                     <br>
                     <div class="form-group"> Starting Salary <span class="badge badge-dark" id="salary-badge">0+</span>
-                        <input type="range" class="form-control-range" min=0 value=0 max=300000 id="salary-range">
+                        <input type="range" class="form-control-range" min=0 value=0 max=300000 id="salary-range" onchange="updateInput(this.value);" oninput="updateInput(this.value)">
                     </div>
                     <div> Posted After
                         <input class="form-control" style="height:fit-content !important; font-size: 15px !important; color:#2b2a2a !important;" type="date" id="post-after" name="post-after">
@@ -391,13 +391,14 @@
     //         }
     //     }
     // }
+    function updateInput(val) {
+        document.getElementById('salary-badge').innerHTML=val + "+"; 
+    }
 
 
 
 
     $(window).on('load', function () {
-
-
 
         $("#posting-type").change(function (event) {
             senddata()
@@ -426,7 +427,6 @@
 
 
         $("#salary-range").change(function () {
-            document.getElementById('salary-badge').innerHTML = this.value + "+";
             senddata();
         });
 
