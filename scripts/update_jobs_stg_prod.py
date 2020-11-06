@@ -103,9 +103,9 @@ def update_Jobs():
                                 title_code_no=row["title_code_no"],
                                 level=row["level"],
                                 job_category=row["job_category"],
-                                full_time_part_time_indicator=row[
-                                    "full_time_part_time_indicator"
-                                ],  # Full-time/Part-time
+                                full_time_part_time_indicator=full_time_part_time_indicator_cleanup(
+                                    row["full_time_part_time_indicator"]
+                                ),  # Full-time/Part-time
                                 career_level=row["career_level"],
                                 salary_range_from=row["salary_range_from"],
                                 salary_range_to=row["salary_range_to"],
@@ -175,10 +175,18 @@ def convertDateFormat(inputDate):
     return datetime.datetime.strptime(inputDate, "%d-%b-%Y").strftime("%Y-%m-%d")
 
 
+# if column is NULL then tag as Fulltime
+def full_time_part_time_indicator_cleanup(s):
+    if s is None:
+        s = "F"
+    return s
+
+
 def civil_service_title_cleanup(s):
     return trim_parenthesis(s)
 
 
+# Trims dangling parenthesis
 def trim_parenthesis(s):
     stack = []
     for i in range(len(s)):
@@ -194,11 +202,13 @@ def trim_parenthesis(s):
     return s
 
 
+# trims database index from title classification
 def title_classification_cleanup(s):
     s = s[: len(s) - 2]
     return s
 
 
+# Fixes encoding for "'", bullet points, etc in the incoming data
 def fix_text_encoding(s):
     if s is not None:
         return ftfy.fix_text(s)

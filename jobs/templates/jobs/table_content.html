@@ -1,11 +1,5 @@
 {% load humanize %}
-<div class="col-md-12">
-    <div class="row justify-content-center pb-3">
-        <div class="col-md-12 heading-section">
-            <h2 class="mb-4">Found {{jobs.count}} matching jobs: </h2>
-        </div>
-    </div>
-</div>
+
 {% for job in jobs %}
 <div class="col-md-12 ">
     <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
