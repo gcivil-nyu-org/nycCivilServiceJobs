@@ -37,16 +37,19 @@ class ExamResultsTerminated(models.Model):
     class Meta:
         verbose_name_plural = "Exam Results(Terminated)"
 
+
 class ExamSchedule(models.Model):
     exam_number = models.IntegerField(null=True)
-    exam_title_civil_service_title = models.CharField(max_length=250, blank=True, null=True)
+    exam_title_civil_service_title = models.CharField(
+        max_length=250, blank=True, null=True
+    )
     application_start_date = models.DateField(null=True, blank=True)
     application_end_date = models.DateField(null=True, blank=True)
     exam_type = models.CharField(max_length=250, blank=True, null=True)
- 
 
     class Meta:
         verbose_name_plural = "Upcoming Exam Schedule"
+
 
 def __int__(self):
     return self.exam_number
