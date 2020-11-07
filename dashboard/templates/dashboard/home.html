@@ -1,0 +1,360 @@
+{% extends 'landing_base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Saved Jobs</title>
+</head>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<section class="ftco-section bg-light">
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading">Jobs</div>
+            <div class="list-group list-group-flush">
+                <a class="nav-link" href="#">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Dashboard
+                </a>
+                <a href="#" class=" icon-heart list-group-item list-group-item-action bg-light"
+                    style="color:#fdab44;">Saved Jobs</a>
+                <a href=" #" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
+                <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
+                <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                Admin
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom ">
+                <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar Search-->
+                <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+                    <div class="input-group">
+                        <input class="form-control" type="text" placeholder="Search for..." aria-label="Search"
+                            aria-describedby="basic-addon2" />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- User Profile-->
+                <ul class="navbar-nav ml-auto ml-md-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                class="fas fa-user fa-fw"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">Settings</a>
+                            <a class="dropdown-item" href="#">Activity Log</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="login.html">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+
+
+
+            </nav>
+            <!--End of  White  Navbar-->
+
+
+
+
+
+            <!--Job Card Starts here .//-->
+
+            <!-- Modal if user is  authenticated  -->
+            <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel1">Apply Job</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you meet the Civil Service Requirement?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">No</button>
+                            <div class="modal-link">
+                                <button type="button" class="btn btn-primary">Yes</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Modal if user is  authenticated  -->
+
+
+            <!-- Modal if user is not authenticated  -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Looking for Jobs?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Sign In to save / apply for jobs.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">Close</button>
+                            <a href="{% url 'signin:signin' %}">
+                                <button type="button" class="btn btn-primary" href>Sign In</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End of Modal if user is not authenticated  -->
+
+
+
+
+            <div id="layoutSidenav">
+                <div id="layoutSidenav_nav">
+                    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                        <div class="sb-sidenav-menu">
+                            <div class="nav">
+
+                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                                    data-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="layout-static.html">Static Navigation</a>
+                                        <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                                    </nav>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </nav>
+                </div>
+                <div id="layoutSidenav_content">
+                    <main>
+                        <div class="container-fluid">
+                            <h1 class="mt-4">Dashboard</h1>
+
+                            <div class="row">
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="card bg-primary text-white mb-4">
+                                        <div class="card-body">Recent Jobs</div>
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <a class="small text-white stretched-link" href="#">View Details</a>
+                                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="card bg-warning text-white mb-4">
+                                        <div class="card-body">Saved Jobs</div>
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <a class="small text-white stretched-link" href="#">View Details</a>
+                                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="card bg-success text-white mb-4">
+                                        <div class="card-body">Upcoming Exams</div>
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <a class="small text-white stretched-link" href="#">View Details</a>
+                                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6">
+                                    <div class="card bg-danger text-white mb-4">
+                                        <div class="card-body">Exam Results</div>
+                                        <div class="card-footer d-flex align-items-center justify-content-between">
+                                            <a class="small text-white stretched-link" href="#">View Details</a>
+                                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <i class="fas fa-chart-area mr-1"></i>
+                                            Area Chart Example
+                                        </div>
+                                        <div class="card-body"><canvas id="myAreaChart" width="100%"
+                                                height="40"></canvas></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-table mr-1"></i>
+                                    DataTable Example
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                    <footer class="py-4 bg-light mt-auto">
+                        <div class="container-fluid">
+                            <div class="d-flex align-items-center justify-content-between small">
+                                <div class="text-muted">Copyright &copy; Your Website 2020</div>
+                                <div>
+                                    <a href="#">Privacy Policy</a>
+                                    &middot;
+                                    <a href="#">Terms &amp; Conditions</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+</section>
+{% endblock %}
+{% block javascript %}
+<script>
+    //$(document).ready(function() {
+    var form = $('.favJob');
+    var formMessages = $('#form-messages');
+    $(form).submit(function (event) {
+
+        // Current form
+        var currentForm = $(this);
+        // Stop the browser from submitting the form.
+        event.preventDefault();
+
+        // Serialize the form data.
+        var formData = currentForm.serialize();
+        var user = "{{user}}";
+        //alert(user);
+
+        $.ajax({
+            type: 'POST',
+            url: currentForm.attr('save_unsave_url'),
+            data: formData
+        }).done(function (response) {
+            debugger;
+            //$("#favBtnID" + response["job_id"]).css("opacity", 1);
+            if (response["response_data"] == "Job Saved") {
+                $('#favBtnID' + response["job_id"]).css({
+                    'cssText': 'background-color: #28a745 !important; opacity:1'
+                });
+                // $('#favBtnID' + response["job_id"]).css({
+                //     'cssText': 'background-color: #28a745 !important; opacity:1'
+                // });
+                $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
+                $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+            } else if (response["response_data"] == "Job Unsaved") {
+                $('#favBtnID' + response["job_id"]).css({
+                    'cssText': 'background-color: #28a745 !important; opacity:1'
+                });
+                // $('#favBtnID' + response["job_id"]).css({
+                //     'cssText': 'background-color: #FFFFFF !important; opacity:1'
+                // });
+                $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
+                // $("#favBtnID" + response["job_id"]).removeAttr("style");
+                $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+            } else if (response["response_data"] == "User not authenticated") {
+                // if ($("#alert" + response["job_id"]).css('display') == 'none') {
+                //     $("#alert" + response["job_id"]).css('display', 'block');
+                // }
+                $('#exampleModal').modal('toggle');
+                //alert("Please sign in to favorite a job");
+            }
+
+            console.log("response")
+            //Do something
+        }).fail(function (data) {
+            //Do something
+            console.log("fail")
+            debugger;
+
+        });
+    });
+    //  });
+
+    $('#exampleModal1').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var civilServiceTitle = button.data('civilservicetitle');
+        var businessTitle = button.data('businesstitle');
+        var jobID = button.data('jobid');
+        var modal = $(this);
+        //console.log(modal.find('.modal-link'));
+        //debugger;
+        modal.find('.modal-title').text(businessTitle);
+        modal.find('.modal-body').text('The job you selected requires Civil Service Title: ' + civilServiceTitle + '. In order to apply, you must be an existing title holder or awaiting the examination result for the title. Do you still want to continue?');
+        modal.find('.modal-link button').click(function () {
+            //alert(jobID);
+            win = window.open("https://a127-jobs.nyc.gov/index_new.html?keyword=" + jobID, '_blank');
+            if (win) {
+                //Browser has allowed it to be opened
+                win.focus();
+            } else {
+                //Browser has blocked it
+                alert('Please allow popups for this website');
+            }
+            modal.modal('toggle');
+
+
+        });
+    });
+
+    $('#exampleModal1').on('hide.bs.modal', function (e) {
+        var modal = $(this);
+        modal.find('.modal-link button').prop("onclick", null).off("click");
+    });
+
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+{% endblock javascript %}

@@ -26,4 +26,5 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     path("admin/", admin.site.urls),
     path("exams/", include("examresults.urls")),
+    path("dashboard/", include("dashboard.urls")),
 ]
