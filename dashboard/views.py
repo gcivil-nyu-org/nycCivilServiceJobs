@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.views import View
-from jobs.models import UserSavedJob
+from jobs.models import UserSavedJob, job_record
 
 
 # Create your views here.
@@ -37,4 +37,17 @@ class SavedJobs(View):
                 "jobs": jobs,
                 "saved_jobs_user": saved_jobs_user,
             },
+        )
+
+
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(reverse("dashboard:dashboard"))
+
+        total_jobs = job_record.objects.count()
+        return render(
+            request=request,
+            template_name="index.html",
+            context={"total_jobs": total_jobs},
         )

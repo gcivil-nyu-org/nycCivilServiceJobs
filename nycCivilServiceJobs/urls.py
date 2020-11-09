@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
+from dashboard.views import HomeView
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="index.html"), name="index"),
+    path("", HomeView.as_view(), name="index"),
     path("register/", include("register.urls")),
     path("signin/", include("signin.urls")),
     path("jobs/", include("jobs.urls")),
