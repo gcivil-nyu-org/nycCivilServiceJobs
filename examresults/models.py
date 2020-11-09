@@ -50,6 +50,23 @@ class ExamSchedule(models.Model):
     class Meta:
         verbose_name_plural = "Upcoming Exam Schedule"
 
+    def __int__(self):
+        return self.exam_number
 
-def __int__(self):
-    return self.exam_number
+
+class CivilServicesTitle(models.Model):
+    title_code = models.CharField(max_length=200, null=True, blank=True)
+    title_description = models.CharField(max_length=200, null=True, blank=True)
+    # standard_hours = models.FloatField(null=True, blank=True)
+    # assignment_level = models.FloatField(null=True, blank=True)
+    # union_code = models.IntegerField(null=True, blank=True)
+    # union_description = models.TextField(null=True, blank=True)
+    # bargaining_unit_short_name = models.CharField(max_length=200,null=True, blank=True)
+    # minimum_salary_rate = models.FloatField(null=True, blank=True)
+    # maximum_salary_rate = models.FloatField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Civil Services Title"
+
+    def __str__(self):
+        return self.title_code
