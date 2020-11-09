@@ -21,21 +21,13 @@
 
         <!-- Sidebar -->
         <div class="bg-light border-right" id="sidebar-wrapper">
-            <div class="sidebar-heading">Jobs</div>
+            <div class="sidebar-heading" style="color:black"><b>Welcome {{user.first_name}}!</b></div>
             <div class="list-group list-group-flush">
-                <a class="nav-link" href="#">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Dashboard
-                </a>
-                <a href="#" class=" icon-heart list-group-item list-group-item-action bg-light"
-                    style="color:#fdab44;">Saved Jobs</a>
+                <a href="{% url 'dashboard:dashboard' %}" class="nav-item list-group-item list-group-item-action bg-light text-success" >Dashboard</a>
+                <a href="{% url 'dashboard:savedjobs' %}" class="nav-item list-group-item list-group-item-action bg-light" > Saved Jobs</a>
                 <a href=" #" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
                 <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
                 <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
-            </div>
-            <div class="sb-sidenav-footer">
-                <div class="small">Logged in as:</div>
-                Admin
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -43,17 +35,17 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
 
-            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom ">
+            <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom ">
                 <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                     aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
+                </button> -->
 
                 <!-- Navbar Search-->
-                <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+                <!-- <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
                     <div class="input-group">
                         <input class="form-control" type="text" placeholder="Search for..." aria-label="Search"
                             aria-describedby="basic-addon2" />
@@ -61,26 +53,13 @@
                             <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
-                </form>
+                </form> -->
 
                 <!-- User Profile-->
-                <ul class="navbar-nav ml-auto ml-md-0">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                class="fas fa-user fa-fw"></i></a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">Settings</a>
-                            <a class="dropdown-item" href="#">Activity Log</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="login.html">Logout</a>
-                        </div>
-                    </li>
+                <!-- <ul class="navbar-nav ml-auto ml-md-0">
+                    
                 </ul>
-
-
-
-            </nav>
+            </nav> -->
             <!--End of  White  Navbar-->
 
 
@@ -149,26 +128,6 @@
 
 
             <div id="layoutSidenav">
-                <div id="layoutSidenav_nav">
-                    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                        <div class="sb-sidenav-menu">
-                            <div class="nav">
-
-                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
-                                    data-parent="#sidenavAccordion">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                        <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
-                                    </nav>
-                                </div>
-
-
-
-                            </div>
-                        </div>
-
-                    </nav>
-                </div>
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid">
@@ -185,7 +144,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-md-6">
-                                    <div class="card bg-warning text-white mb-4">
+                                    <div class="card bg-warning text-white mb-4" style="background: #fdab44 !important;">
                                         <div class="card-body">Saved Jobs</div>
                                         <div class="card-footer d-flex align-items-center justify-content-between">
                                             <a class="small text-white stretched-link" href="#">View Details</a>
