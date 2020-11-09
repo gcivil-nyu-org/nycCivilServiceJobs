@@ -1,11 +1,9 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import redirect, reverse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.utils.http import is_safe_url
 from django.views.generic import FormView
-from django.views import View
-from jobs.models import UserSavedJob
 
 
 class SignInView(FormView):
@@ -51,38 +49,3 @@ class SignInView(FormView):
         if request.user.is_authenticated:
             return redirect(reverse("dashboard:dashboard"))
         return super(SignInView, self).get(request, *args, **kwargs)
-
-
-class SuccessView(View):
-    def get(self, request, *args, **kwargs):
-
-        user_saved_jobs = UserSavedJob.objects.filter(user=self.request.user)
-        saved_jobs_user = list(user_saved_jobs.values_list("job", flat=True))
-        jobs = map(lambda x: x.job, user_saved_jobs)
-        print("request: ", request)
-        nxt = self.request.POST.get('next')
-        print(nxt)
-        if nxt is None:
-            return render(
-                request=request,
-                template_name="dashboard/home.html",
-                context={
-                    "user": request.user,
-                    "jobs": jobs,
-                    "saved_jobs_user": saved_jobs_user,
-                },
-            )
-        elif not is_safe_url(url=nxt,
-            allowed_hosts={request.get_host()},
-            require_https=request.is_secure()):
-            return render(
-                request=request,
-                template_name="dashboard/home.html",
-                context={
-                    "user": request.user,
-                    "jobs": jobs,
-                    "saved_jobs_user": saved_jobs_user,
-                },
-            )
-        else:
-            return redirect(nxt)

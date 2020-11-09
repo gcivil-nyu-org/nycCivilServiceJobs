@@ -15,12 +15,11 @@
 
 from django.contrib.auth import views as auth_views
 from django.urls import path, reverse_lazy
-from signin.views import SignInView, SuccessView
+from signin.views import SignInView
 
 app_name = "signin"
 urlpatterns = [
     path("", SignInView.as_view(), name="signin"),
-    path("success", SuccessView.as_view(), name="success"),
     path(
         "password_reset/",
         auth_views.PasswordResetView.as_view(
