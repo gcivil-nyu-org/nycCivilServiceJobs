@@ -36,7 +36,8 @@ def save_upcoming_exams():
         for row in reader_exams:
             try:
                 val_in_db = ExamSchedule.objects.filter(
-                    exam_title=row[0],
+                    # exam_title=row[0],
+                    exam_title_civil_service_title=row[0],
                     exam_number=row[1],
                     application_start_date=convertDateFormat(row[3]),
                     application_end_date=convertDateFormat(row[4]),
@@ -49,7 +50,8 @@ def save_upcoming_exams():
                 exams.append(
                     ExamSchedule(
                         # row[2] is always "" so skip
-                        exam_title=row[0],
+                        # exam_title=row[0],
+                        exam_title_civil_service_title=row[0],
                         exam_number=row[1],
                         application_start_date=convertDateFormat(row[3]),
                         application_end_date=convertDateFormat(row[4]),
