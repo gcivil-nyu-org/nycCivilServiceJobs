@@ -14,9 +14,11 @@
 #     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 
 from django.urls import path
-from dashboard.views import DashboardView
+from dashboard.views import DashboardView, SavedJobs
+
 
 app_name = "dashboard"
 urlpatterns = [
     path("", DashboardView.as_view(), name="dashboard"),
+    path("savedjobs", SavedJobs.as_view(), name="savedjobs"),
 ]
