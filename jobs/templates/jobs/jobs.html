@@ -81,7 +81,7 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" background-color: #6c757d !important;
                     color: #fff !important;
                     border-color: #6c757d !important;">Close</button>
-                    <a href="{% url 'signin:signin' %}">
+                    <a href="{% url 'signin:signin' %}?next={{request.path}}">
                         <button type="button" class="btn btn-primary" href>Sign In</button>
                     </a>
                 </div>
