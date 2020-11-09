@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.utils.http import is_safe_url
 from django.views.generic import FormView
 from django.views import View
 from jobs.models import UserSavedJob
@@ -20,11 +21,23 @@ class SignInView(FormView):
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
         user = authenticate(username=username, password=password)
+        nxt = self.request.POST.get("next")
 
+        print(self.request)
         if user is not None:
             login(self.request, user)
-            # messages.info(self.request, f"You are now logged in as {username}")
-            return redirect(reverse("signin:success"))
+            if nxt is None:
+                return redirect("dashboard:dashboard")
+            elif not is_safe_url(
+                url=nxt,
+                allowed_hosts={self.request.get_host()},
+                require_https=self.request.is_secure(),
+            ):
+                return redirect("dashboard:dashboard")
+            else:
+                return redirect(nxt)
+
+                # messages.info(self.request, f"You are now logged in as {username}")
         else:
             messages.error(self.request, "Invalid username or password.")
 
@@ -36,7 +49,7 @@ class SignInView(FormView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect(reverse("signin:success"))
+            return redirect(reverse("dashboard:dashboard"))
         return super(SignInView, self).get(request, *args, **kwargs)
 
 
@@ -46,13 +59,30 @@ class SuccessView(View):
         user_saved_jobs = UserSavedJob.objects.filter(user=self.request.user)
         saved_jobs_user = list(user_saved_jobs.values_list("job", flat=True))
         jobs = map(lambda x: x.job, user_saved_jobs)
-
-        return render(
-            request=request,
-            template_name="signin/success.html",
-            context={
-                "user": request.user,
-                "jobs": jobs,
-                "saved_jobs_user": saved_jobs_user,
-            },
-        )
+        print("request: ", request)
+        nxt = self.request.POST.get('next')
+        print(nxt)
+        if nxt is None:
+            return render(
+                request=request,
+                template_name="dashboard/home.html",
+                context={
+                    "user": request.user,
+                    "jobs": jobs,
+                    "saved_jobs_user": saved_jobs_user,
+                },
+            )
+        elif not is_safe_url(url=nxt,
+            allowed_hosts={request.get_host()},
+            require_https=request.is_secure()):
+            return render(
+                request=request,
+                template_name="dashboard/home.html",
+                context={
+                    "user": request.user,
+                    "jobs": jobs,
+                    "saved_jobs_user": saved_jobs_user,
+                },
+            )
+        else:
+            return redirect(nxt)
