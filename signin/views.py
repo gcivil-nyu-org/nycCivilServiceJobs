@@ -21,7 +21,6 @@ class SignInView(FormView):
         user = authenticate(username=username, password=password)
         nxt = self.request.POST.get("next")
 
-        print(self.request)
         if user is not None:
             login(self.request, user)
             if nxt is None:
