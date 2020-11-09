@@ -4,55 +4,201 @@
 
 
 {% block content %}
+
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <title>Exam Results</title>
-
 </head>
+{% block javascript %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+    var dataTable = $('#exams').DataTable({
+      retrieve: true,
+      fixedHeader: true
+    });
+
+// $('#title-code').change(function () {
+//   console.log(this.value)
+//   dataTable
+//       .columns( 1 )
+//       .search( this.value )
+//       .draw();
+// } );
+$("#first-name").on("keyup search input paste cut", function() {
+  dataTable
+        .columns( 3 )
+        .search( this.value )
+        .draw();
+  } );
+
+  $("#last-name").on("keyup search input paste cut", function() {
+    dataTable
+          .columns( 5)
+          .search( this.value )
+          .draw();
+    } );
+
+
+
+$('.js-example-basic-single').select2({
+    width: '100%'
+});
+
+$('.js-hide-search').select2({
+    minimumResultsForSearch: Infinity,
+   width: '100%'
+});
+
+});
+
+</script>
+{% endblock javascript %}
 <br>
 <br>
 <br>
 <br>
 <br>
+<!-- <style>
+  .dataTables_filter
+  {
+  display:none;
+  }
+</style> -->
+
 <section class="ftco-section bg-light">
   <div class="container">
-    <table class="table">
-        <thead class="thread-dark">
-        <tr>
-            <th class="sticky-header">Exam Number</th>
-            <th class="sticky-header">List Title Code</th>
-            <th class="sticky-header">List Title Descrption</th>
-            <th class="sticky-header">First Name</th>
-            <th class="sticky-header">Last Name</th>
-            <th class="sticky-header">Final Average</th>
+    <!-- <div class="form-row">
+      <div class="col-md-2"></div>
+      <div class="form-group col col-md-8">
+        <div class="input-group">
+          <input class="form-control" type="search" name="q" id="search" placeholder="Search" />
+        </div>
+      </div>
+    </div> -->
+    <form method="GET" action="{% url 'examresults:exams' %}">
+        <div class="form-row">
+            <div class="col"></div>
+            <div class="form-group col col-md-6">
+                <div class="input-group">
+                    <input class="form-control" type="search" name="q" id="id_q" value="{{request.GET.q}}"
+                        placeholder="List Title Code or Exam Number or Exam Desc" />
+                </div>
+            </div>
+            <button type="submit" class="form-group btn btn-primary"
+                value="Search">Search</button>
+            <div class="col"></div>
+        </div>
+    </form>
 
-        </tr>
-        </thead>
-        <tbody>
-        {% for exam in page_obj %}
-        <tr>
-            <td>{{ exam.exam_number }}</td>
-            <td>{{ exam.list_title_code }}</td>
-            <td>{{ exam.list_title_desc}}</td>
-            <td>{{ exam.first_name }}</td>
-            <td>{{ exam.last_name }}</td>
-            <td>{{ exam.adjust_final_average }}</td>
+    <div class="row">
+      <div class="col-lg-3 sidebar">
+        <div class="row justify-content-center">
+          <div class="col-md-12 heading-section">
+            <h2 class="mb-4">&nbsp<h2>
+          </div>
+        </div>
+        <div class="sidebar-box bg-white p-4 ftco-animate">
+          <h4 class="heading-sidebar">Filters
+            <!-- <div class="btn-group sort-btn" style="float:right;">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="sort-order"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sort </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" onclick="sort(this.id)" id="" href="#">Default</a>
+                        <a class="dropdown-item" onclick="sort(this.id)" id="sort-posting" href="#">Date
+                            Posted<i class="fa fa-sort-amount-asc"></i> </a>
+                        <a class="dropdown-item" onclick="sort(this.id)" id="sort-salary" href="#">Starting
+                            Salary <i class="fa fa-sort-amount-asc"></i> </a>
+                    </div>
+                </div> -->
+          </h4>
+          <hr class="mt-2 mb-3" />
+
+          <div>List Title Code</div>
+          <div>
+            <select class="js-example-basic-single form-control" name="title-desc" id="title-code">
+              <option value=""> Any </option>
+              {% for code in title_code %}
+              <option value="{{code}}" > {{code}} </option>
+              {% endfor %}
+            </select>
+          </div>
+          <br>
+          <div>List Title Description</div>
+          <div>
+            <select class="js-example-basic-single form-control" name="title-desc" id="title-desc">
+              <option value=""> Any </option>
+              {% for desc in title_desc %}
+              <option value="{{desc}}" > {{desc}} </option>
+              {% endfor %}
+            </select>
+          </div>
+          <br>
+          <div> First Name </div>
+          <input class="form-control" type="text" id="first-name"/>
+
+          <br>
+          <div> Last Name </div>
+          <input class="form-control" type="text" id="last-name"/>
 
 
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
+
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <table id="exams" class="table"">
+        <thead class=" thread-dark">
+          <tr>
+            <th>Exam Number</th>
+            <th>List Title Code</th>
+            <th>List Title Descrption</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Final Average</th>
+
+          </tr>
+          </thead>
+          <tbody>
+            {% for exam in exams %}
+            <tr>
+              <td>{{ exam.exam_number }}</td>
+              <td>{{ exam.list_title_code }}</td>
+              <td>{{ exam.list_title_desc}}</td>
+              <td>{{ exam.first_name }}</td>
+              {% if exam.middle_initial %}
+                <td>{{ exam.middle_initial}}</td>
+              {% else %}
+                <td>-</td>
+              {% endif %}
+              <td>{{ exam.last_name }}</td>
+              <td>{{ exam.adjust_final_average }}</td>
+
+
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <div class="row mt-5">
-        <div class="col text-center">
-          <div class="block-27">
+      <div class="col text-center">
+        <div class="block-27">
 
 
-    {% if is_paginated %}
+          <!-- {% if is_paginated %}
 <ul class="pagination">
   {% if page_obj.has_previous %}
     <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
@@ -72,11 +218,11 @@
     <li class="disabled"><span>&raquo;</span></li>
   {% endif %}
 </ul>
-{% endif %}
-</div>
-</div>
-</div>
-</div>
+{% endif %} -->
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 {% endblock %}
