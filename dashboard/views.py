@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, reverse
 from django.views import View
 from jobs.models import UserSavedJob, job_record
+from examresults.models import ExamSchedule
+from django_datatables_view.base_datatable_view import BaseDatatableView
 
 
 # Create your views here.
@@ -51,3 +53,27 @@ class HomeView(View):
             template_name="index.html",
             context={"total_jobs": total_jobs},
         )
+
+
+class ExamScheduleView(BaseDatatableView):
+    model = ExamSchedule
+    columns = [
+        "exam_number",
+        "exam_title_civil_service_title",
+        "application_start_date",
+        "application_end_date",
+        "exam_type",
+    ]
+    order_columns = [
+        "exam_number",
+        "exam_title_civil_service_title",
+        "application_start_date",
+        "application_end_date",
+        "exam_type",
+    ]
+
+    def get_context_data(self, *args, **kwargs):
+        context = {
+            "upcomingexams": ExamSchedule.objects.all(),
+        }
+        return context
