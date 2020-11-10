@@ -87,25 +87,27 @@
  //     }
  // },
     });
-
+table.search('').columns().search('').draw();
 
 
     $('#title-desc').change(function () {
-
+      console.log("Title",this.value)
   table
       .columns( 2 )
       .search( this.value )
       .draw();
 } );
 
-    $("#first-name").on("keyup search input paste cut", function() {
+    $("#first-name").on("keyup", function() {
+      console.log("First",this.value)
 table
         .columns( 3 )
         .search( this.value )
         .draw();
   } );
 
-  $("#last-name").on("keyup search input paste cut", function() {
+  $("#last-name").on("keyup", function() {
+    console.log("Last",this.value)
     table
           .columns( 5)
           .search( this.value )
