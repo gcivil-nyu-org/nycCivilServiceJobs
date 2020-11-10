@@ -13,21 +13,17 @@
 <br>
 <br>
 <br>
-<br>
-
 
 <section class="ftco-section bg-light">
     <div class="d-flex" id="wrapper">
 
         <!-- Sidebar -->
-        <div class="bg-light border-right" id="sidebar-wrapper" style="position: fixed;">
+        <div class="bg-light border-right" id="sidebar-wrapper">
             <div class="sidebar-heading" style="color:black"><b>Welcome {{user.first_name}}!</b></div>
             <div class="list-group list-group-flush">
                 <a href="{% url 'dashboard:dashboard' %}" class="nav-item list-group-item list-group-item-action bg-light text-success " >Dashboard</a>
                 <a href="{% url 'dashboard:savedjobs' %}" class="nav-item list-group-item list-group-item-action bg-light" > Saved Jobs</a>
                 <a href=" #" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-                <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -35,11 +31,13 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
 
-            <div id="layoutSidenav" style="margin-left: 250px;">
+            <div id="layoutSidenav">
                 <div id="layoutSidenav_content">
                     <main>
-                        <div class="container-fluid" style="padding-top: 10px;">
-                            <h1 class="mt-4">Dashboard</h1>
+                        <div class="col-md-12 ftco-animate">
+                        <div class="container-fluid" style="padding-top: 0px;">
+                            
+                            <h1 class="mt-1">Dashboard</h1>
 
                             <div class="row flex">
                                 <div class="col-xl-4 col-md-6">
@@ -115,12 +113,17 @@
                             <td>{{exam.exam_title_civil_service_title}}</td>
                             <td>{{exam.application_start_date}}</td>
                             <td>{{exam.application_end_date}}</td>
-                            <td>{{exam.exam_type}}</td>
+                            <td>{% if exam.exam_type == 'QIE' %}
+                                Qualifield Incumbent Exam
+                                {% else %}
+                                {{exam.exam_type}}
+                                {% endif%}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
+        </div>
     </main>
     <footer class="py-4 bg-light mt-auto">
         <div class="container-fluid">
