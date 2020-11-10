@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import redirect, reverse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.utils.http import is_safe_url
 from django.views.generic import FormView
 from django.views import View
 from jobs.models import UserSavedJob
@@ -24,11 +25,22 @@ class SignInView(FormView):
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
         user = authenticate(username=username, password=password)
+        nxt = self.request.POST.get("next")
 
         if user is not None:
             login(self.request, user)
-            # messages.info(self.request, f"You are now logged in as {username}")
-            return redirect(reverse("signin:success"))
+            if nxt is None:
+                return redirect("dashboard:dashboard")
+            elif not is_safe_url(
+                url=nxt,
+                allowed_hosts={self.request.get_host()},
+                require_https=self.request.is_secure(),
+            ):
+                return redirect("dashboard:dashboard")
+            else:
+                return redirect(nxt)
+
+                # messages.info(self.request, f"You are now logged in as {username}")
         else:
             messages.error(self.request, "Invalid username or password.")
 
@@ -40,7 +52,7 @@ class SignInView(FormView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect(reverse("signin:success"))
+            return redirect(reverse("dashboard:dashboard"))
         return super(SignInView, self).get(request, *args, **kwargs)
 
 

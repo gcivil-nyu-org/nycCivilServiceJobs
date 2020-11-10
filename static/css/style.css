@@ -8493,6 +8493,7 @@ h1, h2, h3, h4, h5,
     .slider-text .breadcrumbs span a {
       color: #000000; }
 
+
 .slider-text .bread {
   font-weight: 900;
   color: #000000 !important; }
@@ -9890,6 +9891,8 @@ textarea.form-control {
   .categories li.active a, .sidelink li.active a {
     color: #000000;
     font-style: italic; }
+
+    
 
 #ftco-loader {
   position: fixed;
