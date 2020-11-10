@@ -423,6 +423,9 @@
 
     $(window).on('load', function () {
 
+        $('.active').removeClass('active');
+        $('.navbar-nav li').eq(1).addClass('active');
+        
         $("#posting-type").change(function (event) {
             senddata()
         });
