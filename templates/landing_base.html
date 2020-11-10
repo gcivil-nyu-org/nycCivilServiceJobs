@@ -37,7 +37,7 @@
 <body>
 
   <!-- START nav -->
-  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" style="top:0;">
     <!-- <div class="container"> -->
       {% if user.is_authenticated %}
       <a class="navbar-brand" href="{% url 'dashboard:dashboard' %}"><img alt="nycCivilServiceJobs"
@@ -54,7 +54,7 @@
       </button> -->
 
       <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item active">
             {% if user.is_authenticated %}
             <a class="nav-link" href="{% url 'dashboard:dashboard' %}">Home <span class="sr-only">(current)</span></a>
@@ -71,13 +71,14 @@
           <li class="nav-item">
             <a class="nav-link" href="#">About Us</a>
           </li>
-
+      </ul>
+      <ul class="navbar-nav mr-2">
           {% if user.is_authenticated %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false"><i class="fa fa-user fa-lg"></i></a>
-            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="userDropdown">
-              <a class="dropdown-item" href="{% url 'userprofile' %}">Profile</a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="#">Profile</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
             </div>
@@ -86,10 +87,10 @@
           <!-- <li class="nav-item cta mr-md-1"><a href="{% url 'logout' %}" class="nav-link">Log Out</a></li> -->
 
           {% else %}
-          <li class="nav-item cta mr-md-1" id="signin"><a href="{% url 'signin:signin' %}" class="nav-link">Sign In</a>
+          <li class="nav-item cta" id="signin"><a href="{% url 'signin:signin' %}" class="nav-link">Sign In</a>
           </li>
           {% endif %}
-
+        </ul>
       </div>
     <!-- </div> -->
   </nav>
