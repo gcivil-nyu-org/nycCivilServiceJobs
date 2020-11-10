@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.views import View
 from jobs.models import UserSavedJob, job_record
 from examresults.models import ExamSchedule
-from django_datatables_view.base_datatable_view import BaseDatatableView
+import datetime
 
 
 # Create your views here.
@@ -12,7 +12,9 @@ class DashboardView(View):
         user_saved_jobs = UserSavedJob.objects.filter(user=self.request.user)
         saved_jobs_user = list(user_saved_jobs.values_list("job", flat=True))
         jobs = map(lambda x: x.job, user_saved_jobs)
-
+        exam_schedule = ExamSchedule.objects.filter(
+            application_end_date__gte=datetime.date.today()
+        )
         return render(
             request=request,
             template_name="dashboard/home.html",
@@ -20,6 +22,7 @@ class DashboardView(View):
                 "user": request.user,
                 "jobs": jobs,
                 "saved_jobs_user": saved_jobs_user,
+                "exam_schedule": exam_schedule,
             },
         )
 
@@ -55,25 +58,24 @@ class HomeView(View):
         )
 
 
-class ExamScheduleView(BaseDatatableView):
-    model = ExamSchedule
-    columns = [
-        "exam_number",
-        "exam_title_civil_service_title",
-        "application_start_date",
-        "application_end_date",
-        "exam_type",
-    ]
-    order_columns = [
-        "exam_number",
-        "exam_title_civil_service_title",
-        "application_start_date",
-        "application_end_date",
-        "exam_type",
-    ]
+# class ExamScheduleJSON(BaseDatatableView):
+#     model = ExamSchedule
+#     columns = [
+#         "exam_number",
+#         "exam_title_civil_service_title",
+#         "application_start_date",
+#         "application_end_date",
+#         "exam_type",
+#     ]
+#     order_columns = [
+#         "exam_number",
+#         "exam_title_civil_service_title",
+#         "application_start_date",
+#         "application_end_date",
+#         "exam_type",
+#     ]
 
-    def get_context_data(self, *args, **kwargs):
-        context = {
-            "upcomingexams": ExamSchedule.objects.all(),
-        }
-        return context
+#     def get_context_data(self, *args, **kwargs):
+#         exam_schedule =ExamSchedule.objects.all()
+#         json = serializer.serialize('json', object_list)
+#         return exam_schedule
