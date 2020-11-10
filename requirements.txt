@@ -10,3 +10,4 @@ coverage
 coveralls
 pre-commit
 ftfy
+tabula

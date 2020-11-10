@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from .models import ExamResultsTerminated, ExamResultsActive
+from .models import (
+    ExamResultsTerminated,
+    ExamResultsActive,
+    ExamSchedule,
+    CivilServicesTitle,
+)
 
 
 class ExamActiveAdmin(admin.ModelAdmin):
@@ -32,5 +37,21 @@ class ExamTerminatedAdmin(admin.ModelAdmin):
     list_display = ("exam_number", "list_title_code", "list_title_desc")
 
 
+class ExamScheduleAdmin(admin.ModelAdmin):
+    list_display = (
+        "exam_number",
+        "exam_title_civil_service_title",
+        "application_start_date",
+        "application_end_date",
+        "exam_type",
+    )
+
+
+class CivilServicesTitleAdmin(admin.ModelAdmin):
+    list_display = ("title_code", "title_description")
+
+
 admin.site.register(ExamResultsTerminated, ExamTerminatedAdmin)
 admin.site.register(ExamResultsActive, ExamActiveAdmin)
+admin.site.register(ExamSchedule, ExamScheduleAdmin)
+admin.site.register(CivilServicesTitle, CivilServicesTitleAdmin)
