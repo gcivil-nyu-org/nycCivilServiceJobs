@@ -18,7 +18,6 @@ class ExamsActiveView(TemplateView):
         queryset = ExamResultsActive.objects.all()
 
         if query:
-            print("Dispatch", query)
             if query.isnumeric():
                 queryset = ExamResultsActive.objects.filter(
                     Q(exam_number=query) | Q(list_title_code=query)
@@ -63,7 +62,6 @@ class ExamJSON(BaseDatatableView):
 
     def get_initial_queryset(self, q=None):
         query = self.request.GET.get("q")
-        print(self.request.GET)
         exams = ExamResultsActive.objects.none()
         if query:
             if query.isnumeric():
