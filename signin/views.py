@@ -1,9 +1,14 @@
-from django.shortcuts import redirect, reverse
+from django.shortcuts import redirect, reverse, render
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.utils.http import is_safe_url
 from django.views.generic import FormView
+from django.views import View
+from signin.forms import UserProfileForm
+from examresults.models import CivilServicesTitle
+from signin.models import UsersCivilServiceTitle
+import json
 
 
 class SignInView(FormView):
@@ -48,3 +53,84 @@ class SignInView(FormView):
         if request.user.is_authenticated:
             return redirect(reverse("dashboard:dashboard"))
         return super(SignInView, self).get(request, *args, **kwargs)
+
+
+class UserProfileView(View):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            profile_form = UserProfileForm(instance=request.user)
+            civil_services_title_all = CivilServicesTitle.objects.all()
+            user_civil_services_title = UsersCivilServiceTitle.objects.filter(
+                user=self.request.user
+            )
+            user_curr_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=False).values_list(
+                    "civil_service_title", flat=True
+                )
+            )
+            user_interested_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=True).values_list(
+                    "civil_service_title", flat=True
+                )
+            )
+
+            # print(current_civil_services_title_list)
+            # print(interested_civil_services_title_list)
+            return render(
+                request,
+                "signin/user_profile.html",
+                context={
+                    "user": request.user,
+                    "form": profile_form,
+                    "civil_services_title_all": civil_services_title_all,
+                    "user_curr_civil_services_title": json.dumps(
+                        user_curr_civil_services_title
+                    ),
+                    "user_interested_civil_services_title": json.dumps(
+                        user_interested_civil_services_title
+                    ),
+                },
+            )
+        else:
+            return redirect(reverse("signin:signin"))
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            profile_form = UserProfileForm(request.POST, instance=request.user)
+            civil_services_title_all = CivilServicesTitle.objects.all()
+            user_civil_services_title = UsersCivilServiceTitle.objects.filter(
+                user=self.request.user
+            )
+            user_curr_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=False).values_list(
+                    "civil_service_title", flat=True
+                )
+            )
+            user_interested_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=True).values_list(
+                    "civil_service_title", flat=True
+                )
+            )
+
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, ("Your profile was successfully updated"))
+                return redirect("userprofile")
+            else:
+                return render(
+                    request=request,
+                    template_name="signin/user_profile.html",
+                    context={
+                        "user": request.user,
+                        "form": profile_form,
+                        "civil_services_title_all": civil_services_title_all,
+                        "user_curr_civil_services_title": json.dumps(
+                            user_curr_civil_services_title
+                        ),
+                        "user_interested_civil_services_title": json.dumps(
+                            user_interested_civil_services_title
+                        ),
+                    },
+                )
+        else:
+            return redirect(reverse("signin:signin"))
