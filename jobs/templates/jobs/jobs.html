@@ -255,6 +255,8 @@
 {% endblock %}
 {% block javascript %}
 <script>
+    $('.active').removeClass('active');
+    $('.navbar-nav li').eq(1).addClass('active');
     //$(document).ready(function() {
     var form = $('.favJob');
     var formMessages = $('#form-messages');
