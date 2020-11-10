@@ -88,7 +88,7 @@
 <script>
 $(document).ready(function() {
 
-
+    $('li.nav-item.active').removeClass('active');
     var user_curr_civil_services_title = JSON.parse("{{user_curr_civil_services_title|safe}}");
     var user_interested_civil_services_title = JSON.parse("{{user_interested_civil_services_title|safe}}");
 
