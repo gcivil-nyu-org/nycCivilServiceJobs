@@ -1,0 +1,126 @@
+{% extends 'landing_base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'register/signup.css' %}">
+
+<div class="container" style="margin-block-start: 125pt;">
+    
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-pills-icons flex-column" role="tablist">
+                        <!--
+                            color-classes: "nav-pills-primary", "nav-pills-info", "nav-pills-success", "nav-pills-warning","nav-pills-danger"
+                        -->
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#profile" role="tab" data-toggle="tab">
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#preference" role="tab" data-toggle="tab">
+                               Preferences
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-8">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="profile">
+                            <div class="card ">
+                                    <article class="card-body">
+                                        {% for message in messages %}
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            {{ message }}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                        </div>
+                                        {% endfor %}
+                    
+                                        <form method='POST' class="from-group">
+                                            {% csrf_token %}
+                                            
+                                            {% crispy form %}
+                    
+                                            <!-- <div class="form-group">
+                                                <button class="btn btn-success" type="submit">Update Profile</button>
+                                            </div> -->
+                                        </form>
+                                    </article>
+                            </div> 
+                        </div>
+                        <div class="tab-pane" id="preference">
+
+                            <div class="card ">
+                                <article class="card-body">
+                                    <div>
+                                        <div><b>Civil Services Title You Hold</b></div>
+                                        <select class="js-example-basic-multiple" name="current_civil_ser_title" id="current_civil_ser_title" multiple="multiple">
+                                            {% for civilServTitle in civil_services_title_all %}
+                                            <option value={{civilServTitle.id}}> {{civilServTitle.title_description}} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <div></div><b>Civil Services Title You are interested in</b></div>
+                                        <select class="js-example-theme-multiple" name="interested_civil_ser_title[]" id="interested_civil_ser_title" multiple="multiple">
+                                            {% for civilServTitle in civil_services_title_all %}
+                                            <option value={{civilServTitle.id}}> {{civilServTitle.title_description}} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </article>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- row.// -->
+</div>
+<!--container end.//-->
+
+
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function() {
+
+
+    var user_curr_civil_services_title = JSON.parse("{{user_curr_civil_services_title|safe}}");
+    var user_interested_civil_services_title = JSON.parse("{{user_interested_civil_services_title|safe}}");
+
+    debugger;
+    $('.js-example-theme-multiple').select2(
+        {
+            width: '100%',
+        }
+    );
+    $('.js-example-basic-multiple').select2(
+        {
+            width: '100%',
+        }
+    );
+
+    $('#current_civil_ser_title').on('change.select2', function (e) {
+        // Do something
+        
+    });
+
+    if (user_curr_civil_services_title.length > 0)
+    {
+        $('#current_civil_ser_title').val(user_curr_civil_services_title).trigger('change');
+    }
+
+    if (user_interested_civil_services_title.length > 0)
+    {
+        $('#interested_civil_ser_title').val(user_interested_civil_services_title).trigger('change');
+    }
+});
+</script>
+{% endblock javascript %}
