@@ -10,5 +10,5 @@ coverage
 coveralls
 pre-commit
 ftfy
-tabula-py
+camelot-py[cv]
 django-datatables-view
