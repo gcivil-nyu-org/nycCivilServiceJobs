@@ -12,3 +12,4 @@ pre-commit
 ftfy
 tabula-py
 django-datatables-view
+opencv-python-headless
