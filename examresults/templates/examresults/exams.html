@@ -146,9 +146,18 @@ $('.js-hide-search').select2({
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <title>Exam Results</title>
-
+<style>
+  .myfont{
+    height: 35px !important; 
+    font-size: 15px; 
+    font-family: "Nunito Sans", Arial, sans-serif; 
+    font-weight: 400; 
+    border:1px solid #aaa; 
+    color: #444 !important;
+    
+  }
+</style>
 </head>
-<br>
 <br>
 <br>
 <br>
@@ -157,12 +166,12 @@ $('.js-hide-search').select2({
   <div class="container">
 
     <form method="GET" action="{% url 'examresults:exams' %}">
-        <div class="form-row">
+        <div class="form-row pt-3">
             <div class="col"></div>
             <div class="form-group col col-md-6">
                 <div class="input-group">
                     <input class="form-control" type="search" name="q" id="id_q" value="{{request.GET.q}}"
-                        placeholder="List Title Code or Exam Number or Title Desc" />
+                        placeholder="Civl Service Title Code, Civl Service Title or Exam Number" />
                 </div>
             </div>
             <button type="submit" class="form-group btn btn-primary"
@@ -175,7 +184,7 @@ $('.js-hide-search').select2({
   <div class="col-lg-3 sidebar">
     <div class="row justify-content-center">
       <div class="col-md-12 heading-section">
-        <h2 class="mb-4">&nbsp<h2>
+        <br>
       </div>
     </div>
     <div class="sidebar-box bg-white p-4 ftco-animate">
@@ -196,7 +205,7 @@ $('.js-hide-search').select2({
       <hr class="mt-2 mb-3" />
 
       <br>
-      <div>List Title Description</div>
+      <div>Civil Service Title </div>
       <div>
         <select class="js-example-basic-single form-control" name="title-desc" id="title-desc">
           <option value=""> Any </option>
@@ -207,11 +216,11 @@ $('.js-hide-search').select2({
       </div>
       <br>
       <div> First Name </div>
-      <input class=" form-control" type="text" id="first-name"/>
+      <input class="form-control myfont"  type="text" id="first-name"/>
 
       <br>
       <div> Last Name </div>
-      <input class="form-control" type="text" id="last-name"/>
+      <input class="form-control myfont" type="text" id="last-name"/>
 
 
 
@@ -222,8 +231,8 @@ $('.js-hide-search').select2({
     <table  id="exams" class="datatable">
       <thead>
           <th>Exam Number</th>
-            <th>List Title Code</th>
-            <th>List Title Descrption</th>
+            <th>Civil Service Title Code</th>
+            <th>Civil Service Title </th>
             <th>First Name</th>
             <th>Middle Name</th>
             <th>Last Name</th>
