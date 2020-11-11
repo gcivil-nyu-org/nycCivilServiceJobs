@@ -9,7 +9,7 @@
       <img class="one-third align-self-end order-md-last img-fluid" src="{% static 'images/undraw_work_time_lhoj.svg' %}" alt="">
       <div class="one-forth d-flex align-items-center ftco-animate js-fullheight">
         <div class="text mt-5">
-          <p class="mb-4 mt-5 pt-5">We have <span class="number" data-number="903">0</span> great civil service jobs for you!</p>
+          <p class="mb-4 mt-5 pt-5">We have <span class="number" data-number={{total_jobs}}>0</span> great civil service jobs for you!</p>
             <h1 class="mb-5">One stop for all your NYC Civil Service needs.</h1>
 
           <div class="ftco-search">
@@ -34,7 +34,7 @@
                             <div class="form-field mr-2">
                               <div class="icon"><span class="icon-pencil"></span></div>
                                     <input class="form-control border-right-0 border" type="search" name="q" id="id_q"  placeholder="Civil Service Title, Business Title, or Agency" />
-                              
+
                                 </div>
                           </div>
                           </div>
@@ -49,13 +49,13 @@
                     </form>
                   </div>
                   <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-performance-tab">
-                    <form action="#" class="search-job">
+                    <form action="{% url 'examresults:exams' %}" class="search-job">
                       <div class="row no-gutters">
                         <div class="col-md-8">
                           <div class="form-group">
                             <div class="form-field mr-2">
                               <div class="icon"><span class="icon-pencil"></span></div>
-                              <input type="text" class="form-control" placeholder="Civil Service Exam Title">
+                              <input type="text" class="form-control" name="q" placeholder="Civl Service Title Code, Civl Service Title or Exam Number">
                             </div>
                           </div>
                         </div>

@@ -10,3 +10,5 @@ coverage
 coveralls
 pre-commit
 ftfy
+camelot-py[cv]
+django-datatables-view

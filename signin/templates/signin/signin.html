@@ -4,12 +4,12 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'signin/style.css' %}">
 
-<script>
+<!-- <script>
   document.getElementById("signin").remove();
 
-</script>
+</script> -->
 
-<div class="container" style="margin-block-start: 150pt">
+<div class="container" style="margin-block-start: 125pt">
     <div class="row">
         <aside class="col-sm-5" style="margin:auto">
         <div class="card ">
@@ -24,8 +24,9 @@
                     <form method='POST' class="from-group">
                         {% csrf_token %}
                         {{form|crispy}}
-
-                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Sign In">
+                        <input type="hidden" name="next" value="{{request.GET.next}}" />
+                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Sign In"/>
+                        
                     </form>
                     <p class="text-center"><a href="/signin/password_reset" class="btn">Forgot password?</a></p>
 
@@ -38,5 +39,6 @@
         </aside>
     </div>
 </div>
+
 
 {% endblock %}

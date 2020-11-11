@@ -1,10 +1,15 @@
-from django.shortcuts import render, redirect, reverse
+from django.http.response import JsonResponse
+from django.shortcuts import redirect, reverse, render
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.utils.http import is_safe_url
 from django.views.generic import FormView
 from django.views import View
-from jobs.models import UserSavedJob
+from signin.forms import UserProfileForm
+from examresults.models import CivilServicesTitle
+from signin.models import UsersCivilServiceTitle
+import json
 
 
 class SignInView(FormView):
@@ -20,11 +25,22 @@ class SignInView(FormView):
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
         user = authenticate(username=username, password=password)
+        nxt = self.request.POST.get("next")
 
         if user is not None:
             login(self.request, user)
-            # messages.info(self.request, f"You are now logged in as {username}")
-            return redirect(reverse("signin:success"))
+            if nxt is None:
+                return redirect("dashboard:dashboard")
+            elif not is_safe_url(
+                url=nxt,
+                allowed_hosts={self.request.get_host()},
+                require_https=self.request.is_secure(),
+            ):  # pragma: no cover
+                return redirect("dashboard:dashboard")
+            else:  # pragma: no cover
+                return redirect(nxt)
+
+                # messages.info(self.request, f"You are now logged in as {username}")
         else:
             messages.error(self.request, "Invalid username or password.")
 
@@ -36,23 +52,159 @@ class SignInView(FormView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect(reverse("signin:success"))
+            return redirect(reverse("dashboard:dashboard"))
         return super(SignInView, self).get(request, *args, **kwargs)
 
 
-class SuccessView(View):
+class UserProfileView(View):  # pragma: no cover
     def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            profile_form = UserProfileForm(instance=request.user)
+            civil_services_title_all = CivilServicesTitle.objects.all()
+            user_civil_services_title = UsersCivilServiceTitle.objects.filter(
+                user=self.request.user
+            )
+            user_curr_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=False).values_list(
+                    "civil_service_title", flat=True
+                )
+            )
+            user_interested_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=True).values_list(
+                    "civil_service_title", flat=True
+                )
+            )
 
-        user_saved_jobs = UserSavedJob.objects.filter(user=self.request.user)
-        saved_jobs_user = list(user_saved_jobs.values_list("job", flat=True))
-        jobs = map(lambda x: x.job, user_saved_jobs)
+            # print(current_civil_services_title_list)
+            # print(interested_civil_services_title_list)
+            return render(
+                request,
+                "signin/user_profile.html",
+                context={
+                    "user": request.user,
+                    "form": profile_form,
+                    "civil_services_title_all": civil_services_title_all,
+                    "user_curr_civil_services_title": json.dumps(
+                        user_curr_civil_services_title
+                    ),
+                    "user_interested_civil_services_title": json.dumps(
+                        user_interested_civil_services_title
+                    ),
+                },
+            )
+        else:
+            return redirect(reverse("signin:signin"))
 
-        return render(
-            request=request,
-            template_name="signin/success.html",
-            context={
-                "user": request.user,
-                "jobs": jobs,
-                "saved_jobs_user": saved_jobs_user,
-            },
-        )
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            profile_form = UserProfileForm(request.POST, instance=request.user)
+            civil_services_title_all = CivilServicesTitle.objects.all()
+            user_civil_services_title = UsersCivilServiceTitle.objects.filter(
+                user=self.request.user
+            )
+            user_curr_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=False).values_list(
+                    "civil_service_title", flat=True
+                )
+            )
+            user_interested_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=True).values_list(
+                    "civil_service_title", flat=True
+                )
+            )
+
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, ("Your profile was successfully updated"))
+                return redirect("userprofile")
+            else:
+                return render(
+                    request=request,
+                    template_name="signin/user_profile.html",
+                    context={
+                        "user": request.user,
+                        "form": profile_form,
+                        "civil_services_title_all": civil_services_title_all,
+                        "user_curr_civil_services_title": json.dumps(
+                            user_curr_civil_services_title
+                        ),
+                        "user_interested_civil_services_title": json.dumps(
+                            user_interested_civil_services_title
+                        ),
+                    },
+                )
+        else:
+            return redirect(reverse("signin:signin"))
+
+
+class SaveCivilServiceTitleView(View):  # pragma: no cover
+    def post(self, request, *args, **kwargs):
+
+        # print(request.POST['jobs_pk_id'])
+        if self.request.method == "POST":
+            user_int_cst = list(request.POST.getlist("user_int_cst[]"))
+            user_curr_cst = list(request.POST.getlist("user_curr_cst[]"))
+
+            user = request.user
+            response_data = {
+                "count_before": UsersCivilServiceTitle.objects.filter(user=user).count()
+            }
+            if user.is_authenticated:
+
+                UsersCivilServiceTitle.objects.filter(user=user).delete()
+
+                for cst in user_curr_cst:
+                    civilServiceTitle = CivilServicesTitle.objects.get(pk=cst)
+                    already_saved = UsersCivilServiceTitle.objects.filter(
+                        user=user, civil_service_title=civilServiceTitle
+                    )
+                    if already_saved.count() == 0:
+                        save_civilServiceTitle = UsersCivilServiceTitle(
+                            user=user,
+                            civil_service_title=civilServiceTitle,
+                            is_interested=False,
+                        )
+                        save_civilServiceTitle.save()
+
+                for int_cst in user_int_cst:
+                    int_civilServiceTitle = CivilServicesTitle.objects.get(pk=int_cst)
+                    already_saved_int = UsersCivilServiceTitle.objects.filter(
+                        user=user, civil_service_title=int_civilServiceTitle
+                    )
+                    if already_saved_int.count() == 0:
+                        save_int_civilServiceTitle = UsersCivilServiceTitle(
+                            user=user,
+                            civil_service_title=int_civilServiceTitle,
+                            is_interested=True,
+                        )
+                        save_int_civilServiceTitle.save()
+
+                # print("inside post")
+                user_civil_services_title = UsersCivilServiceTitle.objects.filter(
+                    user=user
+                )
+                user_curr_civil_services_title = list(
+                    user_civil_services_title.filter(is_interested=False).values_list(
+                        "civil_service_title", flat=True
+                    )
+                )
+                user_interested_civil_services_title = list(
+                    user_civil_services_title.filter(is_interested=True).values_list(
+                        "civil_service_title", flat=True
+                    )
+                )
+
+                response_data["user_curr_civil_services_title"] = json.dumps(
+                    user_curr_civil_services_title
+                )
+                response_data["user_interested_civil_services_title"] = json.dumps(
+                    user_interested_civil_services_title
+                )
+                response_data["response_data"] = "CST_SAVED"
+                return JsonResponse(response_data, status=200)
+
+            else:
+                # messages.error(self.request, "Invalid username or password.")
+                # print ('inside post else')
+                response_data["response_data"] = "User not authenticated"
+                return JsonResponse(response_data, status=200)

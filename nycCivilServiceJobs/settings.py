@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
+    "dashboard.apps.DashboardConfig",
     "examresults.apps.ExamresultsConfig",
     "jobs.apps.JobsConfig",
     "register.apps.RegisterConfig",

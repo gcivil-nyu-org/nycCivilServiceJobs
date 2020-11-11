@@ -150,7 +150,8 @@ class SearchResultsView(ListView):
             data = {
                 "rendered_table": render_to_string(
                     "jobs/table_content.html", context=context, request=request
-                )
+                ),
+                "count": jobs.count(),
             }
             # data = serializers.serialize('json', data)
             return JsonResponse(data, safe=False)

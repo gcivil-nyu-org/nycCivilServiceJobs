@@ -1,0 +1,352 @@
+{% extends 'landing_base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Saved Jobs</title>
+</head>
+<br>
+<br>
+<br>
+<br>
+
+
+<section class="ftco-section bg-light">
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading" style="color:black"><b>Welcome {{user.first_name}}!</b></div>
+            <div class="list-group list-group-flush">
+                <a href="{% url 'dashboard:dashboard' %}" class="nav-item list-group-item list-group-item-action bg-light" >Dashboard</a>
+                <a href="{% url 'dashboard:savedjobs' %}" class="nav-item list-group-item list-group-item-action bg-light text-success" > Saved Jobs</a>
+                <a href=" #" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
+            </div>
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+             <!--Job Card Starts here .//-->
+
+            <!-- Modal if user is  authenticated  -->
+            <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel1">Apply Job</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you meet the Civil Service Requirement?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">No</button>
+                            <div class="modal-link">
+                                <button type="button" class="btn btn-primary">Yes</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Modal if user is  authenticated  -->
+
+
+            <!-- Modal if user is not authenticated  -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Looking for Jobs?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Sign In to save / apply for jobs.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">Close</button>
+                            <a href="{% url 'signin:signin' %}">
+                                <button type="button" class="btn btn-primary" href>Sign In</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End of Modal if user is not authenticated  -->
+
+            <div id="layoutSidenav">
+                <div id="layoutSidenav_content">
+                        <div class="container-fluid " style="padding-top: 10px;">
+                            <div class="row bg-light">
+                                {% if jobs and saved_jobs_user %}
+
+                                {% for job in jobs %}
+                                <div class="col-md-12 ftco-animate">
+                                    <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+                                        <div class="one-third mb-4 mb-md-0">
+                                            <div class="job-post-item-header align-items-center">
+                                                {% if job.posting_type == "Internal" %}
+                                                <span class="text-white badge py-2 px-3"
+                                                    style="background-color:palevioletred">{{job.posting_type}}</span>
+                                                {% else %}
+                                                <span class="text-white badge py-2 px-3"
+                                                    style="background-color:steelblue">{{job.posting_type}}</span>
+                                                {% endif %}
+                                                <span class="text-white badge py-2 px-3"
+                                                    style="margin-left: 5px; background-color:olive">{{job.career_level }}</span>
+                                                {% if job.post_until is None %}
+                                                <span class="text-white badge py-2 px-3"
+                                                    style="margin-left: 5px; background-color:salmon">Deadline: Until
+                                                    Position is Filled</span>
+                                                {% else %}
+                                                <span class="text-white badge py-2 px-3"
+                                                    style="margin-left: 5px; background-color:salmon">Deadline:
+                                                    {{job.post_until }}</span>
+                                                {% endif %}
+                    
+                                                <h2><a class="mr-2 text-black" data-toggle="collapse"
+                                                        href="#demo{{job.id}}">{{job.business_title}}</a> </h2>
+                                                <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; max-height: 40vh">
+                                                    <p><b>Job Id: </b>{{job.job_id}}</p>
+                                                    {% if job.posting_updated %}
+                                                    <p><b>Last Updated: </b>{{job.posting_updated}}</p>
+                                                    {% else %}
+                                                    <p><b>Posted Date: </b>{{job.posting_date}}</p>
+                                                    {% endif %}
+                                                    <p><b>Title Classification: </b>{{job.title_classification}}</p>
+                                                    {% if job.full_time_part_time_indicator == 'F' %}
+                                                    <p><b>Full-time/Part-Time: </b>Full-Time</p>
+                                                    {% else %}
+                                                    <p><b>Full-time/Part-Time: </b>Part-Time</p>
+                                                    {% endif %}
+                                                    <p><b>Residency Requirement: </b>{{job.residency_requirement}}</p>
+                                                    <p><b>Salary Range: </b>${{job.salary_range_from|floatformat:2|intcomma }} -
+                                                        ${{job.salary_range_to|floatformat:2|intcomma }}
+                                                        ({{job.salary_frequency}})</p>
+                                                    <p><b>Description: </b>{{job.job_description}}</p>
+                                                    {% if result.minimum_qual_requirements%}
+                                                    <p><b>Minimum Qualification: </b>{{job.minimum_qual_requirements}}</p>
+                                                    {% endif %}
+                                                    {% if result.preferred_skills%}
+                                                    <p><b>Preferred Skill: </b>{{job.preferred_skills}}</p>
+                                                    {% endif %}
+                                                    {% if job.additional_information%}
+                                                    <p><b>Additional Information: </b>{{job.additional_information}}</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="job-post-item-body d-block d-md-flex">
+                                                <div class="mr-3"><span class="icon-layers"></span> <a>{{job.agency}}</a>
+                                                </div>
+                                                <div><span class="icon-person"></span> <span>{{job.civil_service_title}}</span></div>
+                                            </div>
+                                        </div>
+                    
+                                        <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0" style="
+                                        width: auto">
+                                            <!-- <div id="alert{{job.id}}" class="alert alert-warning alert-dismissible fade show" role="alert"
+                                                style="display: none;">
+                                                You need to <a href="{% url 'signin:signin'%}"><strong><u>Sign In</u></strong></a> to be
+                                                able to save a job.
+                                                <button type="button" class="close" onclick="$('#alert{{job.id}}').css('display','none');"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div> -->
+                                            <div>
+                                                <form onsubmit="return false;" save_unsave_url="{% url 'jobs:saveJob' job.id %}" method=POST
+                                                    class="favJob">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
+                                                    <button type="submit" class="btn">
+                                                        {%if saved_jobs_user is not None and job.id in saved_jobs_user%}
+                                                        <i id="favBtnID{{job.id}}"
+                                                            class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
+                                                            title="Unsave"
+                                                            style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                                                            <span class="icon-heart" style="color:#fdab44;"></span>
+                                                        </i>
+                                                        {% else %}
+                                                        <i id="favBtnID{{job.id}}"
+                                                            class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
+                                                            title="Save" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                                                            <span class="icon-heart" style="color: rgb(255, 255, 255);"></span>
+                                                        </i>
+                                                        {% endif %}
+                                                    </button>
+                                                    <!-- <a type="button" class=" icon text-center d-flex justify-content-center align-items-center icon mr-2 ">
+                                                        <span class="icon-heart"></span>
+                                                    </a> -->
+                                                </form>
+                                            </div>
+                                            <div>
+                                                {% if request.user.is_authenticated %}
+                    
+                                                {% if job.title_classification == "Competitive" %}
+                    
+                                                <!-- Button trigger modal for competetive -->
+                                                <button type="button" class="btn btn-primary py-2" data-toggle="modal"
+                                                    data-target="#exampleModal1" data-civilServiceTitle="{{job.civil_service_title}}"
+                                                    data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
+                                                    Apply</button>
+                    
+                                                {% else %}
+                                                <!-- Button trigger redirect for non-competitive -->
+                    
+                                                <a href="https://a127-jobs.nyc.gov/index_new.html?keyword={{job.job_id}}"
+                                                    target="_blank"><button type="button" class="btn btn-primary py-2"
+                                                        data-civilServiceTitle="{{job.civil_service_title}}"
+                                                        data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
+                                                        Apply</button></a>
+                                                {% endif %}
+                    
+                                                {% else %}
+                    
+                                                <!-- Button trigger modal if user is not authenticated -->
+                                                <button type="button" class="btn btn-primary py-2" data-toggle="modal"
+                                                    data-target="#exampleModal" data-civilServiceTitle="{{job.civil_service_title}}"
+                                                    data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
+                                                    Apply</button>
+                                                {% endif %}
+                    
+                                                <!-- <div>
+                                                    <a href="#"
+                                                        class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
+                                                        <span class="icon-heart"></span>
+                                                    </a>
+                                                </div>
+                                                    <a href="#" class="btn btn-primary py-2">Apply Job</a>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end -->
+                                {% endfor %}
+                            
+                            </div>
+                            {% else %}
+                            <h2 class="mb-4">You do not have any saved jobs.</h2>
+                            {% endif %}
+
+                        </div>
+                </div>
+            </div>
+</section>
+{% endblock %}
+{% block javascript %}
+<script>
+    //$(document).ready(function() {
+    var form = $('.favJob');
+    var formMessages = $('#form-messages');
+    $(form).submit(function (event) {
+
+        // Current form
+        var currentForm = $(this);
+        // Stop the browser from submitting the form.
+        event.preventDefault();
+
+        // Serialize the form data.
+        var formData = currentForm.serialize();
+        var user = "{{user}}";
+        //alert(user);
+
+        $.ajax({
+            type: 'POST',
+            url: currentForm.attr('save_unsave_url'),
+            data: formData
+        }).done(function (response) {
+            debugger;
+            //$("#favBtnID" + response["job_id"]).css("opacity", 1);
+            if (response["response_data"] == "Job Saved") {
+                $('#favBtnID' + response["job_id"]).css({
+                    'cssText': 'background-color: #28a745 !important; opacity:1'
+                });
+                // $('#favBtnID' + response["job_id"]).css({
+                //     'cssText': 'background-color: #28a745 !important; opacity:1'
+                // });
+                $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
+                $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+            } else if (response["response_data"] == "Job Unsaved") {
+                $('#favBtnID' + response["job_id"]).css({
+                    'cssText': 'background-color: #28a745 !important; opacity:1'
+                });
+                // $('#favBtnID' + response["job_id"]).css({
+                //     'cssText': 'background-color: #FFFFFF !important; opacity:1'
+                // });
+                $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
+                // $("#favBtnID" + response["job_id"]).removeAttr("style");
+                $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+            } else if (response["response_data"] == "User not authenticated") {
+                // if ($("#alert" + response["job_id"]).css('display') == 'none') {
+                //     $("#alert" + response["job_id"]).css('display', 'block');
+                // }
+                $('#exampleModal').modal('toggle');
+                //alert("Please sign in to favorite a job");
+            }
+
+            console.log("response")
+            //Do something
+        }).fail(function (data) {
+            //Do something
+            console.log("fail")
+            debugger;
+
+        });
+    });
+    //  });
+
+    $('#exampleModal1').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var civilServiceTitle = button.data('civilservicetitle');
+        var businessTitle = button.data('businesstitle');
+        var jobID = button.data('jobid');
+        var modal = $(this);
+        //console.log(modal.find('.modal-link'));
+        //debugger;
+        modal.find('.modal-title').text(businessTitle);
+        modal.find('.modal-body').text('The job you selected requires Civil Service Title: ' + civilServiceTitle + '. In order to apply, you must be an existing title holder or awaiting the examination result for the title. Do you still want to continue?');
+        modal.find('.modal-link button').click(function () {
+            //alert(jobID);
+            win = window.open("https://a127-jobs.nyc.gov/index_new.html?keyword=" + jobID, '_blank');
+            if (win) {
+                //Browser has allowed it to be opened
+                win.focus();
+            } else {
+                //Browser has blocked it
+                alert('Please allow popups for this website');
+            }
+            modal.modal('toggle');
+
+
+        });
+    });
+
+    $('#exampleModal1').on('hide.bs.modal', function (e) {
+        var modal = $(this);
+        modal.find('.modal-link button').prop("onclick", null).off("click");
+    });
+
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+{% endblock javascript %}

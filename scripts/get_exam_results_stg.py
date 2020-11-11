@@ -57,10 +57,9 @@ def save_exam_result_active():
     total_entries = 0
     exam_count = 0
     total_exams = len(exam_no_df.index)
-
-    for index, row in exam_no_df.iterrows():
-        s = "exam_no='" + (row["exam_no"]) + "' AND 'first_name' is not null"
-        while exam_count < total_exams:
+    while exam_count < total_exams:
+        for index, row in exam_no_df.iterrows():
+            s = "exam_no='" + (row["exam_no"]) + "' AND 'first_name' is not null"
             try:
                 exam_result_list = client.get(
                     "vx8i-nprf", where=s, limit=limit_per_exam

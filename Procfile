@@ -1,1 +1,1 @@
-web: gunicorn nycCivilServiceJobs.wsgi 
+web: gunicorn nycCivilServiceJobs.wsgi
