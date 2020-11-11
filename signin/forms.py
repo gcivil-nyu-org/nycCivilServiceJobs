@@ -7,7 +7,7 @@ from crispy_forms.helper import FormHelper
 # Sign Up Form
 
 
-class UserProfileForm(forms.ModelForm):
+class UserProfileForm(forms.ModelForm):  # pragma: no cover
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
     email = forms.EmailField(max_length=254)
@@ -32,7 +32,6 @@ class UserProfileForm(forms.ModelForm):
         ]
 
     is_hiring_manager.disabled = True
-    username
 
     def clean_email(self):
         email = self.cleaned_data.get("email").lower()
