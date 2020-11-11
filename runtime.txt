@@ -1,2 +1,2 @@
 python-3.9.0
-java-8
+java.runtime.version=1.8
