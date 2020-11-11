@@ -10,4 +10,5 @@ coverage
 coveralls
 pre-commit
 ftfy
-django-datatables-view 
+tabula-py
+django-datatables-view

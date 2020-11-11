@@ -16,7 +16,6 @@
 <br>
 <br>
 <br>
-<br>
 
 
 <section class="ftco-section bg-light">
@@ -83,7 +82,7 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" background-color: #6c757d !important;
                     color: #fff !important;
                     border-color: #6c757d !important;">Close</button>
-                    <a href="{% url 'signin:signin' %}">
+                    <a href="{% url 'signin:signin' %}?next={{request.get_full_path}}">
                         <button type="button" class="btn btn-primary" href>Sign In</button>
                     </a>
                 </div>
@@ -424,6 +423,9 @@
 
     $(window).on('load', function () {
 
+        $('.active').removeClass('active');
+        $('.navbar-nav li').eq(1).addClass('active');
+        
         $("#posting-type").change(function (event) {
             senddata()
         });
