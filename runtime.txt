@@ -1,2 +1,2 @@
 python-3.9.0
-java-11
+java-8
