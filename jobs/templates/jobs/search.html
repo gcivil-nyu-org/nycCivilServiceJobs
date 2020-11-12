@@ -5,7 +5,7 @@
 
 
 <head>
-    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -95,7 +95,7 @@
 
     <!-- Start of Filter and Job Card Container  -->
     <div class="container col-11">
-    
+
         <div class="row">
             <div class="col-lg-3 sidebar">
                 <div class="row justify-content-center">
@@ -105,21 +105,9 @@
                 </div>
                 <div class="sidebar-box bg-white p-4 ftco-animate">
                     <h4 class="heading-sidebar">Filters
-                        <!-- <div class="btn-group sort-btn" style="float:right;">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="sort-order"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Sort </button>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" onclick="sort(this.id)" id="" href="#">Default</a>
-                                <a class="dropdown-item" onclick="sort(this.id)" id="sort-posting" href="#">Date
-                                    Posted<i class="fa fa-sort-amount-asc"></i> </a>
-                                <a class="dropdown-item" onclick="sort(this.id)" id="sort-salary" href="#">Starting
-                                    Salary <i class="fa fa-sort-amount-asc"></i> </a>
-                            </div>
-                        </div> -->
                     </h4>
                     <hr class="mt-2 mb-3" />
-    
+
                     <div>Agency</div>
                     <div>
                         <select class="js-example-basic-single form-control" name="agency" id="agency">
@@ -130,31 +118,17 @@
                         </select>
                     </div>
                     <br>
-    
+
                     <div> Civil Service Title</div>
                     <div>
-                        <!-- <a class="form-control" style="overflow:hidden; text-overflow:ellipsis; white-space: nowrap;"
-                                href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                All
-                            </a> -->
+
                         <select class="js-example-basic-single form-control" name="cs_title" id="cs_title">
                             <option value="">All</option>
                             {% for cs_title in cs_titles %}
                             <option value={{forloop.counter0}}>{{cs_title}}</option>
                             {% endfor %}
                         </select>
-                        <!-- 
-                            <div class=" from-control dropdown-menu pre-scrollable"
-                                style="width:90%; overflow:scroll; text-overflow: ellipsis; white-space: nowrap; "
-                                id="myDropdown" aria-labelledby="dropdownMenuLink">
-                                <input class="form-control" type="text" placeholder="Type to Search.." id="myInput"
-                                    onkeyup="filterFunction()">
-                                <a class="dropdown-item csdrop" href="#" id="">All</a>
-                                {% for cs_title in cs_titles %}
-                                <a class="dropdown-item csdrop" href="#" id={{forloop.counter0}}>{{cs_title}}</a>
-                                {% endfor %}
-                            </div> -->
+
                     </div>
                     <br>
                     <div>Posting Type</div>
@@ -186,10 +160,13 @@
                     </div>
                     <br>
                     <div class="form-group"> Starting Salary <span class="badge badge-dark" id="salary-badge">0+</span>
-                        <input type="range" class="form-control-range" min=0 value=0 max=300000 id="salary-range" onchange="updateInput(this.value);" oninput="updateInput(this.value)">
+                        <input type="range" class="form-control-range" min=0 value=0 max=300000 id="salary-range"
+                            onchange="updateInput(this.value);" oninput="updateInput(this.value)">
                     </div>
                     <div> Posted After
-                        <input class="form-control" style="height:fit-content !important; font-size: 15px !important; color:#2b2a2a !important;" type="date" id="post-after" name="post-after">
+                        <input class="form-control"
+                            style="height:fit-content !important; font-size: 15px !important; color:#2b2a2a !important;"
+                            type="date" id="post-after" name="post-after">
                     </div>
                     <br>
                 </div>
@@ -203,12 +180,12 @@
                         </div>
                     </div>
                     <div class="col-sm-1 btn-group sort-btn">
-                        <button class="btn dropdown-toggle" type="button" id="sort-order"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="
+                        <button class="btn dropdown-toggle" type="button" id="sort-order" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" style="
                             right: 0;
                             position: absolute;">
                             Sort </button>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" >
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                             <a type='button' class="dropdown-item" onclick="sort(this.id)" id="">Default</a>
                             <a type='button' class="dropdown-item" onclick="sort(this.id)" id="sort-posting">Date
                                 Posted<i class="fa fa-sort-amount-asc"></i> </a>
@@ -276,7 +253,7 @@
         var salary_range = $('#salary-range').val();
         var sort_order = $("#sort-order").val()
         var fp = $("#fp").val()
-        var cs_title=$('#cs_title').find(":selected").val()
+        var cs_title = $('#cs_title').find(":selected").val()
         console.log("sort-order", sort_order)
         var asc;
         if (sort_order == "sort-posting")
@@ -317,7 +294,7 @@
     function putTableData(data) {
         console.log()
         $("#listing").html(data.rendered_table);
-        $('#jobCount').text("Found "+data.count+" matching jobs: ");
+        $('#jobCount').text("Found " + data.count + " matching jobs: ");
 
         var form = $('.favJob');
         var formMessages = $('#form-messages');
@@ -393,39 +370,17 @@
         }
         return cookieValue;
     }
-    // function myFunction() {
-    //     document.getElementById("myDropdown").classList.toggle("show");
-    // }
 
-
-    // function filterFunction() {
-
-    //     var input, filter, ul, li, a, i;
-    //     input = document.getElementById("myInput");
-    //     filter = input.value.toUpperCase();
-    //     div = document.getElementById("myDropdown");
-    //     a = div.getElementsByTagName("a");
-    //     for (i = 1; i < a.length; i++) {
-    //         txtValue = a[i].innerText;
-    //         if (txtValue.toUpperCase().indexOf(filter) > -1) {
-    //             a[i].style.display = "";
-    //         } else {
-    //             a[i].style.display = "none";
-    //         }
-    //     }
-    // }
     function updateInput(val) {
-        document.getElementById('salary-badge').innerHTML=val + "+"; 
+        document.getElementById('salary-badge').innerHTML = val + "+";
     }
-
-
 
 
     $(window).on('load', function () {
 
         $('.active').removeClass('active');
         $('.navbar-nav li').eq(1).addClass('active');
-        
+
         $("#posting-type").change(function (event) {
             senddata()
         });
@@ -443,20 +398,11 @@
             senddata()
         });
 
-        // $('.csdrop').on("click", function () {
-        //     cs_title = $(this).attr("id");
-        //     console.log("CS", cs_title);
-        //     senddata()
-        //     document.getElementById('dropdownMenuLink').innerHTML = $(this).html();;
-
-        // })
-
-
         $("#salary-range").change(function () {
             senddata();
         });
 
-        $('#cs_title').change(function() {
+        $('#cs_title').change(function () {
             senddata();
         });
 
@@ -466,12 +412,13 @@
 
         $('.js-hide-search').select2({
             minimumResultsForSearch: Infinity,
-           width: '100%'
+            width: '100%'
         });
 
-           
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
 
-       
 
         var form = $('.favJob');
         var formMessages = $('#form-messages');

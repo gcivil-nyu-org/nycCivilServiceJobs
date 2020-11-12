@@ -6,10 +6,11 @@
         <div class="one-third mb-4 mb-md-0">
             <div class="job-post-item-header align-items-center">
                 {% if job.posting_type == "Internal" %}
-                <span class="text-white badge py-2 px-3"
-                    style="background-color:palevioletred">{{job.posting_type}}</span>
+                <span class="text-white badge py-2 px-3" style="background-color:palevioletred" data-toggle="tooltip"
+                    data-placement="top" title="Posting open to Internal City Employees">{{job.posting_type}}</span>
                 {% else %}
-                <span class="text-white badge py-2 px-3" style="background-color:steelblue">{{job.posting_type}}</span>
+                <span class="text-white badge py-2 px-3" style="background-color:steelblue" data-toggle="tooltip"
+                    data-placement="top" title="Posting open to Public">{{job.posting_type}}</span>
                 {% endif %}
                 <span class="text-white badge py-2 px-3"
                     style="margin-left: 5px; background-color:olive">{{job.career_level }}</span>
@@ -24,14 +25,25 @@
 
                 <h2><a class="mr-2 text-black" data-toggle="collapse" href="#demo{{job.id}}">{{job.business_title}}</a>
                 </h2>
-                <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; max-height: 40vh">
+                <div id="demo{{job.id}}" class="collapse"
+                    style="overflow-y: auto; max-height: 40vh; margin-bottom: 10px;">
                     <p><b>Job Id: </b>{{job.job_id}}</p>
                     {% if job.posting_updated %}
                     <p><b>Last Updated: </b>{{job.posting_updated}}</p>
                     {% else %}
                     <p><b>Posted Date: </b>{{job.posting_date}}</p>
                     {% endif %}
-                    <p><b>Title Classification: </b>{{job.title_classification}}</p>
+
+                    <p><b>Title Classification:</b>
+                        {% if job.title_classification == 'Competitive' %}
+                        <span data-toggle="tooltip" data-placement="right"
+                            title="The Civil Service Title for this posting requires taking an education/experience exam, written exam or both">{{job.title_classification}}</span>
+                    </p>
+                    {% else %}
+                    <span data-toggle="tooltip" data-placement="right"
+                        title="The Civil Service Title for this posting doesn't require taking an exam">{{job.title_classification}}</span>
+                    {% endif %}
+                    </p>
                     {% if job.full_time_part_time_indicator == 'F' %}
                     <p><b>Full-time/Part-Time: </b>Full-Time</p>
                     {% else %}
@@ -54,25 +66,20 @@
                 </div>
             </div>
             <div class="job-post-item-body d-block d-md-flex">
-                <div class="mr-3"><span class="icon-layers"></span> <a>{{job.agency}}</a>
+                <div class="mr-3"><span class="icon-layers"></span> <span data-toggle="tooltip" data-placement="bottom"
+                        title="Agency">{{job.agency}}</span>
                 </div>
-                <div><span class="icon-person"></span> <span>{{job.civil_service_title}}</span></div>
+                <div><span class="icon-person"></span> <span data-toggle="tooltip" data-placement="bottom"
+                        title="Civil Service Title">{{job.civil_service_title}}</span>
+                </div>
             </div>
         </div>
 
         <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0" style="
         width: auto">
-            <!-- <div id="alert{{job.id}}" class="alert alert-warning alert-dismissible fade show" role="alert"
-                style="display: none;">
-                You need to <a href="{% url 'signin:signin'%}"><strong><u>Sign In</u></strong></a> to be
-                able to save a job.
-                <button type="button" class="close" onclick="$('#alert{{job.id}}').css('display','none');"
-                    aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div> -->
             <div>
-                <form onsubmit="return false;" save_unsave_url="{% url 'jobs:saveJob' job.id %}" method=POST class="favJob">
+                <form onsubmit="return false;" save_unsave_url="{% url 'jobs:saveJob' job.id %}" method=POST
+                    class="favJob">
                     {% csrf_token %}
                     <input type="hidden" name="jobs_pk_id" value="{{ job.id }}" />
                     <button type="submit" class="btn">
@@ -90,9 +97,6 @@
                         </i>
                         {% endif %}
                     </button>
-                    <!-- <a type="button" class=" icon text-center d-flex justify-content-center align-items-center icon mr-2 ">
-                        <span class="icon-heart"></span>
-                    </a> -->
                 </form>
             </div>
             <div>
@@ -124,15 +128,6 @@
                     Apply</button>
                 {% endif %}
 
-
-                <!-- <div>
-                    <a href="#"
-                        class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                        <span class="icon-heart"></span>
-                    </a>
-                </div>
-                    <a href="#" class="btn btn-primary py-2">Apply Job</a>
-                </div> -->
             </div>
         </div>
     </div>
