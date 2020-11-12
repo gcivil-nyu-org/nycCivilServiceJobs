@@ -15,29 +15,26 @@ import datetime
 
 def get_upcoming_exams():
     file = "https://www1.nyc.gov/assets/dcas/downloads/pdf/noes/yearly_examschedule_alpha.pdf"
-    
-    tables = camelot.read_pdf(file, pages = "1-end")
-    tables.export("upcoming_exams.csv", f = "csv")
+
+    tables = camelot.read_pdf(file, pages="1-end")
+    tables.export("upcoming_exams.csv", f="csv")
     exam_csv = "upcoming_exams-page-1-table-1.csv"
     return exam_csv
 
 
 def save_upcoming_exams():
-    exam_csv = get_upcoming_exams() 
+    exam_csv = get_upcoming_exams()
     exams = []
     db_count = ExamSchedule.objects.count()
     with open(exam_csv) as f:
         reader_exams = csv.reader(f, delimiter=",")
 
-        # Skip first two rows: 1st - meta data, 2nd - header
+        # Skip first rows: 1st - header
         next(reader_exams)
-        # next(reader_exams)
 
         for row in reader_exams:
-            print(row)
             try:
                 val_in_db = ExamSchedule.objects.filter(
-                    # exam_title=row[0],
                     exam_title_civil_service_title=row[0],
                     exam_number=row[1],
                     application_start_date=convertDateFormat(row[2]),
@@ -50,8 +47,6 @@ def save_upcoming_exams():
 
                 exams.append(
                     ExamSchedule(
-                        # row[2] is always "" so skip
-                        # exam_title=row[0],
                         exam_title_civil_service_title=row[0],
                         exam_number=row[1],
                         application_start_date=convertDateFormat(row[2]),
