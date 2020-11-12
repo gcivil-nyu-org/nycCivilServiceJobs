@@ -8,22 +8,22 @@ django.setup()
 
 from examresults.models import ExamSchedule
 import pandas as pd
-import tabula
+import camelot
 import csv
 import datetime
 
 
 def get_upcoming_exams():
     file = "https://www1.nyc.gov/assets/dcas/downloads/pdf/noes/yearly_examschedule_alpha.pdf"
-    tabula.convert_into(
-        file, "upcoming_exams.csv", output_format="csv", stream=True, pages="all"
-    )
-    exam_csv = "upcoming_exams.csv"
+    
+    tables = camelot.read_pdf(file, pages = "1-end")
+    tables.export("upcoming_exams.csv", f = "csv")
+    exam_csv = "upcoming_exams-page-1-table-1.csv"
     return exam_csv
 
 
 def save_upcoming_exams():
-    exam_csv = get_upcoming_exams()
+    exam_csv = get_upcoming_exams() 
     exams = []
     db_count = ExamSchedule.objects.count()
     with open(exam_csv) as f:
@@ -31,17 +31,18 @@ def save_upcoming_exams():
 
         # Skip first two rows: 1st - meta data, 2nd - header
         next(reader_exams)
-        next(reader_exams)
+        # next(reader_exams)
 
         for row in reader_exams:
+            print(row)
             try:
                 val_in_db = ExamSchedule.objects.filter(
                     # exam_title=row[0],
                     exam_title_civil_service_title=row[0],
                     exam_number=row[1],
-                    application_start_date=convertDateFormat(row[3]),
-                    application_end_date=convertDateFormat(row[4]),
-                    exam_type=row[5],
+                    application_start_date=convertDateFormat(row[2]),
+                    application_end_date=convertDateFormat(row[3]),
+                    exam_type=row[4],
                 )
 
                 if val_in_db.exists():
@@ -53,9 +54,9 @@ def save_upcoming_exams():
                         # exam_title=row[0],
                         exam_title_civil_service_title=row[0],
                         exam_number=row[1],
-                        application_start_date=convertDateFormat(row[3]),
-                        application_end_date=convertDateFormat(row[4]),
-                        exam_type=row[5],
+                        application_start_date=convertDateFormat(row[2]),
+                        application_end_date=convertDateFormat(row[3]),
+                        exam_type=row[4],
                     )
                 )
             except Exception as e:
@@ -66,7 +67,7 @@ def save_upcoming_exams():
     ExamSchedule.objects.bulk_create(exams, ignore_conflicts=True)
     print(".", end="", flush=True)
     print("\nInserted Exam records: ", ExamSchedule.objects.count() - db_count)
-    os.remove("upcoming_exams.csv")
+    os.remove(exam_csv)
 
 
 def convertDateFormat(inputDate):
