@@ -16,4 +16,4 @@ script:
   - coverage run --source=register,signin,jobs,examresults,dashboard manage.py test
 
 after_script:
-  - coveralls
+  - coveralls 
