@@ -34,20 +34,27 @@ class SearchResultsView(ListView):
     salary_ranges = []
 
     def dispatch(self, request, *args, **kwargs):
-        self.agencies = [
-            x["agency"] for x in job_record.objects.values("agency").distinct()
-        ]
+        query = self.request.GET.get("q") or request.POST.get("query")
+        queryset = job_record.objects.all()
+        if query:
+            queryset = job_record.objects.filter(
+                Q(agency__icontains=query)
+                | Q(business_title__icontains=query)
+                | Q(civil_service_title__icontains=query)
+            )
+
+        self.agencies = [x["agency"] for x in queryset.values("agency").distinct()]
+        print(len(self.agencies))
         self.career_level = [
             x["career_level"]
-            for x in job_record.objects.values("career_level").distinct()
+            for x in queryset.values("career_level").distinct()
             if x["career_level"]
         ]
 
         self.cs_titles = [
             x["civil_service_title"]
-            for x in job_record.objects.values("civil_service_title").distinct()
+            for x in queryset.values("civil_service_title").distinct()
         ]
-        self.salary_ranges = [[0, 10000], [10000, 20000], [20000, 45000], [450000, "+"]]
         return super(SearchResultsView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -121,6 +128,7 @@ class SearchResultsView(ListView):
                 ]
 
             # print(posting_type,date,self.agencies[int(agency)])
+            print(form_filters)
             jobs = jobs.filter(**form_filters)
 
             sort_field = ""
