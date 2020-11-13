@@ -44,7 +44,6 @@ class SearchResultsView(ListView):
             )
 
         self.agencies = [x["agency"] for x in queryset.values("agency").distinct()]
-        print(len(self.agencies))
         self.career_level = [
             x["career_level"]
             for x in queryset.values("career_level").distinct()
@@ -90,7 +89,6 @@ class SearchResultsView(ListView):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
-            # print("AJAX" ,self.request.POST,self.request.GET)
             query = request.POST.get("query")
             jobs = job_record.objects.filter(
                 Q(agency__icontains=query)
@@ -105,7 +103,6 @@ class SearchResultsView(ListView):
             career_level = request.POST.get("career_level")
             salary_range = request.POST.get("salary_range")
             cs_title_index = request.POST.get("cs_title")
-            # print("Career Level: ",salary_range)
 
             sort_order = request.POST.get("sort_order")
             asc = request.POST.get("asc")
@@ -127,8 +124,6 @@ class SearchResultsView(ListView):
                     int(cs_title_index)
                 ]
 
-            # print(posting_type,date,self.agencies[int(agency)])
-            print(form_filters)
             jobs = jobs.filter(**form_filters)
 
             sort_field = ""
@@ -152,23 +147,19 @@ class SearchResultsView(ListView):
             else:
                 context["saved_jobs_user"] = None
 
-            # csrf_token = request.POST.get("csrfmiddlewaretoken")
-            # context["csrf_token"] = csrf_token
-            # print(context)
             data = {
                 "rendered_table": render_to_string(
                     "jobs/table_content.html", context=context, request=request
                 ),
                 "count": jobs.count(),
             }
-            # data = serializers.serialize('json', data)
+
             return JsonResponse(data, safe=False)
 
 
 class SaveJobsView(View):
     def post(self, request, *args, **kwargs):
 
-        # print(request.POST['jobs_pk_id'])
         if self.request.method == "POST":
             job_record_pk = self.kwargs["pk"]
             job = job_record.objects.get(pk=job_record_pk)
@@ -184,11 +175,9 @@ class SaveJobsView(View):
                     already_saved.delete()
                     response_data["response_data"] = "Job Unsaved"
 
-                # print("inside post")
                 return JsonResponse(response_data, status=200)
 
             else:
                 # messages.error(self.request, "Invalid username or password.")
-                # print ('inside post else')
                 response_data["response_data"] = "User not authenticated"
                 return JsonResponse(response_data, status=200)
