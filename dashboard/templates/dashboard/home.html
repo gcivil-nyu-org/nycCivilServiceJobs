@@ -16,6 +16,10 @@
             font-size: 45px;
             font-weight: 650;
         }
+        label{
+            margin-top: 0.5rem;
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 <br>
@@ -28,7 +32,7 @@
 
         <!-- Sidebar -->
         <div class="bg-light border-right" id="sidebar-wrapper">
-            <div class="sidebar-heading" style="color:black"><b>Welcome {{user.first_name}}!</b></div>
+            <div class="sidebar-heading" style="color:black"><b>Welcome {{user.first_name}} !</b></div>
             <div class="list-group list-group-flush">
                 <a href="{% url 'dashboard:dashboard' %}"
                     class="nav-item list-group-item list-group-item-action bg-light text-success ">Dashboard</a>
