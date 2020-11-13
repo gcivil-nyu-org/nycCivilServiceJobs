@@ -1,12 +1,8 @@
 from django.test import TestCase
-from django.core import mail
-from django.shortcuts import render
 from django.urls import reverse
 from register.models import User
 from jobs.models import UserSavedJob, job_record
 from django.utils import timezone
-import json
-from django.template.loader import render_to_string
 
 
 class JobDataTest(TestCase):
@@ -55,7 +51,6 @@ class JobDataTest(TestCase):
             )
             job.save()
 
-    
     def test_home_page(self):
         # not logged in home returns landing page
         response = self.client.get(reverse("index"))
@@ -63,33 +58,26 @@ class JobDataTest(TestCase):
         self.assertTemplateUsed(response, "index.html")
         # landing page shows correct jobs count from database
         self.assertEqual(response.context["total_jobs"], job_record.objects.count())
-        
+
         # not logged in try accessing dashboard redirected to landing
         response = self.client.get(reverse("dashboard:dashboard"))
-        self.assertRedirects(
-            response, reverse("index"), fetch_redirect_response=False
-        )
+        self.assertRedirects(response, reverse("index"), fetch_redirect_response=False)
         # logged in home redirects to dashboard
-        self.client.login(
-            username=self.test_user.username, password="thisisapassword")
+        self.client.login(username=self.test_user.username, password="thisisapassword")
         response = self.client.get(reverse("index"))
         self.assertRedirects(
             response, reverse("dashboard:dashboard"), fetch_redirect_response=False
         )
-    
-    def test_saved_jobs_dashboard_page(self):        
+
+    def test_saved_jobs_dashboard_page(self):
         # not logged in try accessing savedjobs page redirects landing
         response = self.client.get(reverse("dashboard:savedjobs"))
-        self.assertRedirects(
-            response, reverse("index"), fetch_redirect_response=False
-        )
+        self.assertRedirects(response, reverse("index"), fetch_redirect_response=False)
         # logged in accessing savedjobs displays saved jobs
-        self.client.login(
-            username=self.test_user.username, password="thisisapassword")
+        self.client.login(username=self.test_user.username, password="thisisapassword")
         response = self.client.get(reverse("dashboard:savedjobs"))
         self.assertTemplateUsed(response, "dashboard/savedjobs.html")
-   
-        
+
     def test_save_jobs_count_on_dashboard(self):
         user_login = self.client.login(
             username=self.test_user.username, password="thisisapassword"
@@ -107,4 +95,3 @@ class JobDataTest(TestCase):
         response = self.client.get(reverse("dashboard:dashboard"))
         self.assertTrue(response.context["user"].is_authenticated)
         self.assertEqual(len(response.context["saved_jobs_user"]), saved_job_count)
-
