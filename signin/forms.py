@@ -7,7 +7,7 @@ from crispy_forms.helper import FormHelper
 # Sign Up Form
 
 
-class UserProfileForm(forms.ModelForm):  # pragma: no cover
+class UserProfileForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
     email = forms.EmailField(max_length=254)

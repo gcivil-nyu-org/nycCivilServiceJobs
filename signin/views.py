@@ -56,7 +56,7 @@ class SignInView(FormView):
         return super(SignInView, self).get(request, *args, **kwargs)
 
 
-class UserProfileView(View):  # pragma: no cover
+class UserProfileView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             profile_form = UserProfileForm(instance=request.user)
@@ -137,19 +137,22 @@ class UserProfileView(View):  # pragma: no cover
             return redirect(reverse("signin:signin"))
 
 
-class SaveCivilServiceTitleView(View):  # pragma: no cover
+class SaveCivilServiceTitleView(View):
     def post(self, request, *args, **kwargs):
 
         # print(request.POST['jobs_pk_id'])
         if self.request.method == "POST":
             user_int_cst = list(request.POST.getlist("user_int_cst[]"))
             user_curr_cst = list(request.POST.getlist("user_curr_cst[]"))
-
+            response_data = {}
             user = request.user
-            response_data = {
-                "count_before": UsersCivilServiceTitle.objects.filter(user=user).count()
-            }
             if user.is_authenticated:
+
+                response_data = {
+                    "count_before": UsersCivilServiceTitle.objects.filter(
+                        user=user
+                    ).count()
+                }
 
                 UsersCivilServiceTitle.objects.filter(user=user).delete()
 
