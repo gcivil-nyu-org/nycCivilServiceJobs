@@ -20,6 +20,15 @@
             margin-top: 0.5rem;
             margin-right: 0.5rem;
         }
+        .bg-badge1{
+            background-color: salmon;
+        }
+        .bg-badge2{
+            background-color: olive;
+        }
+        .bg-badge3{
+            background-color: steelblue;
+        }
     </style>
 </head>
 <br>
@@ -50,13 +59,10 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="col-md-12 ftco-animate">
-                            <div class="container-fluid" style="padding-top: 0px;">
-
-                                <h1 class="mt-1">Dashboard</h1>
-
+                            <div class="container-fluid mt-3">
                                 <div class="row flex">
                                     <div class="col-xl-4 col-md-6">
-                                        <div class="card bg-warning text-white mb-3">
+                                        <div class="card bg-badge1 text-white mb-3 shadow">
                                             <div class="card-header">Saved Jobs</div>
                                             {% if saved_jobs_user and jobs %}
                                             {% for job in jobs %}
@@ -80,7 +86,7 @@
                                     </div>
 
                                     <div class="col-xl-4 col-md-6">
-                                        <div class="card bg-info text-white mb-3">
+                                        <div class="card bg-badge2 text-white mb-3 shadow">
                                             <div class="card-header">Recommended Jobs</div>
 
                                             <div class="card-body countbadges">
@@ -93,7 +99,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-md-6">
-                                        <div class="card bg-success text-white mb-3">
+                                        <div class="card bg-badge3 text-white mb-3 shadow">
                                             <div class="card-header">Subscriptions</div>
 
                                             <div class="card-body countbadges">
@@ -109,7 +115,7 @@
 
                                 </div>
                             </div>
-                            <div class="card mb-4 text-black">
+                            <div class="card mb-4 text-black shadow-sm">
                                 <div class="card-header"> <i class="fa fa-table mr-1"></i>Upcoming Exams</div>
                                 <link rel="stylesheet" type="text/css"
                                     href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
