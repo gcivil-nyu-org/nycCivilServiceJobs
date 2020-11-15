@@ -1,7 +1,7 @@
 from django.db import models
 from register.models import User
-from examresults.models import CivilServicesTitle, ExamSchedule
-
+from examresults.models import CivilServicesTitle
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 
@@ -9,7 +9,7 @@ from examresults.models import CivilServicesTitle, ExamSchedule
 That is a user can subscribe to an exam result by selecting civil service title"""
 
 
-class ExamResultsSubscription(models.Model):
+class ExamSubscription(models.Model):
     civil_service_title = models.ForeignKey(
         CivilServicesTitle, on_delete=models.CASCADE
     )
@@ -20,8 +20,10 @@ class ExamResultsSubscription(models.Model):
         unique_together = ("civil_service_title", "user")
 
 
-class UpcomingExamResultsSubscription(models.Model):
-    exam_number = models.ForeignKey(ExamSchedule, on_delete=models.CASCADE)
+class ExamResultsSubscription(models.Model):
+    exam_number = models.IntegerField(
+        validators=[MaxValueValidator(999999), MinValueValidator(1000)]
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     is_notified = models.BooleanField("is_notified", default=False)
 
