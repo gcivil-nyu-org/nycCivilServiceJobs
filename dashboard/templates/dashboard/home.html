@@ -186,7 +186,8 @@
                 //     'cssText': 'background-color: #28a745 !important; opacity:1'
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                //$("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Unsave').tooltip('show');
             } else if (response["response_data"] == "Job Unsaved") {
                 $('#favBtnID' + response["job_id"]).css({
                     'cssText': 'background-color: #28a745 !important; opacity:1'
@@ -196,7 +197,8 @@
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
                 // $("#favBtnID" + response["job_id"]).removeAttr("style");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                //$("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Save').tooltip('show');
             } else if (response["response_data"] == "User not authenticated") {
                 // if ($("#alert" + response["job_id"]).css('display') == 'none') {
                 //     $("#alert" + response["job_id"]).css('display', 'block');

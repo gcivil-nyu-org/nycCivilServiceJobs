@@ -86,13 +86,15 @@
                         {%if saved_jobs_user is not None and job.id in saved_jobs_user%}
                         <i id="favBtnID{{job.id}}"
                             class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
-                            title="Unsave" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                            data-toggle="tooltip" data-placement="top" title="Unsave" 
+                            style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                             <span class="icon-heart" style="color:#fdab44;"></span>
                         </i>
                         {% else %}
                         <i id="favBtnID{{job.id}}"
                             class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
-                            title="Save" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                            data-toggle="tooltip" data-placement="top" title="Save" 
+                            style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                             <span class="icon-heart" style="color: rgb(255, 255, 255);"></span>
                         </i>
                         {% endif %}
