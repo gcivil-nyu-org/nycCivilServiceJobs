@@ -1,0 +1,31 @@
+<html>
+{% autoescape off %}
+
+Hi {{ first_name }},
+New Exams realated to your subscribed Civil Service Titles Are Coming Up!
+<table>
+
+  <tr>
+    <th> Exam Number </th>
+    <th> Civil Service Title </th>
+    <th> Application Start Date </th>
+    <th> Application End Date </th>
+    <th> Exam Type </th>
+    </tr>
+ {% for exam in exams %}
+ <tr>
+     <td>{{exam.exam_number}}</td>
+     <td>{{exam.exam_title_civil_service_title}}</td>
+     <td>{{exam.application_start_date}}</td>
+     <td>{{exam.application_end_date}}</td>
+     <td>{% if exam.exam_type == 'QIE' %}
+         Qualifield Incumbent Exam
+         {% else %}
+         {{exam.exam_type}}
+         {% endif%}</td>
+ </tr>
+ {% endfor %}
+</table>
+
+{% endautoescape %}
+</html>
