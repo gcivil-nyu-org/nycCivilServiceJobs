@@ -35,7 +35,7 @@ class SignInView(FormView):
                 url=nxt,
                 allowed_hosts={self.request.get_host()},
                 require_https=self.request.is_secure(),
-            ):  
+            ):
                 return redirect("dashboard:dashboard")
             else:
                 return redirect(nxt)
