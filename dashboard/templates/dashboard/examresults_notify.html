@@ -1,6 +1,33 @@
+<html>
 {% autoescape off %}
 
 Hi {{ first_name }},
-Results  Exam {{exam_number}} is coming up in {{days}} day{{ days|pluralize:",s" }}!
+<br>
+Exams Results for your subscribed Exams are available!
+<table style="border:1px solid #333;border-collapse: collapse;">
+
+  <tr>
+    <th style="border: 1px solid #000000;">Civil Service Title </th>
+    <th style="border: 1px solid #000000;"> Exam Number </th>
+    <th style="border: 1px solid #000000;"> First Name </th>
+    <th style="border: 1px solid #000000;"> Middle Name </th>
+    <th style="border: 1px solid #000000;">Last  Name </th>
+    <th style="border: 1px solid #000000;"> Final Adjusted Average </th>
+    </tr>
+ {% for result in results %}
+ <tr>
+     <td style="border: 1px solid #000000;">{{result.list_title_desc}}</td>
+     <td style="border: 1px solid #000000;">{{result.exam_number}}</td>
+     <td style="border: 1px solid #000000;">{{result.first_name}}</td>
+     <td style="border: 1px solid #000000;">{{result.middle_initial}}</td>
+      <td style="border: 1px solid #000000;">{{result.last_name}}</td>
+      <td style="border: 1px solid #000000;">{{result.adjust_final_average}}</td>
+
+
+ </tr>
+
+ {% endfor %}
+</table>
 
 {% endautoescape %}
+</html>

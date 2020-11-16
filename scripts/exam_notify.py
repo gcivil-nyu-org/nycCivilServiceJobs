@@ -32,14 +32,14 @@ def notify_exams():
                 exams[title] = ExamSchedule.objects.filter(
                     exam_title_civil_service_title=title,
                     application_start_date__lte=datetime.date.today()
-                    + datetime.timedelta(days=2),
+                    + datetime.timedelta(days=5),
                     application_start_date__gte=datetime.date.today(),
                 )
             if exams[title]:
                 exam_list.extend(exams[title])
         message = render_to_string(
             "dashboard/upcomingexam_notify.html",
-            {"first_name": obj.user.first_name, "title": title, "exams": exam_list},
+            {"first_name": obj.user.first_name, "exams": exam_list},
         )
 
         if user_sub:
@@ -50,20 +50,31 @@ def notify_exams():
             obj.save()
 
 
-# def notify_results():
-#     queryset = ExamResultsSubscription.objects.filter(is_notified=False)
-#     for obj in queryset:
-#         if ExamActiveResults.filter(list_title_code=obj.civil_service_title.title_code).exists():
-#             message = render_to_string(
-#                 "dashboard/examresults_notify.html",
-#                 {
-#                     "first_name": obj.user.first_name,
-#                     "Civil Service Title": obj.civil_service_title.title_description,
-#
-#                 },
-#             )
-#             send_email(obj.user.email,"Exam Results Notification",message)
-#             obj.is_notified=True
-#             obj.save()
+def notify_results():
+    queryset = ExamResultsSubscription.objects.filter(is_notified=False)
+    users = queryset.values_list("user", flat=True).distinct()
+
+    for user in users:
+        examresults = []
+        user_exam = queryset.filter(user=user)
+        for obj in user_exam:
+            results = ExamResultsActive.objects.filter(
+                exam_number=obj.exam_number,
+                first_name__iexact=obj.user.first_name,
+                last_name__iexact=obj.user.last_name,
+            )
+            if results:
+                examresults.extend(results)
+        if examresults:
+            message = render_to_string(
+                "dashboard/examresults_notify.html",
+                {"first_name": obj.user.first_name, "results": examresults},
+            )
+            send_email(obj.user.email, "Exam Results Notification", message)
+            for obj in user_exam:
+                obj.is_notified = True
+                obj.save()
+
 
 notify_exams()
+notify_results()
