@@ -12,9 +12,6 @@ https://nyc-civil-service-jobs.herokuapp.com/
 [![Build Status](https://travis-ci.com/nycCivilServicesJobsTeam/nycCivilServiceJobs.svg?branch=develop)](https://travis-ci.com/nycCivilServicesJobsTeam/nycCivilServiceJobs)
 [![Coverage Status](https://coveralls.io/repos/github/nycCivilServicesJobsTeam/nycCivilServiceJobs/badge.svg?branch=develop&service=github)](https://coveralls.io/github/nycCivilServicesJobsTeam/nycCivilServiceJobs?branch=develop)
 
-<a href="https://travis-ci.com/nycCivilServicesJobsTeam/nycCivilServiceJobs" target="_blank">![Build Status](https://travis-ci.com/nycCivilServicesJobsTeam/nycCivilServiceJobs.svg?branch=develop)</a>
-<a href="https://coveralls.io/github/nycCivilServicesJobsTeam/nycCivilServiceJobs?branch=develop" target="_blank">![Coverage Status](https://coveralls.io/repos/github/nycCivilServicesJobsTeam/nycCivilServiceJobs/badge.svg?branch=develop&service=github)</a>
-
 ### Main
 
 [![Build Status](https://travis-ci.com/gcivil-nyu-org/nycCivilServiceJobs.svg?branch=main)](https://travis-ci.com/gcivil-nyu-org/nycCivilServiceJobs)
