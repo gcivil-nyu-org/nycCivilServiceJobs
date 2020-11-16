@@ -8,7 +8,7 @@ from register.forms import SignUpForm
 class BaseTest(TestCase):
     def setUp(self):
         self.register_url = reverse("register:signup")
-        self.dummy_user = User.objects.create(
+        self.dummy_user = User.objects.create_user(
             is_hiring_manager=True,
             username="testjane",
             first_name="Jane",
@@ -121,4 +121,15 @@ class RegisterTestView(BaseTest):
         self.assertTemplateUsed(response, "register/account_activated.html")
         self.assertRedirects(
             response, reverse("register:success"), fetch_redirect_response=True
+        )
+
+    def test_register_view_user_logged_in(self):
+        user_login = self.client.login(
+            username=self.dummy_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+        response = self.client.get(self.register_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response, reverse("dashboard:dashboard"), fetch_redirect_response=False
         )

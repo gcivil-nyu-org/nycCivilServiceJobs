@@ -1,8 +1,8 @@
-{% autoescape off %}
+{% autoescape off %}Hi {{ first_name }},
 
-Hi {{ first_name }},
-Thank you for registering with nycCivilService! Please click the below link to sign in.
+Thank you for registering with us! Please click the below link to sign in.
+http://{{ domain }}{% url 'signin:signin' %}
 
-http://{{ domain }}/signin
-
+Thank You,
+nycCivilServiceJobs Team
 {% endautoescape %}

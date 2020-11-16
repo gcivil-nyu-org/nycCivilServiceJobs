@@ -167,14 +167,15 @@
                                     {%if saved_jobs_user is not None and job.id in saved_jobs_user%}
                                     <i id="favBtnID{{job.id}}"
                                         class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
-                                        title="Unsave"
+                                        data-toggle="tooltip" data-placement="top" title="Unsave"
                                         style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                                         <span class="icon-heart" style="color:#fdab44;"></span>
                                     </i>
                                     {% else %}
                                     <i id="favBtnID{{job.id}}"
                                         class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
-                                        title="Save" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                                        data-toggle="tooltip" data-placement="top" title="Save" 
+                                        style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                                         <span class="icon-heart" style="color: rgb(255, 255, 255);"></span>
                                     </i>
                                     {% endif %}
@@ -268,7 +269,8 @@
                 //     'cssText': 'background-color: #28a745 !important; opacity:1'
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                //$("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Unsave').tooltip('show');
             } else if (response["response_data"] == "Job Unsaved") {
                 $('#favBtnID' + response["job_id"]).css({
                     'cssText': 'background-color: #28a745 !important; opacity:1'
@@ -278,7 +280,8 @@
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
                 // $("#favBtnID" + response["job_id"]).removeAttr("style");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                //$("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Save').tooltip('show');
             } else if (response["response_data"] == "User not authenticated") {
                 // if ($("#alert" + response["job_id"]).css('display') == 'none') {
                 //     $("#alert" + response["job_id"]).css('display', 'block');

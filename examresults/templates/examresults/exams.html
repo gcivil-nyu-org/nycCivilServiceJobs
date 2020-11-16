@@ -12,33 +12,37 @@
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const q = urlParams.get('q')
-  console.log(q);
-  if(q=='')
+  //console.log(q);
+  if(q=='' || q==null){
     var EXAMS_DATA = '{% url "examresults:exams_data" %}';
-  else
+    $('#r1').css('display','none');
+  }
+  else{
     var EXAMS_DATA = '{% url "examresults:exams_data" %}?q='+q;
-  console.log(EXAMS_DATA);
+    $('#r1').css('display','flex');
+  }
+  //console.log(EXAMS_DATA);
   var dt_language = {
-     "emptyTable":     "{% trans "Search For Exams Results Above" %}",
-     "info":           "{% trans "Showing _START_ to _END_ of _TOTAL_ entries" %}",
-     "infoEmpty":      "{% trans "Showing 0 to 0 of 0 entries" %}",
-     "infoFiltered":   "{% trans "(filtered from _MAX_ total entries)" %}",
+     "emptyTable":     "{% trans 'No Exams Results Found' %}",
+     "info":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries' %}",
+     "infoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries' %}",
+     "infoFiltered":   "{% trans '(filtered from _MAX_ total entries)' %}",
      "infoPostFix":    "",
      "thousands":      ",",
-     "lengthMenu":     "{% trans "Show _MENU_ entries" %}",
-     "loadingRecords": "{% trans "Loading..." %}",
-     "processing":     "{% trans "Processing..." %}",
-     "search":         "{% trans "Search:" %}",
-     "zeroRecords":    "{% trans "No matching records found" %}",
+     "lengthMenu":     "{% trans 'Show _MENU_ entries' %}",
+     "loadingRecords": "{% trans 'Loading...' %}",
+     "processing":     "{% trans 'Processing...' %}",
+     "search":         "{% trans 'Search:' %}",
+     "zeroRecords":    "{% trans 'No matching records found' %}",
      "paginate": {
-         "first":      "{% trans "First" %}",
-         "last":       "{% trans "Last" %}",
-         "next":       "{% trans "Next" %}",
-         "previous":   "{% trans "Previous" %}"
+         "first":      "{% trans 'First' %}",
+         "last":       "{% trans 'Last' %}",
+         "next":       "{% trans 'Next' %}",
+         "previous":   "{% trans 'Previous' %}"
      },
      "aria": {
-         "sortAscending":  "{% trans ": activate to sort column ascending" %}",
-         "sortDescending": "{% trans ": activate to sort column descending" %}"
+         "sortAscending":  "{% trans ': activate to sort column ascending' %}",
+         "sortDescending": "{% trans ': activate to sort column descending' %}"
      }
  }
   $(document).ready(function() {
@@ -171,7 +175,7 @@ $('.js-hide-search').select2({
             <div class="form-group col col-md-6">
                 <div class="input-group">
                     <input class="form-control" type="search" name="q" id="id_q" value="{{request.GET.q}}"
-                        placeholder="Civl Service Title Code, Civl Service Title or Exam Number" />
+                        placeholder="Civil Service Title Code, Civil Service Title or Exam Number" />
                 </div>
             </div>
             <button type="submit" class="form-group btn btn-primary"
@@ -243,13 +247,11 @@ $('.js-hide-search').select2({
   </div>
   </div>
 
-<div class="row mt-5">
+<div id="noResFound" class="row">
   <div class="col text-center">
-    <div class="block-27">
-
-
-
-    </div>
+    <h4 class="block-27 pt-5">
+      Please Search for Exam Results
+    </h4>
   </div>
 </div>
 </div>
