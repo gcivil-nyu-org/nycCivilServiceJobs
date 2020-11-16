@@ -14,7 +14,6 @@
 <br>
 <br>
 
-
 <section class="ftco-section bg-light">
     <form method="GET" action="{% url 'jobs:results' %}">
         <div class="form-row pt-3">
@@ -92,9 +91,9 @@
 
     <div class="container">
         <div class="col-md-12">
-            <div class="row justify-content-center pb-3">
+            <div class="row justify-content-center">
                 <div class="col-md-12 heading-section ftco-animate">
-                    <h2 class="mb-4">Top 10 Recent Jobs </h2>
+                    <h2 class="mb-2">Top 10 Recent Jobs </h2>
                 </div>
             </div>
         </div>
@@ -106,12 +105,14 @@
                     <div class="one-third mb-4 mb-md-0">
                         <div class="job-post-item-header align-items-center">
                             {% if job.posting_type == "Internal" %}
-                            <span class="text-white badge py-2 px-3"
-                                style="background-color:palevioletred">{{job.posting_type}}</span>
+                            <span class="text-white badge py-2 px-3" style="background-color:palevioletred"
+                                data-toggle="tooltip" data-placement="top"
+                                title="Posting open to Internal City Employees">{{job.posting_type}}</span>
                             {% else %}
-                            <span class="text-white badge py-2 px-3"
-                                style="background-color:steelblue">{{job.posting_type}}</span>
-                            {% endif %}
+                            <span class="text-white badge py-2 px-3" style="background-color:steelblue"
+                                data-toggle="tooltip" data-placement="top"
+                                title="Posting open to Public">{{job.posting_type}}
+                                {% endif %}</span>
                             <span class="text-white badge py-2 px-3"
                                 style="margin-left: 5px; background-color:olive">{{job.career_level }}</span>
                             {% if job.post_until is None %}
@@ -126,14 +127,22 @@
 
                             <h2><a class="mr-2 text-black" data-toggle="collapse"
                                     href="#demo{{job.id}}">{{job.business_title}}</a> </h2>
-                            <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; max-height: 40vh">
-                                <p><b>Job Id: </b>{{job.job_id}}</p>
+                            <div id="demo{{job.id}}" class="collapse" style="overflow-y: auto; max-height: 40vh; margin-bottom: 10px;">                                <p><b>Job Id: </b>{{job.job_id}}</p>
                                 {% if job.posting_updated %}
                                 <p><b>Last Updated: </b>{{job.posting_updated}}</p>
                                 {% else %}
                                 <p><b>Posted Date: </b>{{job.posting_date}}</p>
                                 {% endif %}
-                                <p><b>Title Classification: </b>{{job.title_classification}}</p>
+                                <p><b>Title Classification:</b>
+                                    {% if job.title_classification == 'Competitive' %}
+                                    <span data-toggle="tooltip" data-placement="right"
+                                        title="The Civil Service Title for this posting requires taking an education/experience exam, written exam or both">{{job.title_classification}}</span>
+                                </p>
+                                {% else %}
+                                <span data-toggle="tooltip" data-placement="right"
+                                    title="The Civil Service Title for this posting doesn't require taking an exam">{{job.title_classification}}</span>
+                                {% endif %}
+                                </p>
                                 {% if job.full_time_part_time_indicator == 'F' %}
                                 <p><b>Full-time/Part-Time: </b>Full-Time</p>
                                 {% else %}
@@ -156,23 +165,17 @@
                             </div>
                         </div>
                         <div class="job-post-item-body d-block d-md-flex">
-                            <div class="mr-3"><span class="icon-layers"></span> <a>{{job.agency}}</a>
+                            <div class="mr-3"><span class="icon-layers"></span> <span data-toggle="tooltip"
+                                    data-placement="bottom" title="Agency">{{job.agency}}</span>
                             </div>
-                            <div><span class="icon-person"></span> <span>{{job.civil_service_title}}</span></div>
+                            <div><span class="icon-person"></span> <span data-toggle="tooltip" data-placement="bottom"
+                                    title="Civil Service Title">{{job.civil_service_title}}</span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0" style="
                     width: auto">
-                        <!-- <div id="alert{{job.id}}" class="alert alert-warning alert-dismissible fade show" role="alert"
-                            style="display: none;">
-                            You need to <a href="{% url 'signin:signin'%}"><strong><u>Sign In</u></strong></a> to be
-                            able to save a job.
-                            <button type="button" class="close" onclick="$('#alert{{job.id}}').css('display','none');"
-                                aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div> -->
                         <div>
                             <form onsubmit="return false;" save_unsave_url="{% url 'jobs:saveJob' job.id %}" method=POST
                                 class="favJob">
@@ -182,21 +185,19 @@
                                     {%if saved_jobs_user is not None and job.id in saved_jobs_user%}
                                     <i id="favBtnID{{job.id}}"
                                         class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
-                                        title="Unsave"
+                                        data-toggle="tooltip" data-placement="top" title="Unsave"
                                         style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                                         <span class="icon-heart" style="color:#fdab44;"></span>
                                     </i>
                                     {% else %}
                                     <i id="favBtnID{{job.id}}"
                                         class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
-                                        title="Save" style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
+                                        data-toggle="tooltip" data-placement="top" title="Save" 
+                                        style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                                         <span class="icon-heart" style="color: rgb(255, 255, 255);"></span>
                                     </i>
                                     {% endif %}
                                 </button>
-                                <!-- <a type="button" class=" icon text-center d-flex justify-content-center align-items-center icon mr-2 ">
-                                    <span class="icon-heart"></span>
-                                </a> -->
                             </form>
                         </div>
                         <div>
@@ -228,16 +229,6 @@
                                 data-businessTitle="{{job.business_title}}" data-jobid="{{job.job_id}}">
                                 Apply</button>
                             {% endif %}
-
-
-                            <!-- <div>
-                                <a href="#"
-                                    class="icon text-center d-flex justify-content-center align-items-center icon mr-2">
-                                    <span class="icon-heart"></span>
-                                </a>
-                            </div>
-                                <a href="#" class="btn btn-primary py-2">Apply Job</a>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -286,7 +277,8 @@
                 //     'cssText': 'background-color: #28a745 !important; opacity:1'
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                //$("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Unsave').tooltip('show');
             } else if (response["response_data"] == "Job Unsaved") {
                 $('#favBtnID' + response["job_id"]).css({
                     'cssText': 'background-color: #28a745 !important; opacity:1'
@@ -296,7 +288,8 @@
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
                 // $("#favBtnID" + response["job_id"]).removeAttr("style");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                //$("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Save').tooltip('show');
             } else if (response["response_data"] == "User not authenticated") {
                 // if ($("#alert" + response["job_id"]).css('display') == 'none') {
                 //     $("#alert" + response["job_id"]).css('display', 'block');
@@ -314,7 +307,6 @@
 
         });
     });
-    //  });
 
     $('#exampleModal1').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
@@ -347,5 +339,9 @@
         modal.find('.modal-link button').prop("onclick", null).off("click");
     });
 
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
 {% endblock javascript %}
