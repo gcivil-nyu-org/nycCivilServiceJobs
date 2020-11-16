@@ -3,7 +3,7 @@
 
 Hi {{ first_name }},
 New Exams realated to your subscribed Civil Service Titles Are Coming Up!
-<table>
+<table style="border:1px solid #333;border-collapse: collapse;">
 
   <tr>
     <th> Exam Number </th>
@@ -14,11 +14,22 @@ New Exams realated to your subscribed Civil Service Titles Are Coming Up!
     </tr>
  {% for exam in exams %}
  <tr>
-     <td>{{exam.exam_number}}</td>
-     <td>{{exam.exam_title_civil_service_title}}</td>
-     <td>{{exam.application_start_date}}</td>
-     <td>{{exam.application_end_date}}</td>
-     <td>{% if exam.exam_type == 'QIE' %}
+     <td style="border: 1px solid #000000;">{{exam.exam_number}}</td>
+     <td style="border: 1px solid #000000;">{{exam.exam_title_civil_service_title}}</td>
+     <td style="border: 1px solid #000000;">{{exam.application_start_date}}</td>
+     <td style="border: 1px solid #000000;">{{exam.application_end_date}}</td>
+     <td style="border: 1px solid #000000;">{% if exam.exam_type == 'QIE' %}
+         Qualifield Incumbent Exam
+         {% else %}
+         {{exam.exam_type}}
+         {% endif%}</td>
+ </tr>
+ <tr>
+     <td style="border: 1px solid #000000;">{{exam.exam_number}}</td>
+     <td style="border: 1px solid #000000;">{{exam.exam_title_civil_service_title}}</td>
+     <td style="border: 1px solid #000000;">{{exam.application_start_date}}</td>
+     <td style="border: 1px solid #000000;">{{exam.application_end_date}}</td>
+     <td style="border: 1px solid #000000;">{% if exam.exam_type == 'QIE' %}
          Qualifield Incumbent Exam
          {% else %}
          {{exam.exam_type}}
