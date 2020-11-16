@@ -37,6 +37,20 @@ def notify_exams():
                 )
             if exams[title]:
                 exam_list.extend(exams[title])
+
+                obj.is_notified = True
+                obj.save()
+
+            earlynotif = ExamSchedule.objects.filter(
+                exam_title_civil_service_title=title,
+                application_start_date__lte=datetime.date.today()
+                + datetime.timedelta(days=10),
+                application_start_date__gte=datetime.date.today()
+                + datetime.timedelta(days=6),
+            )
+            if earlynotif:
+                exam_list.extend(earlynotif)
+
         message = render_to_string(
             "dashboard/upcomingexam_notify.html",
             {"first_name": obj.user.first_name, "exams": exam_list},
@@ -45,9 +59,6 @@ def notify_exams():
         if user_sub:
             email = user_sub[0].user.email
             send_email(email, "Upcoming Exam Notification", message)
-        for obj in user_sub:
-            obj.is_notified = True
-            obj.save()
 
 
 def notify_results():
