@@ -16,10 +16,12 @@
   if(q=='' || q==null){
     var EXAMS_DATA = '{% url "examresults:exams_data" %}';
     $('#r1').css('display','none');
+    $('#noResFound').css('display','flex');
   }
   else{
     var EXAMS_DATA = '{% url "examresults:exams_data" %}?q='+q;
     $('#r1').css('display','flex');
+    $('#noResFound').css('display','none');
   }
   //console.log(EXAMS_DATA);
   var dt_language = {
