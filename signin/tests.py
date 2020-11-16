@@ -57,10 +57,16 @@ class SigninTest(TestCase):
             response, reverse("dashboard:dashboard"), fetch_redirect_response=False
         )
 
-    # def test_get_success_page(self):
-    #     response = self.client.get(reverse("signin:success"))
-    #     self.assertEqual(response.status_code, 200)
-    # self.assertEqual(response.template_name[0], 'signin/success.html')
+    def test_signin_redirect_next_tag(self):
+
+        response = self.client.post(
+            reverse("signin:signin"),
+            {"next": "/jobs/", "username": "testuser", "password": "secret"},
+            follow=True,
+        )
+        self.assertRedirects(
+            response, reverse("jobs:jobs"), fetch_redirect_response=False
+        )
 
     def test_wrong_username(self):
 

@@ -35,9 +35,9 @@ class SignInView(FormView):
                 url=nxt,
                 allowed_hosts={self.request.get_host()},
                 require_https=self.request.is_secure(),
-            ):  # pragma: no cover
+            ):  
                 return redirect("dashboard:dashboard")
-            else:  # pragma: no cover
+            else:
                 return redirect(nxt)
 
                 # messages.info(self.request, f"You are now logged in as {username}")
