@@ -7,7 +7,6 @@ django.setup()
 from dashboard.models import ExamResultsSubscription, ExamSubscription
 from examresults.models import ExamResultsActive, ExamSchedule
 from django.core import mail
-from register.models import User
 from django.template.loader import render_to_string
 import datetime
 
