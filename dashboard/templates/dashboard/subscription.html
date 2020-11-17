@@ -286,15 +286,14 @@
                 debugger;
                 var user_subscribed_services_title = response["subscribed_title"];
                 console.log(user_subscribed_services_title)
-                $("#cstID").append('<li id=cst'+user_subscribed_services_title+'><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></label></li>');
+                $("#cstID").append('<li id=cst' + user_subscribed_services_title + '><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></label></li>');
             }
-            else
-            {
+            else {
                 alert("Already Subscribed");
             }
         }).fail(function (data) {
             //Do something
-            
+
             console.log("fail")
             debugger;
 
@@ -363,7 +362,7 @@
         var action = confirm("Are you sure you want to delete subscription?");
         if (action != false) {
             $.ajax({
-                url: "{% url 'dashboard:ExamNoDeleteView' %}",
+                url: "{% url 'dashboard:ExamResultsDeleteView' %}",
                 data: {
                     type: 'GET',
                     civilservicetitleid: civilservicetitleid,
