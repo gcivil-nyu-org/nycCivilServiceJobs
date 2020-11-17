@@ -67,6 +67,12 @@ class SubscriptionView(View):  # pragma: no cover
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             civil_services_title_all = CivilServicesTitle.objects.all()
+            user_subscribed_exams = ExamSubscription.objects.filter(
+                user=self.request.user
+            )
+            user_subscribed_exam_results = ExamResultsSubscription.objects.filter(
+                user=self.request.user
+            )
 
             return render(
                 request,
@@ -74,6 +80,8 @@ class SubscriptionView(View):  # pragma: no cover
                 context={
                     "user": request.user,
                     "civil_services_title_all": civil_services_title_all,
+                    "user_subscribed_exams": user_subscribed_exams,
+                    "user_subscribed_exam_results": user_subscribed_exam_results,
                 },
             )
         else:
@@ -87,25 +95,15 @@ class SaveCivilServiceTitleView(View):  # pragma: no cover
             cstname = request.POST.get("civilservicetitle")
             print(cstname)
             user = request.user
-
             response_data = {
                 "count_before": ExamSubscription.objects.filter(user=user).count()
             }
-            print(response_data)
             if user.is_authenticated:
                 civilServiceTitle = CivilServicesTitle.objects.get(pk=cst)
-                print(civilServiceTitle)
-
-                #  already_saved = list(
-                #     ExamSubscription.objects.filter(user=user).values_list(
-                #         "civil_service_title", flat=True
-                #     )
-                # )
                 already_saved = ExamSubscription.objects.filter(
                     user=user, civil_service_title=civilServiceTitle
                 )
-                # seen = set(already_saved)
-                if not already_saved:
+                if already_saved.count() == 0:
                     save_civilServiceTitle = ExamSubscription(
                         user=user,
                         civil_service_title=civilServiceTitle,
@@ -115,23 +113,17 @@ class SaveCivilServiceTitleView(View):  # pragma: no cover
                     response_data[
                         "subscribed_title"
                     ] = civilServiceTitle.title_description
+                    response_data["subscribed_id"] = ExamSubscription.objects.get(
+                        user=user, civil_service_title=civilServiceTitle
+                    ).id
                 else:
                     response_data[
                         "response_data"
                     ] = "CIVIL_SERVICE_TITLE_ALREADY_PRESENT"
 
-                # already_saved = list(seen)
-                # print(already_saved)
-
-                # print(response_data["subscribed_titles"])
-
-                # response_data["subsribed_titles"] = json.dumps(civilServiceTitle)
-
                 return JsonResponse(response_data, status=200)
 
             else:
-                # messages.error(self.request, "Invalid username or password.")
-                # print ('inside post else')
                 response_data["response_data"] = "User not authenticated"
                 return JsonResponse(response_data, status=200)
 
@@ -142,7 +134,7 @@ class SaveExamNumberView(View):
 
         if self.request.method == "POST":
             examNo = request.POST.get("examno")
-            print(examNo)
+            # print(examNo)
             user = request.user
             response_data = {
                 "count_before": ExamResultsSubscription.objects.filter(
@@ -160,26 +152,19 @@ class SaveExamNumberView(View):
                         exam_number=examNo,
                     )
                     save_examNo.save()
+                    response_data["response_data"] = "EXAM_SAVED"
+                    response_data["subscribed_exam_num"] = examNo
+                    response_data[
+                        "subscribed_exam_id"
+                    ] = ExamResultsSubscription.objects.get(
+                        user=user, exam_number=examNo
+                    ).id
                 else:
-                    response_data["response_data"] = "Exam_Already_Saved"
+                    response_data["response_data"] = "EXAM_ALREADY_PRESENT"
 
-                # user_exams_subscribed = ExamResultsSubscription.objects.filter(
-                #     user=user
-                # )
-
-                # response_data["user_exams_subscribed"] = json.dumps(
-                #     user_exams_subscribed
-                # )
-
-                response_data = {
-                    "response_data": "EXAM_SAVED",
-                    "subscribed_result": examNo,
-                }
                 return JsonResponse(response_data, status=200)
 
             else:
-                # messages.error(self.request, "Invalid username or password.")
-                # print ('inside post else')
                 response_data["response_data"] = "User not authenticated"
                 return JsonResponse(response_data, status=200)
 
