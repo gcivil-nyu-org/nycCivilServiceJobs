@@ -20,7 +20,7 @@ def get_job_ids():
 
         for row in reader_exams:
             try:
-                val_in_db = job_record.objects.filter(job_id=row[0]).delete()
+                job_record.objects.filter(job_id=row[0]).delete()
             except Exception as e:
                 print("Error", e)
 
