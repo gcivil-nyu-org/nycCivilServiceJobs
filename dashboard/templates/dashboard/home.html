@@ -34,7 +34,7 @@
                     class="nav-item list-group-item list-group-item-action bg-light text-success ">Dashboard</a>
                 <a href="{% url 'dashboard:savedjobs' %}"
                     class="nav-item list-group-item list-group-item-action bg-light"> Saved Jobs</a>
-                <a href=" #" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
+                <a href="{% url 'dashboard:subscription' %}" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -96,7 +96,7 @@
                                                 <p class="card-text">0</p>
                                             </div>
                                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                                <a class="small text-white stretched-link" href="#">View All</a>
+                                                <a class="small text-white stretched-link" href="{% url 'dashboard:subscription' %}">View All</a>
                                                 <div class="small text-white"><i class="fa fa-angle-right"></i></div>
                                             </div>
                                         </div>
