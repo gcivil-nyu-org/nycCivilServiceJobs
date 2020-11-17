@@ -5,7 +5,8 @@ from examresults.models import ExamSchedule
 import datetime
 from django.http.response import JsonResponse
 from examresults.models import CivilServicesTitle
-import json
+
+# import json
 from dashboard.models import ExamSubscription, ExamResultsSubscription
 
 
@@ -94,29 +95,37 @@ class SaveCivilServiceTitleView(View):  # pragma: no cover
             if user.is_authenticated:
                 civilServiceTitle = CivilServicesTitle.objects.get(pk=cst)
                 print(civilServiceTitle)
-                already_saved = list(
-                    ExamSubscription.objects.filter(user=user).values_list(
-                        "civil_service_title", flat=True
-                    )
+
+                #  already_saved = list(
+                #     ExamSubscription.objects.filter(user=user).values_list(
+                #         "civil_service_title", flat=True
+                #     )
+                # )
+                already_saved = ExamSubscription.objects.filter(
+                    user=user, civil_service_title=civilServiceTitle
                 )
-                seen = set(already_saved)
-                if cst not in seen:
+                # seen = set(already_saved)
+                if not already_saved:
                     save_civilServiceTitle = ExamSubscription(
                         user=user,
                         civil_service_title=civilServiceTitle,
                     )
                     save_civilServiceTitle.save()
+                    response_data["response_data"] = "CIVIL_SERVICE_TITLE_SAVED"
+                    response_data[
+                        "subscribed_title"
+                    ] = civilServiceTitle.title_description
                 else:
-                    response_data["response_data"] = "Civil Service title_Already_Saved"
+                    response_data[
+                        "response_data"
+                    ] = "CIVIL_SERVICE_TITLE_ALREADY_PRESENT"
 
-                already_saved = list(seen)
-                print(already_saved)
+                # already_saved = list(seen)
+                # print(already_saved)
 
-                response_data["subscribed_titles"] = json.dumps(already_saved)
-                print(response_data["subscribed_titles"])
+                # print(response_data["subscribed_titles"])
 
                 # response_data["subsribed_titles"] = json.dumps(civilServiceTitle)
-                response_data["response_data"] = "CIVIL_SERVICE_TITLE_SAVED"
 
                 return JsonResponse(response_data, status=200)
 

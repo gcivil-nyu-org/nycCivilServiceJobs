@@ -171,6 +171,21 @@
                             <button class="btn btn-success mt-3" onclick="saveTitle()">Subscribe</button>
                         </div>
 
+                        <div class="filter-summary-selectedFilterContainer">
+                            <ul class="filter-summary-filterList" id="cstID">
+                                <li>
+                                    <div class="filter-summary-filter">
+                                        Office Assistant1
+                                        <label class="filter-summary-removeFilter">
+                                            <button type="button" class="close" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
                         <div>
                             <div class="md-1"><b>Subscribe for Upcoming Exam Results</b></div>
 
@@ -191,7 +206,7 @@
 
                         <div class="filter-summary-selectedFilterContainer">
                             <ul class="filter-summary-filterList" id="examid">
-                                <li>
+                                <li id='ff'>
                                     <div class="filter-summary-filter">
                                         Office Assistant
                                         <label class="filter-summary-removeFilter">
@@ -269,14 +284,17 @@
                 $('#civilservicetitle').find(":selected").prop('disabled', true);
                 //alert("Title is saved");
                 debugger;
-                var user_subscribed_services_title = JSON.parse(response["subsribed_titles"]);
+                var user_subscribed_services_title = response["subscribed_title"];
                 console.log(user_subscribed_services_title)
-                //$("#examtitle").append('<li><div class="filter-summary-filter">' + val(user_subscribed_services_title) + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></label></li>');
-
+                $("#cstID").append('<li id=cst'+user_subscribed_services_title+'><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></label></li>');
+            }
+            else
+            {
+                alert("Already Subscribed");
             }
         }).fail(function (data) {
             //Do something
-            alert("Already Subscribed")
+            
             console.log("fail")
             debugger;
 
@@ -359,6 +377,7 @@
                 }
             });
         }
+    }
 
 
 
