@@ -104,10 +104,6 @@
             <div id="layoutSidenav">
                 <div id="layoutSidenav_content">
                     <div class="container-fluid " style="padding-top: 10px;">
-
-
-
-
                         <div class="row bg-light">
                             <div class="col-md-12 ftco-animate">
                                 <div class="job-post-item p-4 d-block d-lg-flex align-items-left">
@@ -297,7 +293,7 @@
                 if (response["response_data"] == "CIVIL_SERVICE_TITLE_SAVED") {
                     debugger;
                     var user_subscribed_services_title = response["subscribed_title"];
-                    $("#cstID").append('<li id=cst' + response["subscribed_id"] + '><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></label></li>');
+                    $("#cstID").append('<li id=cst' + response["subscribed_id"] + '><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true" onClick="deleteTitle('+response["subscribed_id"]+')">&times;</span></button></label></li>');
                     $('#civilservicetitle').val("").trigger('change');
                 }
                 else if (response["response_data"] == "CIVIL_SERVICE_TITLE_ALREADY_PRESENT") {
@@ -349,22 +345,25 @@
         var formData = currentForm.serialize();
         var user = "{{user}}";
         debugger;
-        $.ajax({
-            type: 'POST',
-            url: currentForm.attr('save_exam_url'),
-            data: formData
-        }).done(function (response, data) {
-            if (response["response_data"] == "EXAM_SAVED") {
-                $("#examid").append('<li id=exam' + response["subscribed_exam_id"] + '><div class="filter-summary-filter">' + response["subscribed_exam_num"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamNo(examno)><span aria-hidden="true">&times;</span></button></label></li>');
-                $("#examno").val("");
-            }
-            else if (response["response_data"] == "EXAM_ALREADY_PRESENT") {
-                $("#alertExamAlreadySaved").css('display', 'block');
-            }
-        }).fail(function (data) {
-            //Do something
-            console.log("fail")
-        });
+        if($("#examno").val() != "")
+        {
+            $.ajax({
+                type: 'POST',
+                url: currentForm.attr('save_exam_url'),
+                data: formData
+            }).done(function (response, data) {
+                if (response["response_data"] == "EXAM_SAVED") {
+                    $("#examid").append('<li id=exam' + response["subscribed_exam_id"] + '><div class="filter-summary-filter">' + response["subscribed_exam_num"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamno('+response["subscribed_exam_id"]+')"><span aria-hidden="true">&times;</span></button></label></li>');
+                    $("#examno").val("");
+                }
+                else if (response["response_data"] == "EXAM_ALREADY_PRESENT") {
+                    $("#alertExamAlreadySaved").css('display', 'block');
+                }
+            }).fail(function (data) {
+                //Do something
+                console.log("fail")
+            });
+        }
     });
 
     function deleteExamno(id) {
