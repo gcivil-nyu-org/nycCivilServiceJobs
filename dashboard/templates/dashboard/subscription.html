@@ -158,12 +158,28 @@
             <div id="layoutSidenav">
                 <div id="layoutSidenav_content">
                     <div class="container-fluid " style="padding-top: 10px;">
+                        <div id="alertCstAlreadySaved" class="alert alert-warning alert-dismissible fade show" role="alert"
+                            style="display: none;">
+                            You are already subscribed to this Civil Service Title.
+                            <button type="button" class="close" onclick="$('#alertCstAlreadySaved').css('display','none');"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
 
+                        <div id="alertExamAlreadySaved" class="alert alert-warning alert-dismissible fade show" role="alert"
+                            style="display: none;">
+                            You are already subscribed to this Exam.
+                            <button type="button" class="close" onclick="$('#alertExamAlreadySaved').css('display','none');"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
 
                         <div>
                             <div class="md-1"><b>Subscribe for Exam Result using Civil Service Title</b></div>
                             <select class="js-example-basic-single" name="civilservicetitle" id="civilservicetitle">
-                                <option value=""> Any </option>
+                                <option></option>
                                 {% for civilServTitle in civil_services_title_all %}
                                 <option value={{civilServTitle.id}}> {{civilServTitle.title_description}} </option>
                                 {% endfor %}
@@ -173,9 +189,10 @@
 
                         <div class="filter-summary-selectedFilterContainer">
                             <ul class="filter-summary-filterList" id="cstID">
-                                <li>
+                                {% for userCST in user_subscribed_exams %}
+                                <li id="cst{{userCST.id}}">
                                     <div class="filter-summary-filter">
-                                        Office Assistant1
+                                        {{userCST.civil_service_title.title_description}}
                                         <label class="filter-summary-removeFilter">
                                             <button type="button" class="close" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
@@ -183,20 +200,19 @@
                                         </label>
                                     </div>
                                 </li>
+                                {% endfor %}
                             </ul>
                         </div>
 
                         <div>
                             <div class="md-1"><b>Subscribe for Upcoming Exam Results</b></div>
-
-
                             <form onsubmit="return false;" save_exam_url="{% url 'dashboard:SaveExamNumberView' %}"
                                 method=POST class="save_exam_no">
                                 {% csrf_token %}
                                 <div class="row">
                                     <div class="col">
                                         <input class="form-control" type="number" name="examno" id="examno"
-                                            placeholder="Exam Number" value="{{request.POST.examno}}" />
+                                            placeholder="Exam Number" value="" />
                                     </div>
                                     <button class="btn btn-success mt-3" type="submit">Subscribe </button>
 
@@ -206,9 +222,10 @@
 
                         <div class="filter-summary-selectedFilterContainer">
                             <ul class="filter-summary-filterList" id="examid">
-                                <li id='ff'>
+                                {% for userExamRes in user_subscribed_exam_results %}
+                                <li id="exam{{userExamRes.id}}">
                                     <div class="filter-summary-filter">
-                                        Office Assistant
+                                        {{userExamRes.exam_number}}
                                         <label class="filter-summary-removeFilter">
                                             <button type="button" class="close" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
@@ -216,6 +233,7 @@
                                         </label>
                                     </div>
                                 </li>
+                                {% endfor %}
                             </ul>
                         </div>
 
@@ -232,14 +250,13 @@
 
 {% block javascript %}
 <script>
-    //var user_curr_civil_services_title = JSON.parse("{{user_curr_civil_services_title|safe}}");
-    //var user_subscribed_civil_services_title = JSON.parse("{{user_subscribed_civil_services_title|safe}}");
-    // var user_subscribed_exam_number = JSON.parse("{{user_subscribed_exam_number|safe}}");
     $(document).ready(function () {
 
         $('.js-example-basic-single').select2(
             {
                 width: '70%',
+                placeholder: "Select a Civil Service Title",
+
             }
         );
 
@@ -264,13 +281,18 @@
 
     function saveTitle() {
 
+        $("#alertCstAlreadySaved").css('display', 'none');
+        $("#alertExamAlreadySaved").css('display', 'none');
+
         var civilservicetitle = $('#civilservicetitle').find(":selected").text();
         var civilservicetitleid = $('#civilservicetitle').find(":selected").val();
         const csrftoken = getCookie('csrftoken');
         var user = "{{user}}";
         //alert(user);
         //debugger;
-        $.ajax({
+        if(civilservicetitle != "" && civilservicetitleid !="")
+        {
+            $.ajax({
             type: 'POST',
             url: "{% url 'dashboard:SaveCivilServiceTitleView' %}",
             data: {
@@ -278,26 +300,23 @@
                 civilservicetitleid: civilservicetitleid,
                 civilservicetitle: civilservicetitle,
             }
-
-        }).done(function (response) {
-            if (response["response_data"] == "CIVIL_SERVICE_TITLE_SAVED") {
-                $('#civilservicetitle').find(":selected").prop('disabled', true);
-                //alert("Title is saved");
+            }).done(function (response) {
+                if (response["response_data"] == "CIVIL_SERVICE_TITLE_SAVED") {
+                    debugger;
+                    var user_subscribed_services_title = response["subscribed_title"];
+                    $("#cstID").append('<li id=cst' + response["subscribed_id"] + '><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></label></li>');
+                    $('#civilservicetitle').val("").trigger('change');
+                    }
+                else if (response["response_data"] == "CIVIL_SERVICE_TITLE_ALREADY_PRESENT"){
+                    $("#alertCstAlreadySaved").css('display', 'block');
+                }
+            }).fail(function (data) {
+                console.log("fail")
                 debugger;
-                var user_subscribed_services_title = response["subscribed_title"];
-                console.log(user_subscribed_services_title)
-                $("#cstID").append('<li id=cst' + user_subscribed_services_title + '><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></label></li>');
-            }
-            else {
-                alert("Already Subscribed");
-            }
-        }).fail(function (data) {
-            //Do something
 
-            console.log("fail")
-            debugger;
-
-        });
+            });
+        }
+        
     }
 
     function deleteTitle(id) {
@@ -321,40 +340,34 @@
 
     }
 
-
-
-
-
-
     var form = $('.save_exam_no');
     var formMessages = $('#form-messages');
     $(form).submit(function (event) {
-
-        // Current form
         var currentForm = $(this);
         // Stop the browser from submitting the form.
         event.preventDefault();
+        $("#alertCstAlreadySaved").css('display', 'none');
+        $("#alertExamAlreadySaved").css('display', 'none');
 
         // Serialize the form data.
         var formData = currentForm.serialize();
         var user = "{{user}}";
-        //alert(user);
-        //debugger;
+        debugger;
         $.ajax({
             type: 'POST',
             url: currentForm.attr('save_exam_url'),
             data: formData
         }).done(function (response, data) {
             if (response["response_data"] == "EXAM_SAVED") {
-                //alert("Exam is saved");
-                $("#examid").append('<li><div class="filter-summary-filter">' + response["subscribed_result"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamNo(examno)><span aria-hidden="true">&times;</span></button></label></li>');
-
+                $("#examid").append('<li id=exam'+response["subscribed_exam_id"]+'><div class="filter-summary-filter">' + response["subscribed_exam_num"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamNo(examno)><span aria-hidden="true">&times;</span></button></label></li>');
+                $("#examno").val(""); 
+                }
+            else if (response["response_data"] == "EXAM_ALREADY_PRESENT"){
+                $("#alertExamAlreadySaved").css('display', 'block');
             }
         }).fail(function (data) {
             //Do something
             console.log("fail")
-            debugger;
-
         });
     });
 
@@ -377,8 +390,5 @@
             });
         }
     }
-
-
-
 </script>
 {% endblock javascript %}
