@@ -8,19 +8,24 @@ from django.conf import settings
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from django_apscheduler.models import DjangoJobExecution
-
 from django_apscheduler.jobstores import register_job
 import sys
 import exam_notify as en  # noqa: E402
+import savedjobs_notify as sj
+
 
 scheduler = BlockingScheduler(settings.SCHEDULER_CONFIG)
 
 
-def my_job():
+def job1():
     print("Exam Notifications")
     en.notify_exams()
     en.notify_results()
-    pass
+
+
+def job2():
+    print("Job Notifications")
+    sj.notify_jobs()
 
 
 def delete_old_job_executions(max_age=604_800):
@@ -28,14 +33,25 @@ def delete_old_job_executions(max_age=604_800):
 
 
 scheduler.add_job(
-    my_job,
+    job1,
     "cron",
     day_of_week="mon-fri",
     hour=0,
     minute=5,
-    id="notify",
+    id="exam",
     replace_existing=True,
 )
+
+scheduler.add_job(
+    job2,
+    "cron",
+    day_of_week="mon-fri",
+    hour=1,
+    minute=5,
+    id="job",
+    replace_existing=True,
+)
+
 
 scheduler.add_job(
     delete_old_job_executions,
