@@ -170,16 +170,55 @@ class SaveExamNumberView(View):
 
 
 class ExamResultsDeleteView(View):
-    def get(self, request):
-        id1 = request.GET.get("examid", None)
-        ExamResultsSubscription.objects.get(exam_number=id1).delete()
-        data = {"deleted": True}
-        return JsonResponse(data)
+    def post(self, request, *args, **kwargs):
+
+        if self.request.method == "POST":
+            examNo = request.POST.get("examno")
+            user = request.user
+            response_data = {
+                "count_before": ExamResultsSubscription.objects.filter(
+                    user=user
+                ).count()
+            }
+            if user.is_authenticated:
+
+                already_saved = ExamResultsSubscription.objects.get(id=examNo)
+
+                if already_saved:
+                    already_saved.delete()
+                    response_data["response_data"] = "EXAM_SUBSCRIBED_DELETED"
+                    response_data["exam_deleted_id"] = examNo
+
+                else:
+                    response_data["response_data"] = "EXAM_TITLE_NOT_PRESENT"
+
+                return JsonResponse(response_data, status=200)
+
+            else:
+                response_data["response_data"] = "User not authenticated"
+                return JsonResponse(response_data, status=200)
 
 
 class CivilServiceTitleDeleteView(View):
-    def get(self, request):
-        cst1 = request.GET.get("civilservicetitle", None)
-        ExamSubscription.objects.get(exam_number=cst1).delete()
-        data = {"deleted": True}
-        return JsonResponse(data)
+    def post(self, request, *args, **kwargs):
+        if self.request.method == "POST":
+            cst = request.POST.get("civilservicetitleid")
+            user = request.user
+            response_data = {
+                "count_before": ExamSubscription.objects.filter(user=user).count()
+            }
+            if user.is_authenticated:
+                already_saved = ExamSubscription.objects.get(id=cst)
+                if already_saved:
+                    already_saved.delete()
+                    response_data["response_data"] = "CIVIL_SERVICE_TITLE_DELETED"
+                    response_data["cst_deleted_id"] = cst
+
+                else:
+                    response_data["response_data"] = "CIVIL_SERVICE_TITLE_NOT_PRESENT"
+
+                return JsonResponse(response_data, status=200)
+
+            else:
+                response_data["response_data"] = "User not authenticated"
+                return JsonResponse(response_data, status=200)

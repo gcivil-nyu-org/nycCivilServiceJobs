@@ -115,20 +115,23 @@
                                         <div class="col mr-2 text-black"></a>
                                             <h4><b>Upcoming Exam Subscriptions</b></h4>
                                         </div>
-                                        <div id="alertCstAlreadySaved" class="alert alert-warning alert-dismissible fade show"
-                                        role="alert" style="display: none;">
-                                        You are already subscribed to this Civil Service Title.
-                                        <button type="button" class="close"
-                                            onclick="$('#alertCstAlreadySaved').css('display','none');" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
+                                        <div id="alertCstAlreadySaved"
+                                            class="alert alert-warning alert-dismissible fade show" role="alert"
+                                            style="display: none;">
+                                            You are already subscribed to this Civil Service Title.
+                                            <button type="button" class="close"
+                                                onclick="$('#alertCstAlreadySaved').css('display','none');"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
                                         <div class="d-flex" style="padding-top: 20px">
                                             <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
                                                     style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
                                             </div>
-                                            <div class=col-9 style="padding-left: 20px;"><select class="js-example-basic-single"
-                                                    name="civilservicetitle" id="civilservicetitle">
+                                            <div class=col-9 style="padding-left: 20px;"><select
+                                                    class="js-example-basic-single" name="civilservicetitle"
+                                                    id="civilservicetitle">
                                                     <option></option>
                                                     {% for civilServTitle in civil_services_title_all %}
                                                     <option value={{civilServTitle.id}}>
@@ -151,7 +154,8 @@
                                                         <div class="filter-summary-filter">
                                                             {{userCST.civil_service_title.title_description}}
                                                             <label class="filter-summary-removeFilter">
-                                                                <button type="button" class="close" aria-label="Close">
+                                                                <button type="button" class="close" aria-label="Close"
+                                                                    onclick="deleteTitle('{{userCST.id}}')">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </label>
@@ -169,20 +173,22 @@
                                         <div class="col mr-2 text-black"></a>
                                             <h4><b>Exam Result Subscriptions</b></h4>
                                         </div>
-                                        <div id="alertExamAlreadySaved" class="alert alert-warning alert-dismissible fade show"
-                                        role="alert" style="display: none;">
-                                        You are already subscribed to this Exam.
-                                        <button type="button" class="close"
-                                            onclick="$('#alertExamAlreadySaved').css('display','none');" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
+                                        <div id="alertExamAlreadySaved"
+                                            class="alert alert-warning alert-dismissible fade show" role="alert"
+                                            style="display: none;">
+                                            You are already subscribed to this Exam.
+                                            <button type="button" class="close"
+                                                onclick="$('#alertExamAlreadySaved').css('display','none');"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
                                         <div class="d-flex" style="padding-top: 20px">
                                             <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
                                                     style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
                                             </div>
 
-                                            <div class=col-9 style="padding-left: 20px;" >
+                                            <div class=col-9 style="padding-left: 20px;">
                                                 <form onsubmit="return false;"
                                                     save_exam_url="{% url 'dashboard:SaveExamNumberView' %}" method=POST
                                                     class="save_exam_no">
@@ -211,7 +217,8 @@
                                                         <div class="filter-summary-filter">
                                                             {{userExamRes.exam_number}}
                                                             <label class="filter-summary-removeFilter">
-                                                                <button type="button" class="close" aria-label="Close">
+                                                                <button type="button" class="close" aria-label="Close"
+                                                                    onclick="deleteExamno('{{userExamRes.id}}')">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </label>
@@ -306,24 +313,27 @@
     }
 
     function deleteTitle(id) {
-        var action = confirm("Are you sure you want to delete subscription?");
-        if (action != false) {
-            $.ajax({
-                url: "{% url 'dashboard:CivilServiceTitleDeleteView' %}",
-                data: {
-                    type: 'GET',
-                    civilservicetitleid: civilservicetitleid,
-                    civilservicetitle: civilservicetitle,
-                },
-                success: function (data) {
-                    if (data["deleted" == True]) {
+        var cst_id = parseInt(id);
+        //var action = confirm("Are you sure you want to delete subscription?");
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url: "{% url 'dashboard:CivilServiceTitleDeleteView' %}",
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: csrftoken,
+                civilservicetitleid: cst_id,
+            },
+            success: function (response) {
+                if (response["response_data"] == "CIVIL_SERVICE_TITLE_DELETED") {
+                    var cst_id_deleted = '#cst' + response["cst_deleted_id"];
+                    debugger;
+                    $(cst_id_deleted).remove();
 
-                    }
+
                 }
+            }
 
-            });
-        }
-
+        });
     }
 
     var form = $('.save_exam_no');
@@ -357,24 +367,30 @@
         });
     });
 
-    function deleteExamNo(examno) {
-        var action = confirm("Are you sure you want to delete subscription?");
-        if (action != false) {
-            $.ajax({
-                url: "{% url 'dashboard:ExamResultsDeleteView' %}",
-                data: {
-                    type: 'GET',
-                    civilservicetitleid: civilservicetitleid,
-                    civilservicetitle: civilservicetitle,
-                },
-                success: function (data) {
-                    if (data["deleted" == True]) {
-                        $("#examid" + id).remove();
-                    }
+    function deleteExamno(id) {
+        var exam_id = parseInt(id);
+        //var action = confirm("Are you sure you want to delete subscription?");
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url: "{% url 'dashboard:ExamResultsDeleteView' %}",
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: csrftoken,
+                examno: exam_id,
+            },
+            success: function (response) {
+                if (response["response_data"] == "EXAM_SUBSCRIBED_DELETED") {
+
+                    var exam_id_deleted = '#exam' + response["exam_deleted_id"];
+                    debugger;
+                    $(exam_id_deleted).remove();
+
 
                 }
-            });
-        }
+            }
+
+        })
+
     }
 </script>
 {% endblock javascript %}
