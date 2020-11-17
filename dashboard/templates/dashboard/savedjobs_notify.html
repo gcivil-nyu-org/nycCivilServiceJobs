@@ -1,0 +1,29 @@
+<html>
+{% autoescape off %}
+
+Hi {{ first_name }},
+<br><br>
+Here are the list of jobs that you have saved:
+<br><br>
+<table style="border:1px solid #333;border-collapse: collapse;">
+
+  <tr>
+    <th style="border: 1px solid #000000;"> Job Id  </th>
+    <th style="border: 1px solid #000000;"> Civil Service Title </th>
+    <th style="border: 1px solid #000000;"> Business Title </th>
+    <th style="border: 1px solid #000000;"> Agency </th>
+    <th style="border: 1px solid #000000;"> Deadline </th>
+    </tr>
+ {% for job in jobs %}
+ <tr>
+     <td style="border: 1px solid #000000;">{{job.job_id}}</td>
+     <td style="border: 1px solid #000000;">{{job.civil_service_title}}</td>
+     <td style="border: 1px solid #000000;">{{job.business_title}}</td>
+     <td style="border: 1px solid #000000;">{{job.agency}}</td>
+     <td style="border: 1px solid #000000;">{{job.post_until}}</td>
+ </tr>
+ {% endfor %}
+</table>
+
+{% endautoescape %}
+</html>
