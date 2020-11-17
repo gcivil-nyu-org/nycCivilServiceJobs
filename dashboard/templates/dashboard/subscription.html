@@ -1,0 +1,366 @@
+{% extends 'landing_base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Saved Jobs</title>
+    <style>
+        .filter-summary-selectedFilterContainer {
+            padding-top: 15px;
+        }
+
+        .filter-summary-filter {
+            position: relative;
+            background-color: #fff;
+            text-transform: capitalize;
+            color: #3e4152;
+            cursor: default;
+            font-size: 12px;
+            padding: 5px 26px 5px 10px;
+            -webkit-transition: all .2s ease-out;
+            transition: all .2s ease-out;
+            border-radius: 20px;
+            border: 1px solid #d4d5d9;
+        }
+
+        .filter-summary-filter {
+            position: relative;
+            background-color: #fff;
+            text-transform: capitalize;
+            color: #3e4152;
+            cursor: default;
+            font-size: 12px;
+            padding: 5px 26px 5px 10px;
+            -webkit-transition: all .2s ease-out;
+            transition: all .2s ease-out;
+            border-radius: 20px;
+            border: 1px solid #d4d5d9;
+        }
+
+        .filter-summary-filterList {
+            list-style-type: none;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+            -webkit-box-align: baseline;
+            -ms-flex-align: baseline;
+            align-items: baseline;
+            margin: 0;
+            padding-left: 17px !important;
+        }
+
+
+        .filter-summary-removeFilter {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 18px;
+            height: 20px;
+            z-index: 1;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<br>
+<br>
+<br>
+<br>
+
+
+<section class="ftco-section bg-light">
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading" style="color:black"><b>Welcome {{user.first_name}}!</b></div>
+            <div class="list-group list-group-flush">
+                <a href="{% url 'dashboard:dashboard' %}"
+                    class="nav-item list-group-item list-group-item-action bg-light">Dashboard</a>
+                <a href="{% url 'dashboard:savedjobs' %}"
+                    class="nav-item list-group-item list-group-item-action bg-light text-success"> Saved Jobs</a>
+                <a href="{% url 'dashboard:subscription' %}"
+                    class="list-group-item list-group-item-action bg-light">Subscriptions</a>
+            </div>
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <!--Job Card Starts here .//-->
+
+            <!-- Modal if user is  authenticated  -->
+            <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel1">Apply Job</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you meet the Civil Service Requirement?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">No</button>
+                            <div class="modal-link">
+                                <button type="button" class="btn btn-primary">Yes</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Modal if user is  authenticated  -->
+
+
+            <!-- Modal if user is not authenticated  -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Looking for Jobs?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Sign In to save / apply for jobs.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" background-color: #6c757d !important;
+                    color: #fff !important;
+                    border-color: #6c757d !important;">Close</button>
+                            <a href="{% url 'signin:signin' %}">
+                                <button type="button" class="btn btn-primary" href>Sign In</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End of Modal if user is not authenticated  -->
+
+            <div id="layoutSidenav">
+                <div id="layoutSidenav_content">
+                    <div class="container-fluid " style="padding-top: 10px;">
+
+
+                        <div>
+                            <div class="md-1"><b>Subscribe for Exam Result using Civil Service Title</b></div>
+                            <select class="js-example-basic-single" name="civilservicetitle" id="civilservicetitle">
+                                <option value=""> Any </option>
+                                {% for civilServTitle in civil_services_title_all %}
+                                <option value={{civilServTitle.id}}> {{civilServTitle.title_description}} </option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-success mt-3" onclick="saveTitle()">Subscribe</button>
+                        </div>
+
+                        <div>
+                            <div class="md-1"><b>Subscribe for Upcoming Exam Results</b></div>
+
+
+                            <form onsubmit="return false;" save_exam_url="{% url 'dashboard:SaveExamNumberView' %}"
+                                method=POST class="save_exam_no">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col">
+                                        <input class="form-control" type="number" name="examno" id="examno"
+                                            placeholder="Exam Number" value="{{request.POST.examno}}" />
+                                    </div>
+                                    <button class="btn btn-success mt-3" type="submit">Subscribe </button>
+
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="filter-summary-selectedFilterContainer">
+                            <ul class="filter-summary-filterList" id="examid">
+                                <li>
+                                    <div class="filter-summary-filter">
+                                        Office Assistant
+                                        <label class="filter-summary-removeFilter">
+                                            <button type="button" class="close" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    //var user_curr_civil_services_title = JSON.parse("{{user_curr_civil_services_title|safe}}");
+    //var user_subscribed_civil_services_title = JSON.parse("{{user_subscribed_civil_services_title|safe}}");
+    // var user_subscribed_exam_number = JSON.parse("{{user_subscribed_exam_number|safe}}");
+    $(document).ready(function () {
+
+        $('.js-example-basic-single').select2(
+            {
+                width: '70%',
+            }
+        );
+
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    function saveTitle() {
+
+        var civilservicetitle = $('#civilservicetitle').find(":selected").text();
+        var civilservicetitleid = $('#civilservicetitle').find(":selected").val();
+        const csrftoken = getCookie('csrftoken');
+        var user = "{{user}}";
+        //alert(user);
+        //debugger;
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'dashboard:SaveCivilServiceTitleView' %}",
+            data: {
+                csrfmiddlewaretoken: csrftoken,
+                civilservicetitleid: civilservicetitleid,
+                civilservicetitle: civilservicetitle,
+            }
+
+        }).done(function (response) {
+            if (response["response_data"] == "CIVIL_SERVICE_TITLE_SAVED") {
+                $('#civilservicetitle').find(":selected").prop('disabled', true);
+                //alert("Title is saved");
+                debugger;
+                var user_subscribed_services_title = JSON.parse(response["subsribed_titles"]);
+                console.log(user_subscribed_services_title)
+                //$("#examtitle").append('<li><div class="filter-summary-filter">' + val(user_subscribed_services_title) + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></label></li>');
+
+            }
+        }).fail(function (data) {
+            //Do something
+            alert("Already Subscribed")
+            console.log("fail")
+            debugger;
+
+        });
+    }
+
+    function deleteTitle(id) {
+        var action = confirm("Are you sure you want to delete subscription?");
+        if (action != false) {
+            $.ajax({
+                url: "{% url 'dashboard:CivilServiceTitleDeleteView' %}",
+                data: {
+                    type: 'GET',
+                    civilservicetitleid: civilservicetitleid,
+                    civilservicetitle: civilservicetitle,
+                },
+                success: function (data) {
+                    if (data["deleted" == True]) {
+
+                    }
+                }
+
+            });
+        }
+
+    }
+
+
+
+
+
+
+    var form = $('.save_exam_no');
+    var formMessages = $('#form-messages');
+    $(form).submit(function (event) {
+
+        // Current form
+        var currentForm = $(this);
+        // Stop the browser from submitting the form.
+        event.preventDefault();
+
+        // Serialize the form data.
+        var formData = currentForm.serialize();
+        var user = "{{user}}";
+        //alert(user);
+        //debugger;
+        $.ajax({
+            type: 'POST',
+            url: currentForm.attr('save_exam_url'),
+            data: formData
+        }).done(function (response, data) {
+            if (response["response_data"] == "EXAM_SAVED") {
+                //alert("Exam is saved");
+                $("#examid").append('<li><div class="filter-summary-filter">' + response["subscribed_result"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamNo(examno)><span aria-hidden="true">&times;</span></button></label></li>');
+
+            }
+        }).fail(function (data) {
+            //Do something
+            console.log("fail")
+            debugger;
+
+        });
+    });
+
+    function deleteExamNo(examno) {
+        var action = confirm("Are you sure you want to delete subscription?");
+        if (action != false) {
+            $.ajax({
+                url: "{% url 'dashboard:ExamNoDeleteView' %}",
+                data: {
+                    type: 'GET',
+                    civilservicetitleid: civilservicetitleid,
+                    civilservicetitle: civilservicetitle,
+                },
+                success: function (data) {
+                    if (data["deleted" == True]) {
+                        $("#examid" + id).remove();
+                    }
+
+                }
+            });
+        }
+
+
+
+</script>
+{% endblock javascript %}
