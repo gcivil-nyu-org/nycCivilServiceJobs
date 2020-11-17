@@ -20,6 +20,15 @@ class DashboardView(View):
         exam_schedule = ExamSchedule.objects.filter(
             application_end_date__gte=datetime.date.today()
         )
+        user_subscribed_exams_count = ExamSubscription.objects.filter(
+            user=self.request.user
+        ).count()
+        user_subscribed_exam_results_count = ExamResultsSubscription.objects.filter(
+            user=self.request.user
+        ).count()
+        user_subscriptions_count = (
+            user_subscribed_exams_count + user_subscribed_exam_results_count
+        )
         return render(
             request=request,
             template_name="dashboard/home.html",
@@ -28,6 +37,7 @@ class DashboardView(View):
                 "jobs": jobs,
                 "saved_jobs_user": saved_jobs_user,
                 "exam_schedule": exam_schedule,
+                "user_subscriptions_count": user_subscriptions_count,
             },
         )
 
@@ -92,8 +102,8 @@ class SaveCivilServiceTitleView(View):  # pragma: no cover
     def post(self, request, *args, **kwargs):
         if self.request.method == "POST":
             cst = request.POST.get("civilservicetitleid")
-            cstname = request.POST.get("civilservicetitle")
-            print(cstname)
+            # cstname = request.POST.get("civilservicetitle")
+            # print(cstname)
             user = request.user
             response_data = {
                 "count_before": ExamSubscription.objects.filter(user=user).count()
@@ -128,8 +138,7 @@ class SaveCivilServiceTitleView(View):  # pragma: no cover
                 return JsonResponse(response_data, status=200)
 
 
-class SaveExamNumberView(View):
-    # pragma: no cover
+class SaveExamNumberView(View):  # pragma: no cover
     def post(self, request, *args, **kwargs):
 
         if self.request.method == "POST":
