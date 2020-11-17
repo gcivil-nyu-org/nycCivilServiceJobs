@@ -20,6 +20,9 @@ from dashboard.views import (
     SubscriptionView,
     SaveCivilServiceTitleView,
     SaveExamNumberView,
+    CivilServiceTitleDeleteView,
+    ExamResultsDeleteView
+
 )
 
 
@@ -37,5 +40,15 @@ urlpatterns = [
         "SaveExamNumberView",
         SaveExamNumberView.as_view(),
         name="SaveExamNumberView",
+    ),
+    path(
+        "CivilServiceTitleDeleteView",
+        CivilServiceTitleDeleteView.as_view(),
+        name="CivilServiceTitleDeleteView",
+    ),
+    path(
+        "ExamResultsDeleteView",
+        ExamResultsDeleteView.as_view(),
+        name="ExamResultsDeleteView",
     ),
 ]

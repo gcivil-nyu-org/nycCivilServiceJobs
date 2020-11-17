@@ -345,7 +345,7 @@
         var action = confirm("Are you sure you want to delete subscription?");
         if (action != false) {
             $.ajax({
-                url: "{% url 'dashboard:ExamNoDeleteView' %}",
+                url: "{% url 'dashboard:ExamResultsDeleteView' %}",
                 data: {
                     type: 'GET',
                     civilservicetitleid: civilservicetitleid,
