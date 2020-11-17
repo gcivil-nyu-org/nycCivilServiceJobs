@@ -10,36 +10,24 @@
     <title>Saved Jobs</title>
     <style>
         .filter-summary-selectedFilterContainer {
-            padding-top: 15px;
+            padding-top: 20px;
         }
 
         .filter-summary-filter {
             position: relative;
-            background-color: #fff;
+            background-color: #ffffff;
             text-transform: capitalize;
-            color: #3e4152;
+            color: black;
             cursor: default;
-            font-size: 12px;
-            padding: 5px 26px 5px 10px;
+            font-size: 15px;
+            padding: 7px 28px 7px 14px;
             -webkit-transition: all .2s ease-out;
             transition: all .2s ease-out;
-            border-radius: 20px;
+            border-radius: 15px;
             border: 1px solid #d4d5d9;
+            margin: 5px 5px 5px 5px;
         }
 
-        .filter-summary-filter {
-            position: relative;
-            background-color: #fff;
-            text-transform: capitalize;
-            color: #3e4152;
-            cursor: default;
-            font-size: 12px;
-            padding: 5px 26px 5px 10px;
-            -webkit-transition: all .2s ease-out;
-            transition: all .2s ease-out;
-            border-radius: 20px;
-            border: 1px solid #d4d5d9;
-        }
 
         .filter-summary-filterList {
             list-style-type: none;
@@ -54,19 +42,35 @@
             -ms-flex-align: baseline;
             align-items: baseline;
             margin: 0;
-            padding-left: 17px !important;
+            padding-left: 0px !important;
         }
 
 
         .filter-summary-removeFilter {
+            color: black;
             position: absolute;
-            top: 4px;
-            right: 4px;
+            top: 8px;
+            /* right: 4px; */
             width: 18px;
             height: 20px;
             z-index: 1;
             text-align: center;
             cursor: pointer;
+
+        }
+
+        .btn-fix {
+            margin-top: 0px !important;
+            margin-left: 10px
+        }
+
+        .myfont {
+            height: 35px !important;
+            font-size: 15px;
+            font-family: "Nunito Sans", Arial, sans-serif;
+            font-weight: 400;
+            border: 1px solid #aaa;
+            color: black !important;
         }
     </style>
 </head>
@@ -86,9 +90,9 @@
                 <a href="{% url 'dashboard:dashboard' %}"
                     class="nav-item list-group-item list-group-item-action bg-light">Dashboard</a>
                 <a href="{% url 'dashboard:savedjobs' %}"
-                    class="nav-item list-group-item list-group-item-action bg-light text-success"> Saved Jobs</a>
+                    class="nav-item list-group-item list-group-item-action bg-light "> Saved Jobs</a>
                 <a href="{% url 'dashboard:subscription' %}"
-                    class="list-group-item list-group-item-action bg-light">Subscriptions</a>
+                    class="list-group-item list-group-item-action bg-light text-success">Subscriptions</a>
             </div>
         </div>
 
@@ -97,148 +101,130 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
 
-            <!--Job Card Starts here .//-->
-
-            <!-- Modal if user is  authenticated  -->
-            <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel1">Apply Job</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            Are you sure you meet the Civil Service Requirement?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" style=" background-color: #6c757d !important;
-                    color: #fff !important;
-                    border-color: #6c757d !important;">No</button>
-                            <div class="modal-link">
-                                <button type="button" class="btn btn-primary">Yes</button></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Modal if user is  authenticated  -->
-
-
-            <!-- Modal if user is not authenticated  -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Looking for Jobs?</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            Sign In to save / apply for jobs.
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style=" background-color: #6c757d !important;
-                    color: #fff !important;
-                    border-color: #6c757d !important;">Close</button>
-                            <a href="{% url 'signin:signin' %}">
-                                <button type="button" class="btn btn-primary" href>Sign In</button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- End of Modal if user is not authenticated  -->
-
             <div id="layoutSidenav">
                 <div id="layoutSidenav_content">
                     <div class="container-fluid " style="padding-top: 10px;">
-                        <div id="alertCstAlreadySaved" class="alert alert-warning alert-dismissible fade show" role="alert"
-                            style="display: none;">
-                            You are already subscribed to this Civil Service Title.
-                            <button type="button" class="close" onclick="$('#alertCstAlreadySaved').css('display','none');"
-                                aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
 
-                        <div id="alertExamAlreadySaved" class="alert alert-warning alert-dismissible fade show" role="alert"
-                            style="display: none;">
-                            You are already subscribed to this Exam.
-                            <button type="button" class="close" onclick="$('#alertExamAlreadySaved').css('display','none');"
-                                aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
 
-                        <div>
-                            <div class="md-1"><b>Subscribe for Exam Result using Civil Service Title</b></div>
-                            <select class="js-example-basic-single" name="civilservicetitle" id="civilservicetitle">
-                                <option></option>
-                                {% for civilServTitle in civil_services_title_all %}
-                                <option value={{civilServTitle.id}}> {{civilServTitle.title_description}} </option>
-                                {% endfor %}
-                            </select>
-                            <button class="btn btn-success mt-3" onclick="saveTitle()">Subscribe</button>
-                        </div>
 
-                        <div class="filter-summary-selectedFilterContainer">
-                            <ul class="filter-summary-filterList" id="cstID">
-                                {% for userCST in user_subscribed_exams %}
-                                <li id="cst{{userCST.id}}">
-                                    <div class="filter-summary-filter">
-                                        {{userCST.civil_service_title.title_description}}
-                                        <label class="filter-summary-removeFilter">
-                                            <button type="button" class="close" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </label>
+
+                        <div class="row bg-light">
+                            <div class="col-md-12 ftco-animate">
+                                <div class="job-post-item p-4 d-block d-lg-flex align-items-left">
+                                    <div class="mb-4 mb-md-0">
+                                        <div class="col mr-2 text-black"></a>
+                                            <h4><b>Upcoming Exam Subscriptions</b></h4>
+                                        </div>
+                                        <div id="alertCstAlreadySaved" class="alert alert-warning alert-dismissible fade show"
+                                        role="alert" style="display: none;">
+                                        You are already subscribed to this Civil Service Title.
+                                        <button type="button" class="close"
+                                            onclick="$('#alertCstAlreadySaved').css('display','none');" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
+                                        <div class="d-flex" style="padding-top: 20px">
+                                            <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
+                                                    style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
+                                            </div>
+                                            <div class=col-9 style="padding-left: 20px;"><select class="js-example-basic-single"
+                                                    name="civilservicetitle" id="civilservicetitle">
+                                                    <option></option>
+                                                    {% for civilServTitle in civil_services_title_all %}
+                                                    <option value={{civilServTitle.id}}>
+                                                        {{civilServTitle.title_description}} </option>
+                                                    {% endfor %}
+                                                </select>
+                                                <button class="btn btn-success mt-3 btn-fix"
+                                                    onclick="saveTitle()">Subscribe</button>
 
-                        <div>
-                            <div class="md-1"><b>Subscribe for Upcoming Exam Results</b></div>
-                            <form onsubmit="return false;" save_exam_url="{% url 'dashboard:SaveExamNumberView' %}"
-                                method=POST class="save_exam_no">
-                                {% csrf_token %}
-                                <div class="row">
-                                    <div class="col">
-                                        <input class="form-control" type="number" name="examno" id="examno"
-                                            placeholder="Exam Number" value="" />
+                                            </div>
+                                        </div>
+
+                                        <div class="filter-summary-selectedFilterContainer d-flex">
+                                            <div class="col mr-2 text-black" style="padding-top:8px; max-width:20%; ">
+                                                <b>Active Subscription(s): </b> </div>
+                                            <div class="col">
+                                                <ul class="filter-summary-filterList" id="cstID">
+                                                    {% for userCST in user_subscribed_exams %}
+                                                    <li id="cst{{userCST.id}}">
+                                                        <div class="filter-summary-filter">
+                                                            {{userCST.civil_service_title.title_description}}
+                                                            <label class="filter-summary-removeFilter">
+                                                                <button type="button" class="close" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <button class="btn btn-success mt-3" type="submit">Subscribe </button>
-
                                 </div>
-                            </form>
-                        </div>
 
-                        <div class="filter-summary-selectedFilterContainer">
-                            <ul class="filter-summary-filterList" id="examid">
-                                {% for userExamRes in user_subscribed_exam_results %}
-                                <li id="exam{{userExamRes.id}}">
-                                    <div class="filter-summary-filter">
-                                        {{userExamRes.exam_number}}
-                                        <label class="filter-summary-removeFilter">
-                                            <button type="button" class="close" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </label>
+                                <div class="job-post-item p-4 d-block d-lg-flex align-items-left">
+                                    <div class="mb-4 mb-md-0" style="width: 100%;">
+                                        <div class="col mr-2 text-black"></a>
+                                            <h4><b>Exam Result Subscriptions</b></h4>
+                                        </div>
+                                        <div id="alertExamAlreadySaved" class="alert alert-warning alert-dismissible fade show"
+                                        role="alert" style="display: none;">
+                                        You are already subscribed to this Exam.
+                                        <button type="button" class="close"
+                                            onclick="$('#alertExamAlreadySaved').css('display','none');" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
+                                        <div class="d-flex" style="padding-top: 20px">
+                                            <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
+                                                    style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
+                                            </div>
+
+                                            <div class=col-9 style="padding-left: 20px;" >
+                                                <form onsubmit="return false;"
+                                                    save_exam_url="{% url 'dashboard:SaveExamNumberView' %}" method=POST
+                                                    class="save_exam_no">
+                                                    {% csrf_token %}
+                                                    <div class="row" style="margin-left: 0px;">
+                                                        <div class="col-xs-3">
+                                                            <input class="form-control-sm myfont" type="number"
+                                                                name="examno" id="examno" placeholder="Exam Number"
+                                                                value="" />
+                                                        </div>
+                                                        <button class="btn btn-success mt-3 btn-fix"
+                                                            type="submit">Subscribe </button>
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <div class="filter-summary-selectedFilterContainer d-flex">
+                                            <div class="col mr-2 text-black" style="padding-top:8px; max-width:20%; ">
+                                                <b>Active Subscription(s): </b> </div>
+                                            <div class="col">
+                                                <ul class="filter-summary-filterList" id="examid">
+                                                    {% for userExamRes in user_subscribed_exam_results %}
+                                                    <li id="exam{{userExamRes.id}}">
+                                                        <div class="filter-summary-filter">
+                                                            {{userExamRes.exam_number}}
+                                                            <label class="filter-summary-removeFilter">
+                                                                <button type="button" class="close" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-
-
                     </div>
                 </div>
             </div>
@@ -254,8 +240,9 @@
 
         $('.js-example-basic-single').select2(
             {
-                width: '70%',
+                width: '40%',
                 placeholder: "Select a Civil Service Title",
+                allowClear: false,
 
             }
         );
@@ -290,24 +277,23 @@
         var user = "{{user}}";
         //alert(user);
         //debugger;
-        if(civilservicetitle != "" && civilservicetitleid !="")
-        {
+        if (civilservicetitle != "" && civilservicetitleid != "") {
             $.ajax({
-            type: 'POST',
-            url: "{% url 'dashboard:SaveCivilServiceTitleView' %}",
-            data: {
-                csrfmiddlewaretoken: csrftoken,
-                civilservicetitleid: civilservicetitleid,
-                civilservicetitle: civilservicetitle,
-            }
+                type: 'POST',
+                url: "{% url 'dashboard:SaveCivilServiceTitleView' %}",
+                data: {
+                    csrfmiddlewaretoken: csrftoken,
+                    civilservicetitleid: civilservicetitleid,
+                    civilservicetitle: civilservicetitle,
+                }
             }).done(function (response) {
                 if (response["response_data"] == "CIVIL_SERVICE_TITLE_SAVED") {
                     debugger;
                     var user_subscribed_services_title = response["subscribed_title"];
                     $("#cstID").append('<li id=cst' + response["subscribed_id"] + '><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></label></li>');
                     $('#civilservicetitle').val("").trigger('change');
-                    }
-                else if (response["response_data"] == "CIVIL_SERVICE_TITLE_ALREADY_PRESENT"){
+                }
+                else if (response["response_data"] == "CIVIL_SERVICE_TITLE_ALREADY_PRESENT") {
                     $("#alertCstAlreadySaved").css('display', 'block');
                 }
             }).fail(function (data) {
@@ -316,7 +302,7 @@
 
             });
         }
-        
+
     }
 
     function deleteTitle(id) {
@@ -359,10 +345,10 @@
             data: formData
         }).done(function (response, data) {
             if (response["response_data"] == "EXAM_SAVED") {
-                $("#examid").append('<li id=exam'+response["subscribed_exam_id"]+'><div class="filter-summary-filter">' + response["subscribed_exam_num"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamNo(examno)><span aria-hidden="true">&times;</span></button></label></li>');
-                $("#examno").val(""); 
-                }
-            else if (response["response_data"] == "EXAM_ALREADY_PRESENT"){
+                $("#examid").append('<li id=exam' + response["subscribed_exam_id"] + '><div class="filter-summary-filter">' + response["subscribed_exam_num"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamNo(examno)><span aria-hidden="true">&times;</span></button></label></li>');
+                $("#examno").val("");
+            }
+            else if (response["response_data"] == "EXAM_ALREADY_PRESENT") {
                 $("#alertExamAlreadySaved").css('display', 'block');
             }
         }).fail(function (data) {
