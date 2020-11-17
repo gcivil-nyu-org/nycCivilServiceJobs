@@ -25,6 +25,7 @@ def notify_exams():
         user_sub = queryset.filter(user=user)
 
         exam_list = []
+
         for obj in user_sub:
             title = obj.civil_service_title.title_description
             if title not in exams:
@@ -50,13 +51,13 @@ def notify_exams():
             if earlynotif:
                 exam_list.extend(earlynotif)
 
-        message = render_to_string(
-            "dashboard/upcomingexam_notify.html",
-            {"first_name": obj.user.first_name, "exams": exam_list},
-        )
-
-        if user_sub:
-            email = user_sub[0].user.email
+        if exam_list:
+            obj = user_sub[0]
+            email = obj.user.email
+            message = render_to_string(
+                "dashboard/upcomingexam_notify.html",
+                {"first_name": obj.user.first_name, "exams": exam_list},
+            )
             send_email(email, "Upcoming Exam Notification", message)
 
 
@@ -76,6 +77,7 @@ def notify_results():
             if results:
                 examresults.extend(results)
         if examresults:
+            obj = user_exam[0]
             message = render_to_string(
                 "dashboard/examresults_notify.html",
                 {"first_name": obj.user.first_name, "results": examresults},
