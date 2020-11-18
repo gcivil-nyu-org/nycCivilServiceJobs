@@ -14,32 +14,35 @@ from dashboard.models import ExamSubscription, ExamResultsSubscription
 class DashboardView(View):
     def get(self, request, *args, **kwargs):
 
-        user_saved_jobs = UserSavedJob.objects.filter(user=self.request.user)
-        saved_jobs_user = list(user_saved_jobs.values_list("job", flat=True))
-        jobs = map(lambda x: x.job, user_saved_jobs)
-        exam_schedule = ExamSchedule.objects.filter(
-            application_end_date__gte=datetime.date.today()
-        )
-        user_subscribed_exams_count = ExamSubscription.objects.filter(
-            user=self.request.user
-        ).count()
-        user_subscribed_exam_results_count = ExamResultsSubscription.objects.filter(
-            user=self.request.user
-        ).count()
-        user_subscriptions_count = (
-            user_subscribed_exams_count + user_subscribed_exam_results_count
-        )
-        return render(
-            request=request,
-            template_name="dashboard/home.html",
-            context={
-                "user": request.user,
-                "jobs": jobs,
-                "saved_jobs_user": saved_jobs_user,
-                "exam_schedule": exam_schedule,
-                "user_subscriptions_count": user_subscriptions_count,
-            },
-        )
+        if request.user.is_authenticated:
+            user_saved_jobs = UserSavedJob.objects.filter(user=self.request.user)
+            saved_jobs_user = list(user_saved_jobs.values_list("job", flat=True))
+            jobs = map(lambda x: x.job, user_saved_jobs)
+            exam_schedule = ExamSchedule.objects.filter(
+                application_end_date__gte=datetime.date.today()
+            )
+            user_subscribed_exams_count = ExamSubscription.objects.filter(
+                user=self.request.user
+            ).count()
+            user_subscribed_exam_results_count = ExamResultsSubscription.objects.filter(
+                user=self.request.user
+            ).count()
+            user_subscriptions_count = (
+                user_subscribed_exams_count + user_subscribed_exam_results_count
+            )
+            return render(
+                request=request,
+                template_name="dashboard/home.html",
+                context={
+                    "user": request.user,
+                    "jobs": jobs,
+                    "saved_jobs_user": saved_jobs_user,
+                    "exam_schedule": exam_schedule,
+                    "user_subscriptions_count": user_subscriptions_count,
+                },
+            )
+        else:
+            return redirect(reverse("index"))
 
 
 class SavedJobs(View):
