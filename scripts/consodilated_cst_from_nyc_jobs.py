@@ -22,13 +22,12 @@ client = Socrata(
 )
 
 
-
 def get_cst():
-    
-    
 
     try:
-        cst = client.get("kpav-sd4t", select="distinct civil_service_title, title_code_no")
+        cst = client.get(
+            "kpav-sd4t", select="distinct civil_service_title, title_code_no"
+        )
     except Exception as e:
         print("Client Error", e)
     else:
@@ -44,7 +43,9 @@ def get_cst():
                 entries.append(
                     CivilServicesTitle(
                         title_code=row["title_code_no"],
-                        title_description=civil_service_title_cleanup(row["civil_service_title"]),
+                        title_description=civil_service_title_cleanup(
+                            row["civil_service_title"]
+                        ),
                     )
                 )
             except Exception as e:
@@ -56,8 +57,7 @@ def get_cst():
         "\nCreated Objects in Civil Services Titles: ",
         CivilServicesTitle.objects.count(),
     )
-    
-    
+
 
 def civil_service_title_cleanup(s):
     return trim_parenthesis(s).rstrip()
