@@ -16,6 +16,19 @@
             font-size: 45px;
             font-weight: 650;
         }
+        label{
+            margin-top: 0.5rem;
+            margin-right: 0.5rem;
+        }
+        .bg-badge1{
+            background-color: salmon;
+        }
+        .bg-badge2{
+            background-color: olive;
+        }
+        .bg-badge3{
+            background-color: steelblue;
+        }
     </style>
 </head>
 <br>
@@ -28,7 +41,7 @@
 
         <!-- Sidebar -->
         <div class="bg-light border-right" id="sidebar-wrapper">
-            <div class="sidebar-heading" style="color:black"><b>Welcome {{user.first_name}}!</b></div>
+            <div class="sidebar-heading" style="color:black"><b>Welcome {{user.first_name}} !</b></div>
             <div class="list-group list-group-flush">
                 <a href="{% url 'dashboard:dashboard' %}"
                     class="nav-item list-group-item list-group-item-action bg-light text-success ">Dashboard</a>
@@ -46,13 +59,10 @@
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="col-md-12 ftco-animate">
-                            <div class="container-fluid" style="padding-top: 0px;">
-
-                                <h1 class="mt-1">Dashboard</h1>
-
+                            <div class="container-fluid mt-3">
                                 <div class="row flex">
                                     <div class="col-xl-4 col-md-6">
-                                        <div class="card bg-warning text-white mb-3">
+                                        <div class="card bg-badge1 text-white mb-3 shadow">
                                             <div class="card-header">Saved Jobs</div>
                                             {% if saved_jobs_user and jobs %}
                                             {% for job in jobs %}
@@ -76,7 +86,7 @@
                                     </div>
 
                                     <div class="col-xl-4 col-md-6">
-                                        <div class="card bg-info text-white mb-3">
+                                        <div class="card bg-badge2 text-white mb-3 shadow">
                                             <div class="card-header">Recommended Jobs</div>
 
                                             <div class="card-body countbadges">
@@ -89,7 +99,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-4 col-md-6">
-                                        <div class="card bg-success text-white mb-3">
+                                        <div class="card bg-badge3 text-white mb-3 shadow">
                                             <div class="card-header">Subscriptions</div>
 
                                             <div class="card-body countbadges">
@@ -105,7 +115,7 @@
 
                                 </div>
                             </div>
-                            <div class="card mb-4 text-black">
+                            <div class="card mb-4 text-black shadow-sm">
                                 <div class="card-header"> <i class="fa fa-table mr-1"></i>Upcoming Exams</div>
                                 <link rel="stylesheet" type="text/css"
                                     href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
@@ -176,7 +186,8 @@
                 //     'cssText': 'background-color: #28a745 !important; opacity:1'
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                //$("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Unsave').tooltip('show');
             } else if (response["response_data"] == "Job Unsaved") {
                 $('#favBtnID' + response["job_id"]).css({
                     'cssText': 'background-color: #28a745 !important; opacity:1'
@@ -186,7 +197,8 @@
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
                 // $("#favBtnID" + response["job_id"]).removeAttr("style");
-                $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                //$("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Save').tooltip('show');
             } else if (response["response_data"] == "User not authenticated") {
                 // if ($("#alert" + response["job_id"]).css('display') == 'none') {
                 //     $("#alert" + response["job_id"]).css('display', 'block');

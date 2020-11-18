@@ -29,15 +29,12 @@ def save_upcoming_exams():
     with open(exam_csv) as f:
         reader_exams = csv.reader(f, delimiter=",")
 
-        # Skip first two rows: 1st - meta data, 2nd - header
+        # Skip first rows: 1st - header
         next(reader_exams)
-        # next(reader_exams)
 
         for row in reader_exams:
-            print(row)
             try:
                 val_in_db = ExamSchedule.objects.filter(
-                    # exam_title=row[0],
                     exam_title_civil_service_title=row[0],
                     exam_number=row[1],
                     application_start_date=convertDateFormat(row[2]),
@@ -50,8 +47,6 @@ def save_upcoming_exams():
 
                 exams.append(
                     ExamSchedule(
-                        # row[2] is always "" so skip
-                        # exam_title=row[0],
                         exam_title_civil_service_title=row[0],
                         exam_number=row[1],
                         application_start_date=convertDateFormat(row[2]),
