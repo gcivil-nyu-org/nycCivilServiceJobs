@@ -178,7 +178,7 @@ class SaveExamNumberView(View):  # pragma: no cover
                 return JsonResponse(response_data, status=200)
 
 
-class ExamResultsDeleteView(View):
+class ExamResultsDeleteView(View):  # pragma: no cover
     def post(self, request, *args, **kwargs):
 
         if self.request.method == "POST":
@@ -208,7 +208,7 @@ class ExamResultsDeleteView(View):
                 return JsonResponse(response_data, status=200)
 
 
-class CivilServiceTitleDeleteView(View):
+class CivilServiceTitleDeleteView(View):  # pragma: no cover
     def post(self, request, *args, **kwargs):
         if self.request.method == "POST":
             cst = request.POST.get("civilservicetitleid")

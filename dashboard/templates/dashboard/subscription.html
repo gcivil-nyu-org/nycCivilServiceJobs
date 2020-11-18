@@ -293,7 +293,7 @@
                 if (response["response_data"] == "CIVIL_SERVICE_TITLE_SAVED") {
                     debugger;
                     var user_subscribed_services_title = response["subscribed_title"];
-                    $("#cstID").append('<li id=cst' + response["subscribed_id"] + '><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true" onClick="deleteTitle('+response["subscribed_id"]+')">&times;</span></button></label></li>');
+                    $("#cstID").prepend('<li id=cst' + response["subscribed_id"] + '><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true" onClick="deleteTitle('+response["subscribed_id"]+')">&times;</span></button></label></li>');
                     $('#civilservicetitle').val("").trigger('change');
                 }
                 else if (response["response_data"] == "CIVIL_SERVICE_TITLE_ALREADY_PRESENT") {
@@ -353,7 +353,7 @@
                 data: formData
             }).done(function (response, data) {
                 if (response["response_data"] == "EXAM_SAVED") {
-                    $("#examid").append('<li id=exam' + response["subscribed_exam_id"] + '><div class="filter-summary-filter">' + response["subscribed_exam_num"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamno('+response["subscribed_exam_id"]+')"><span aria-hidden="true">&times;</span></button></label></li>');
+                    $("#examid").prepend('<li id=exam' + response["subscribed_exam_id"] + '><div class="filter-summary-filter">' + response["subscribed_exam_num"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamno('+response["subscribed_exam_id"]+')"><span aria-hidden="true">&times;</span></button></label></li>');
                     $("#examno").val("");
                 }
                 else if (response["response_data"] == "EXAM_ALREADY_PRESENT") {
