@@ -60,7 +60,7 @@ def get_cst():
     
 
 def civil_service_title_cleanup(s):
-    return trim_parenthesis(s)
+    return trim_parenthesis(s).rstrip()
 
 
 # Trims dangling parenthesis
