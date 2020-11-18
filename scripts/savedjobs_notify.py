@@ -28,13 +28,7 @@ def notify_jobs():
         job_list = []
 
         for obj in user_sub:
-            job_id = obj.job.job_id
-
-            job_list.extend(
-                job_record.objects.filter(
-                    job_id=job_id,
-                )
-            )
+            job_list.append(obj.job)
 
         if job_list:
             obj = user_sub[0]

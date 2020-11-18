@@ -71,11 +71,11 @@ def notify_results():
         for obj in user_exam:
             results = ExamResultsActive.objects.filter(
                 exam_number=obj.exam_number,
-                first_name__iexact=obj.user.first_name,
-                last_name__iexact=obj.user.last_name,
-            )
+                # first_name__iexact=obj.user.first_name,
+                # last_name__iexact=obj.user.last_name,
+            ).first()
             if results:
-                examresults.extend(results)
+                examresults.append(results)
         if examresults:
             obj = user_exam[0]
             message = render_to_string(
