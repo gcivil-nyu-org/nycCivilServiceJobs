@@ -280,11 +280,7 @@
 
 
     function saveTitle() {
-
         $("#alertCstAlreadySaved").css('display', 'none');
-        $("#alertExamAlreadySaved").css('display', 'none');
-        $("#alertExamAlreadyReleased").css('display', 'none');
-
         var civilservicetitle = $('#civilservicetitle').find(":selected").text();
         var civilservicetitleid = $('#civilservicetitle').find(":selected").val();
         const csrftoken = getCookie('csrftoken');
@@ -320,6 +316,7 @@
     }
 
     function deleteTitle(id) {
+        $("#alertCstAlreadySaved").css('display', 'none');
         var cst_id = parseInt(id);
         //var action = confirm("Are you sure you want to delete subscription?");
         const csrftoken = getCookie('csrftoken');
@@ -335,8 +332,6 @@
                     var cst_id_deleted = '#cst' + response["cst_deleted_id"];
                     debugger;
                     $(cst_id_deleted).remove();
-
-
                 }
             }
 
@@ -349,10 +344,8 @@
         var currentForm = $(this);
         // Stop the browser from submitting the form.
         event.preventDefault();
-        $("#alertCstAlreadySaved").css('display', 'none');
         $("#alertExamAlreadySaved").css('display', 'none');
         $("#alertExamAlreadyReleased").css('display', 'none');
-
         // Serialize the form data.
         var formData = currentForm.serialize();
         var user = "{{user}}";
@@ -384,6 +377,7 @@
     });
 
     function deleteExamno(id) {
+        $("#alertExamAlreadySaved").css('display', 'none');
         var exam_id = parseInt(id);
         //var action = confirm("Are you sure you want to delete subscription?");
         const csrftoken = getCookie('csrftoken');
@@ -400,8 +394,6 @@
                     var exam_id_deleted = '#exam' + response["exam_deleted_id"];
                     debugger;
                     $(exam_id_deleted).remove();
-
-
                 }
             }
 
