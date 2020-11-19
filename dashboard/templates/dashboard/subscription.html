@@ -179,6 +179,16 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
+                                        <div id="alertExamAlreadyReleased"
+                                            class="alert alert-warning alert-dismissible fade show" role="alert"
+                                            style="display: none;">
+                                            The results for this Exam are already released. You may find the results <a id='examResUrlID' target="_blank">here</a>.
+                                            <button type="button" class="close"
+                                                onclick="$('#alertExamAlreadyReleased').css('display','none');"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
                                         <div class="d-flex" style="padding-top: 20px">
                                             <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
                                                     style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
@@ -273,6 +283,7 @@
 
         $("#alertCstAlreadySaved").css('display', 'none');
         $("#alertExamAlreadySaved").css('display', 'none');
+        $("#alertExamAlreadyReleased").css('display', 'none');
 
         var civilservicetitle = $('#civilservicetitle').find(":selected").text();
         var civilservicetitleid = $('#civilservicetitle').find(":selected").val();
@@ -340,6 +351,7 @@
         event.preventDefault();
         $("#alertCstAlreadySaved").css('display', 'none');
         $("#alertExamAlreadySaved").css('display', 'none');
+        $("#alertExamAlreadyReleased").css('display', 'none');
 
         // Serialize the form data.
         var formData = currentForm.serialize();
@@ -358,6 +370,11 @@
                 }
                 else if (response["response_data"] == "EXAM_ALREADY_PRESENT") {
                     $("#alertExamAlreadySaved").css('display', 'block');
+                }
+                else if (response["response_data"] == "EXAM_ALREADY_RELEASED") {
+                    
+                    $("#examResUrlID").attr('href',"{% url 'examresults:exams' %}?q=" + response["subscribed_exam_num"]);
+                    $("#alertExamAlreadyReleased").css('display', 'block');
                 }
             }).fail(function (data) {
                 //Do something

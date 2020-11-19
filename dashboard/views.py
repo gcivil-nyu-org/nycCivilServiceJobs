@@ -4,7 +4,7 @@ from jobs.models import UserSavedJob, job_record
 from examresults.models import ExamSchedule
 import datetime
 from django.http.response import JsonResponse
-from examresults.models import CivilServicesTitle
+from examresults.models import CivilServicesTitle, ExamResultsActive
 
 # import json
 from dashboard.models import ExamSubscription, ExamResultsSubscription
@@ -162,7 +162,16 @@ class SaveExamNumberView(View):  # pragma: no cover
                 already_saved = ExamResultsSubscription.objects.filter(
                     user=user, exam_number=examNo
                 )
-                if already_saved.count() == 0:
+
+                already_released = ExamResultsActive.objects.filter(
+                    exam_number=examNo,
+                )
+
+                if already_released.count() > 0:
+                    response_data["subscribed_exam_num"] = examNo
+                    response_data["response_data"] = "EXAM_ALREADY_RELEASED"
+
+                elif already_saved.count() == 0:
                     save_examNo = ExamResultsSubscription(
                         user=user,
                         exam_number=examNo,
