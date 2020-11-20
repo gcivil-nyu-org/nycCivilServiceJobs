@@ -111,7 +111,7 @@
                                 <div class="job-post-item p-4 d-block align-items-left">
                                     <div class="mb-4 mb-md-0">
                                         <div class="col mr-2 text-black"></a>
-                                            <h4><b>Upcoming Exam Subscriptions</b></h4>
+                                            <h4><b>Expired Exam Subscriptions</b></h4>
                                         </div>
                                         <div id="alertCstAlreadySaved"
                                             class="alert alert-warning alert-dismissible fade show" role="alert"
@@ -123,31 +123,14 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <div class="d-flex" style="padding-top: 20px">
-                                            <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
-                                                    style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
-                                            </div>
-                                            <div class=col-9 style="padding-left: 20px;"><select
-                                                    class="js-example-basic-single" name="civilservicetitle"
-                                                    id="civilservicetitle">
-                                                    <option></option>
-                                                    {% for civilServTitle in civil_services_title_all %}
-                                                    <option value={{civilServTitle.id}}>
-                                                        {{civilServTitle.title_description}} </option>
-                                                    {% endfor %}
-                                                </select>
-                                                <button class="btn btn-success mt-3 btn-fix"
-                                                    onclick="saveTitle()">Subscribe</button>
 
-                                            </div>
-                                        </div>
 
                                         <div class="filter-summary-selectedFilterContainer d-flex">
                                             <div class="col mr-2 text-black" style="padding-top:8px; max-width:20%; ">
-                                                <b>Active Subscription(s): </b> </div>
+                                                <b>Expired Subscription(s): </b> </div>
                                             <div class="col">
                                                 <ul class="filter-summary-filterList" id="cstID">
-                                                    {% for userCST in user_subscribed_exams %}
+                                                    {% for userCST in user_expired_subscribed_exams %}
                                                     <li id="cst{{userCST.id}}">
                                                         <div class="filter-summary-filter">
                                                             {{userCST.civil_service_title.title_description}}
@@ -169,7 +152,7 @@
                                 <div class="job-post-item p-4 d-block align-items-left">
                                     <div class="mb-4 mb-md-0" style="width: 100%;">
                                         <div class="col mr-2 text-black"></a>
-                                            <h4><b>Upcoming Exam Result Subscriptions</b></h4>
+                                            <h4><b>Expired Exam Result Subscriptions</b></h4>
                                         </div>
                                         <div id="alertExamAlreadySaved"
                                             class="alert alert-warning alert-dismissible fade show" role="alert"
@@ -192,37 +175,14 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <div class="d-flex" style="padding-top: 20px">
-                                            <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
-                                                    style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
-                                            </div>
 
-                                            <div class=col-9 style="padding-left: 20px;">
-                                                <form onsubmit="return false;"
-                                                    save_exam_url="{% url 'dashboard:SaveExamNumberView' %}" method=POST
-                                                    class="save_exam_no">
-                                                    {% csrf_token %}
-                                                    <div class="row" style="margin-left: 0px;">
-                                                        <div class="col-xs-3">
-                                                            <input class="form-control-sm myfont" type="number"
-                                                                name="examno" id="examno"
-                                                                placeholder="Enter an Exam Number" value="" min=1
-                                                                max="9999" style="width: 13em" />
-                                                        </div>
-                                                        <button class="btn btn-success mt-3 btn-fix"
-                                                            type="submit">Subscribe </button>
-
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
 
                                         <div class="filter-summary-selectedFilterContainer d-flex">
                                             <div class="col mr-2 text-black" style="padding-top:8px; max-width:20%; ">
-                                                <b>Active Subscription(s): </b> </div>
+                                                <b>Expired Subscription(s): </b> </div>
                                             <div class="col">
                                                 <ul class="filter-summary-filterList" id="examid">
-                                                    {% for userExamRes in user_subscribed_exam_results %}
+                                                    {% for userExamRes in user_expired_subscribed_exam_results %}
                                                     <li id="exam{{userExamRes.id}}">
                                                         <div class="filter-summary-filter">
                                                             {{userExamRes.exam_number}}

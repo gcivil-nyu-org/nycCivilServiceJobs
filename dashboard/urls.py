@@ -22,6 +22,7 @@ from dashboard.views import (
     SaveExamNumberView,
     CivilServiceTitleDeleteView,
     ExamResultsDeleteView,
+    ExpiredSubscriptionView,
 )
 
 
@@ -49,5 +50,10 @@ urlpatterns = [
         "ExamResultsDelete",
         ExamResultsDeleteView.as_view(),
         name="ExamResultsDeleteView",
+    ),
+    path(
+        "expiredsubscription",
+        ExpiredSubscriptionView.as_view(),
+        name="expiredsubscription",
     ),
 ]

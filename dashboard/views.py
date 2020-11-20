@@ -85,10 +85,11 @@ class SubscriptionView(View):  # pragma: no cover
         if request.user.is_authenticated:
             civil_services_title_all = CivilServicesTitle.objects.all()
             user_subscribed_exams = ExamSubscription.objects.filter(
-                user=self.request.user
+                user=self.request.user, is_notified=False
             )
+
             user_subscribed_exam_results = ExamResultsSubscription.objects.filter(
-                user=self.request.user
+                user=self.request.user, is_notified=False
             )
 
             return render(
@@ -99,6 +100,34 @@ class SubscriptionView(View):  # pragma: no cover
                     "civil_services_title_all": civil_services_title_all,
                     "user_subscribed_exams": user_subscribed_exams,
                     "user_subscribed_exam_results": user_subscribed_exam_results,
+                },
+            )
+        else:
+            return redirect(reverse("signin:signin"))
+
+
+class ExpiredSubscriptionView(View):  # pragma: no cover
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            civil_services_title_all = CivilServicesTitle.objects.all()
+
+            user_expired_subscribed_exams = ExamSubscription.objects.filter(
+                user=self.request.user, is_notified=True
+            )
+            user_expired_subscribed_exam_results = (
+                ExamResultsSubscription.objects.filter(
+                    user=self.request.user, is_notified=True
+                )
+            )
+
+            return render(
+                request,
+                "dashboard/expired_subscripton.html",
+                context={
+                    "user": request.user,
+                    "civil_services_title_all": civil_services_title_all,
+                    "user_expired_subscribed_exams": user_expired_subscribed_exams,
+                    "user_expired_subscribed_exam_results": user_expired_subscribed_exam_results,
                 },
             )
         else:
@@ -241,6 +270,95 @@ class CivilServiceTitleDeleteView(View):  # pragma: no cover
 
                 else:
                     response_data["response_data"] = "CIVIL_SERVICE_TITLE_NOT_PRESENT"
+
+                return JsonResponse(response_data, status=200)
+
+            else:
+                response_data["response_data"] = "User not authenticated"
+                return JsonResponse(response_data, status=200)
+
+
+class ExpiredCivilServiceTitleView(View):  # pragma: no cover
+    def get(self, request, *args, **kwargs):
+        if self.request.method == "POST":
+            cst = request.POST.get("civilservicetitleid")
+            # cstname = request.POST.get("civilservicetitle")
+            # print(cstname)
+            user = request.user
+            response_data = {
+                "count_before": ExamSubscription.objects.filter(user=user).count()
+            }
+            if user.is_authenticated:
+                civilServiceTitle = CivilServicesTitle.objects.get(pk=cst)
+                already_saved = ExamSubscription.objects.filter(
+                    user=user, civil_service_title=civilServiceTitle
+                )
+                if already_saved.count() == 0:
+                    save_civilServiceTitle = ExamSubscription(
+                        user=user,
+                        civil_service_title=civilServiceTitle,
+                    )
+                    save_civilServiceTitle.save()
+                    response_data["response_data"] = "CIVIL_SERVICE_TITLE_SAVED"
+                    response_data[
+                        "subscribed_title"
+                    ] = civilServiceTitle.title_description
+                    response_data["subscribed_id"] = ExamSubscription.objects.get(
+                        user=user, civil_service_title=civilServiceTitle
+                    ).id
+                else:
+                    response_data[
+                        "response_data"
+                    ] = "CIVIL_SERVICE_TITLE_ALREADY_PRESENT"
+
+                return JsonResponse(response_data, status=200)
+
+            else:
+                response_data["response_data"] = "User not authenticated"
+                return JsonResponse(response_data, status=200)
+
+
+class SaveExamNumberView(View):  # pragma: no cover
+    def post(self, request, *args, **kwargs):
+
+        if self.request.method == "POST":
+            examNo = request.POST.get("examno")
+            # print(examNo)
+            user = request.user
+            response_data = {
+                "count_before": ExamResultsSubscription.objects.filter(
+                    user=user
+                ).count()
+            }
+            if user.is_authenticated:
+
+                already_saved = ExamResultsSubscription.objects.filter(
+                    user=user, exam_number=examNo
+                )
+
+                already_released = ExamResultsActive.objects.filter(
+                    exam_number=examNo,
+                )
+
+                if already_released.count() > 0:
+                    response_data["subscribed_exam_num"] = examNo
+                    response_data["response_data"] = "EXAM_ALREADY_RELEASED"
+
+                elif already_saved.count() == 0:
+                    save_examNo = ExamResultsSubscription(
+                        user=user,
+                        exam_number=examNo,
+                    )
+                    save_examNo.save()
+                    response_data["response_data"] = "EXAM_SAVED"
+                    response_data["subscribed_exam_num"] = examNo
+                    response_data[
+                        "subscribed_exam_id"
+                    ] = ExamResultsSubscription.objects.get(
+                        user=user, exam_number=examNo
+                    ).id
+                else:
+                    response_data["response_data"] = "EXAM_ALREADY_PRESENT"
 
                 return JsonResponse(response_data, status=200)
 

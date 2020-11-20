@@ -16,17 +16,21 @@
             font-size: 45px;
             font-weight: 650;
         }
-        label{
+
+        label {
             margin-top: 0.5rem;
             margin-right: 0.5rem;
         }
-        .bg-badge1{
+
+        .bg-badge1 {
             background-color: salmon;
         }
-        .bg-badge2{
+
+        .bg-badge2 {
             background-color: olive;
         }
-        .bg-badge3{
+
+        .bg-badge3 {
             background-color: steelblue;
         }
     </style>
@@ -47,7 +51,11 @@
                     class="nav-item list-group-item list-group-item-action bg-light text-success ">Dashboard</a>
                 <a href="{% url 'dashboard:savedjobs' %}"
                     class="nav-item list-group-item list-group-item-action bg-light"> Saved Jobs</a>
-                <a href="{% url 'dashboard:subscription' %}" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
+                <a href="{% url 'dashboard:subscription' %}"
+                    class="list-group-item list-group-item-action bg-light">Subscriptions</a>
+                <a href="{% url 'dashboard:expiredsubscription' %}"
+                    class="list-group-item list-group-item-action bg-light">Expired Subscriptions</a>
+
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -106,7 +114,8 @@
                                                 <p class="card-text">{{user_subscriptions_count}}</p>
                                             </div>
                                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                                <a class="small text-white stretched-link" href="{% url 'dashboard:subscription' %}">View All</a>
+                                                <a class="small text-white stretched-link"
+                                                    href="{% url 'dashboard:subscription' %}">View All</a>
                                                 <div class="small text-white"><i class="fa fa-angle-right"></i></div>
                                             </div>
                                         </div>
