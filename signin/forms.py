@@ -13,9 +13,9 @@ class UserProfileForm(forms.ModelForm):
     email = forms.EmailField(max_length=254)
     username = forms.CharField(max_length=30, widget=forms.HiddenInput())
     CHOICES_AT = [(False, "Job Seeker"), (True, "Hiring Manager")]
-    is_hiring_manager = forms.ChoiceField(
-        choices=CHOICES_AT, label="Account Type", widget=forms.Select(), required=True
-    )
+    # is_hiring_manager = forms.ChoiceField(
+    #     choices=CHOICES_AT, label="Account Type", widget=forms.Select(), required=True
+    # )
     dob = forms.DateField(
         label="Date of Birth", widget=forms.DateInput(attrs={"type": "date"})
     )
@@ -23,7 +23,7 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            "is_hiring_manager",
+            # "is_hiring_manager",
             "username",
             "first_name",
             "last_name",
@@ -31,7 +31,7 @@ class UserProfileForm(forms.ModelForm):
             "email",
         ]
 
-    is_hiring_manager.disabled = True
+    # is_hiring_manager.disabled = True
 
     def clean_email(self):
         email = self.cleaned_data.get("email").lower()
@@ -43,13 +43,13 @@ class UserProfileForm(forms.ModelForm):
                 "Please use a different email address."
             )
 
-        is_hiring_manager = self.cleaned_data.get("is_hiring_manager")
-        email_domain = email[-4:]
-        if is_hiring_manager == "True" and email_domain != ".gov":
-            raise ValidationError(
-                "This email is not a valid Email Address for Hiring Manager. "
-                "Please use a different email address."
-            )
+        # is_hiring_manager = self.cleaned_data.get("is_hiring_manager")
+        # email_domain = email[-4:]
+        # if is_hiring_manager == "True" and email_domain != ".gov":
+        #     raise ValidationError(
+        #         "This email is not a valid Email Address for Hiring Manager. "
+        #         "Please use a different email address."
+        #     )
         return self.cleaned_data.get("email")
 
     def __init__(self, *args, **kwargs):
