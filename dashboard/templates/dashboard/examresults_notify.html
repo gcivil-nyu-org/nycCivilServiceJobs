@@ -18,7 +18,7 @@ Exams Results for your subscribed Exams are available!
  {% for result in results %}
  <tr>
      <td style="border: 1px solid #000000;">{{result.list_title_desc}}</td>
-     <td style="border: 1px solid #000000;">{{result.exam_number}}</td>
+     <td style="border: 1px solid #000000;"><a href="{{url}}?q={{result.exam_number}}">{{result.exam_number}}</a></td>
      <!-- <td style="border: 1px solid #000000;">{{result.first_name}}</td>
      <td style="border: 1px solid #000000;">{{result.middle_initial}}</td>
       <td style="border: 1px solid #000000;">{{result.last_name}}</td> -->
