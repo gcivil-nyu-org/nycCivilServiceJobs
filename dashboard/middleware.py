@@ -10,6 +10,7 @@ class DynamicSiteDomainMiddleware:
         try:
             current_site = Site.objects.get(id=settings.DEFAULT_SITE_ID)
             current_site.domain = request.get_host()
+            current_site.name = current_site.domain
             current_site.save()
         except Site.DoesNotExist:
             current_site = Site.objects.get(id=settings.DEFAULT_SITE_ID)
