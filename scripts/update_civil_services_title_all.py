@@ -23,6 +23,7 @@ client = Socrata(
 
 
 def update_civil_services_title():
+    CivilServicesTitle.objects.all().delete()
     columns = ["title_code", "title_description"]
 
     limit = 10000
@@ -30,6 +31,7 @@ def update_civil_services_title():
     print("Total Records Before Preprocessing: ", record_count)
     offset = 0
     civil_services_title = []
+    seen = set()
     while offset < record_count:
         try:
             civil_services_title_list = client.get(
@@ -60,26 +62,29 @@ def update_civil_services_title():
 
             for index, row in civil_services_title_df.iterrows():
                 try:
-                    # print(row["job_id"])
-                    val_in_db = CivilServicesTitle.objects.filter(
-                        title_code=row["title"],
-                        title_description=civil_service_title_cleanup(row["descr"]),
-                    )
-                    if not val_in_db.exists():
-                        civil_services_title.append(
-                            CivilServicesTitle(
-                                title_code=row["title"],
-                                title_description=civil_service_title_cleanup(
-                                    row["descr"]
-                                ),
-                            )
+                    title_code = row["title"]
+                    title_desc = civil_service_title_cleanup(row["descr"])
+                    if not (title_desc in seen or seen.add(title_desc)):
+                        # print(row["job_id"])
+                        val_in_db = CivilServicesTitle.objects.filter(
+                            title_code=title_code,
+                            title_description=title_desc,
                         )
+                        if not val_in_db.exists():
+                            civil_services_title.append(
+                                CivilServicesTitle(
+                                    title_code=title_code,
+                                    title_description=title_desc,
+                                )
+                            )
                 except Exception as e:
                     print("Error", e)
 
             offset += limit
 
     print("Found", len(civil_services_title), "new Civil Services Titles")
+    # df_civil_services_title = pd.DataFrame(civil_services_title)
+    # df_civil_services_title.to_csv("cst_data_test.csv")
     if len(civil_services_title) > 0:
         CivilServicesTitle.objects.bulk_create(
             civil_services_title, ignore_conflicts=True
@@ -90,7 +95,12 @@ def update_civil_services_title():
 
 
 def civil_service_title_cleanup(s):
-    return trim_parenthesis(s)
+    s = s.lstrip()
+    if s[0] == "*":
+        s = s[1:]
+    s = trim_parenthesis(s)
+    s = s.rstrip()
+    return s
 
 
 # Trims dangling parenthesis
