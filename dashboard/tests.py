@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from register.models import User
 from jobs.models import UserSavedJob, job_record
-from dashboard.models import ExamResultsSubscription, ExamSubscription
+from dashboard.models import ExamSubscription
 from examresults.models import CivilServicesTitle, ExamResultsActive
 from django.utils import timezone
 import json
@@ -135,6 +135,7 @@ class JobDataTest(TestCase):
         user_login = self.client.login(
             username=self.test_user.username, password="thisisapassword"
         )
+        self.assertTrue(user_login)
         response = self.client.get(reverse("dashboard:subscription"))
         self.assertTrue(response.context["user"].is_authenticated)
         self.assertTemplateUsed(response, "dashboard/subscription.html")
@@ -167,6 +168,7 @@ class JobDataTest(TestCase):
         user_login = self.client.login(
             username=self.test_user.username, password="thisisapassword"
         )
+        self.assertTrue(user_login)
         response = self.client.get(reverse("dashboard:expiredsubscription"))
         self.assertTrue(response.context["user"].is_authenticated)
         self.assertTemplateUsed(response, "dashboard/expired_subscripton.html")
@@ -243,11 +245,6 @@ class JobDataTest(TestCase):
         self.assertEqual(
             json.loads(response.content)["response_data"], "CIVIL_SERVICE_TITLE_DELETED"
         )
-
-        # response = self.client.post(
-        #     reverse("dashboard:DeleteUpcomingExamView"), data={"civilservicetitleid": 1}
-        # )
-        # self.assertEqual(json.loads(response.content)["response_data"], "CIVIL_SERVICE_TITLE_NOT_PRESENT")
 
     def test_save_subscription_upcoming_exam_result_view_user_not_logged_in_save(self):
         response = self.client.post(
