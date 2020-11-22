@@ -2,7 +2,10 @@ from django.test import TestCase
 from django.urls import reverse
 from register.models import User
 from jobs.models import UserSavedJob, job_record
+from dashboard.models import ExamResultsSubscription, ExamSubscription
+from examresults.models import CivilServicesTitle
 from django.utils import timezone
+import json
 
 
 class JobDataTest(TestCase):
@@ -95,3 +98,65 @@ class JobDataTest(TestCase):
         response = self.client.get(reverse("dashboard:dashboard"))
         self.assertTrue(response.context["user"].is_authenticated)
         self.assertEqual(len(response.context["saved_jobs_user"]), saved_job_count)
+
+    def test_subscription_view(self):
+
+        # not logged in try accessing subscription page redirects signin
+        response = self.client.get(reverse("dashboard:subscription"))
+        self.assertRedirects(
+            response, reverse("signin:signin"), fetch_redirect_response=False
+        )
+
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        response = self.client.get(reverse("dashboard:subscription"))
+        self.assertTrue(response.context["user"].is_authenticated)
+        self.assertTemplateUsed(response, "dashboard/subscription.html")
+        self.assertQuerysetEqual(
+            response.context["civil_services_title_all"],
+            CivilServicesTitle.objects.all(),
+        )
+        self.assertQuerysetEqual(
+            response.context["user_subscribed_exams"],
+            ExamSubscription.objects.filter(
+                user=response.context["user"], is_notified=False
+            ),
+        )
+        self.assertQuerysetEqual(
+            response.context["user_subscribed_exam_results"],
+            ExamSubscription.objects.filter(
+                user=response.context["user"], is_notified=False
+            ),
+        )
+
+    def test_expired_subscription_view(self):
+
+        # not logged in try accessing expired subscription page redirects signin
+        response = self.client.get(reverse("dashboard:expiredsubscription"))
+        self.assertRedirects(
+            response, reverse("signin:signin"), fetch_redirect_response=False
+        )
+
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        response = self.client.get(reverse("dashboard:expiredsubscription"))
+        self.assertTrue(response.context["user"].is_authenticated)
+        self.assertTemplateUsed(response, "dashboard/expired_subscripton.html")
+        self.assertQuerysetEqual(
+            response.context["civil_services_title_all"],
+            CivilServicesTitle.objects.all(),
+        )
+        self.assertQuerysetEqual(
+            response.context["user_expired_subscribed_exams"],
+            ExamSubscription.objects.filter(
+                user=response.context["user"], is_notified=True
+            ),
+        )
+        self.assertQuerysetEqual(
+            response.context["user_expired_subscribed_exam_results"],
+            ExamSubscription.objects.filter(
+                user=response.context["user"], is_notified=True
+            ),
+        )
