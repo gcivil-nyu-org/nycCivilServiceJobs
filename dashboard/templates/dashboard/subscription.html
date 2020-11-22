@@ -123,7 +123,17 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        
+                                        <div id="alertCstSavedInExpired"
+                                            class="alert alert-warning alert-dismissible fade show" role="alert"
+                                            style="display: none;">
+                                            This Civil Service Title already exists in your expired subscriptions. Please remove it prior to resubscribing.
+                                            <button type="button" class="close"
+                                                onclick="$('#alertCstSavedInExpired').css('display','none');"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
                                         <div class="d-flex" style="padding-top: 20px">
                                             <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
                                                     style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
@@ -311,6 +321,11 @@
                 else if (response["response_data"] == "CIVIL_SERVICE_TITLE_ALREADY_PRESENT") {
                     $("#alertCstAlreadySaved").css('display', 'block');
                 }
+
+                else if(response["response_data"] == "CIVIL_SERVICE_TITLE_ALREADY_PRESENT_IN_EXPIRED"){
+                    $("#alertCstSavedInExpired").css('display', 'block');
+                }
+
             }).fail(function (data) {
                 console.log("fail")
                 debugger;
@@ -322,6 +337,8 @@
 
     function deleteTitle(id) {
         $("#alertCstAlreadySaved").css('display', 'none');
+        $("#alertCstSavedInExpired").css('display', 'none');
+        
         var cst_id = parseInt(id);
         //var action = confirm("Are you sure you want to delete subscription?");
         const csrftoken = getCookie('csrftoken');

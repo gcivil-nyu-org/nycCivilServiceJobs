@@ -164,6 +164,10 @@ class SaveUpcomingExamView(View):
                     response_data["subscribed_id"] = ExamSubscription.objects.get(
                         user=user, civil_service_title=civilServiceTitle
                     ).id
+                elif (already_saved[0].is_notified == True):
+                                        response_data[
+                        "response_data"
+                    ] = "CIVIL_SERVICE_TITLE_ALREADY_PRESENT_IN_EXPIRED"
                 else:
                     response_data[
                         "response_data"
