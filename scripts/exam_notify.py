@@ -37,7 +37,7 @@ def notify_exams():
             title = obj.civil_service_title.title_description
             if title not in exams:
                 exams[title] = ExamSchedule.objects.filter(
-                    exam_title_civil_service_title__iexact=title.lower(),
+                    exam_title_civil_service_title__iexact=title,
                     application_start_date=datetime.date.today(),
                 )
             if exams[title]:
@@ -47,7 +47,7 @@ def notify_exams():
                 obj.save()
 
             earlynotif = ExamSchedule.objects.filter(
-                exam_title_civil_service_title=title,
+                exam_title_civil_service_title__iexact=title,
                 application_start_date=datetime.date.today()
                 + datetime.timedelta(days=5),
             )
