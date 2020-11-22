@@ -254,7 +254,7 @@
         if (civilservicetitle != "" && civilservicetitleid != "") {
             $.ajax({
                 type: 'POST',
-                url: "{% url 'dashboard:SaveCivilServiceTitleView' %}",
+                url: "{% url 'dashboard:SaveUpcomingExamView' %}",
                 data: {
                     csrfmiddlewaretoken: csrftoken,
                     civilservicetitleid: civilservicetitleid,
@@ -285,7 +285,7 @@
         //var action = confirm("Are you sure you want to delete subscription?");
         const csrftoken = getCookie('csrftoken');
         $.ajax({
-            url: "{% url 'dashboard:CivilServiceTitleDeleteView' %}",
+            url: "{% url 'dashboard:DeleteUpcomingExamView' %}",
             type: 'POST',
             data: {
                 csrfmiddlewaretoken: csrftoken,
@@ -345,7 +345,7 @@
         //var action = confirm("Are you sure you want to delete subscription?");
         const csrftoken = getCookie('csrftoken');
         $.ajax({
-            url: "{% url 'dashboard:ExamResultsDeleteView' %}",
+            url: "{% url 'dashboard:DeleteExamResultsView' %}",
             type: 'POST',
             data: {
                 csrfmiddlewaretoken: csrftoken,

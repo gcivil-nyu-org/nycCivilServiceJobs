@@ -18,10 +18,10 @@ from dashboard.views import (
     DashboardView,
     SavedJobs,
     SubscriptionView,
-    SaveCivilServiceTitleView,
+    SaveUpcomingExamView,
     SaveExamNumberView,
-    CivilServiceTitleDeleteView,
-    ExamResultsDeleteView,
+    DeleteUpcomingExamView,
+    DeleteExamResultsView,
     ExpiredSubscriptionView,
 )
 
@@ -32,9 +32,9 @@ urlpatterns = [
     path("savedjobs", SavedJobs.as_view(), name="savedjobs"),
     path("subscription", SubscriptionView.as_view(), name="subscription"),
     path(
-        "SaveCivilServiceTitleView",
-        SaveCivilServiceTitleView.as_view(),
-        name="SaveCivilServiceTitleView",
+        "SaveUpcomingExamView",
+        SaveUpcomingExamView.as_view(),
+        name="SaveUpcomingExamView",
     ),
     path(
         "SaveExamNumberView",
@@ -43,13 +43,13 @@ urlpatterns = [
     ),
     path(
         "CivilServiceTitleDelete",
-        CivilServiceTitleDeleteView.as_view(),
-        name="CivilServiceTitleDeleteView",
+        DeleteUpcomingExamView.as_view(),
+        name="DeleteUpcomingExamView",
     ),
     path(
         "ExamResultsDelete",
-        ExamResultsDeleteView.as_view(),
-        name="ExamResultsDeleteView",
+        DeleteExamResultsView.as_view(),
+        name="DeleteExamResultsView",
     ),
     path(
         "expiredsubscription",

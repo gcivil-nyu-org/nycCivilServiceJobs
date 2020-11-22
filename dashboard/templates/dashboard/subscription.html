@@ -123,6 +123,7 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
+                                        
                                         <div class="d-flex" style="padding-top: 20px">
                                             <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
                                                     style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
@@ -294,7 +295,7 @@
         if (civilservicetitle != "" && civilservicetitleid != "") {
             $.ajax({
                 type: 'POST',
-                url: "{% url 'dashboard:SaveCivilServiceTitleView' %}",
+                url: "{% url 'dashboard:SaveUpcomingExamView' %}",
                 data: {
                     csrfmiddlewaretoken: csrftoken,
                     civilservicetitleid: civilservicetitleid,
@@ -325,11 +326,11 @@
         //var action = confirm("Are you sure you want to delete subscription?");
         const csrftoken = getCookie('csrftoken');
         $.ajax({
-            url: "{% url 'dashboard:CivilServiceTitleDeleteView' %}",
+            url: "{% url 'dashboard:DeleteUpcomingExamView' %}",
             type: 'POST',
             data: {
                 csrfmiddlewaretoken: csrftoken,
-                civilservicetitleid: cst_id,
+                civilservicetitlekey: cst_id,
             },
             success: function (response) {
                 if (response["response_data"] == "CIVIL_SERVICE_TITLE_DELETED") {
@@ -385,11 +386,11 @@
         //var action = confirm("Are you sure you want to delete subscription?");
         const csrftoken = getCookie('csrftoken');
         $.ajax({
-            url: "{% url 'dashboard:ExamResultsDeleteView' %}",
+            url: "{% url 'dashboard:DeleteExamResultsView' %}",
             type: 'POST',
             data: {
                 csrfmiddlewaretoken: csrftoken,
-                examno: exam_id,
+                examnokey: exam_id,
             },
             success: function (response) {
                 if (response["response_data"] == "EXAM_SUBSCRIBED_DELETED") {

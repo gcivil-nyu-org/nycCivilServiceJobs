@@ -80,7 +80,7 @@ class HomeView(View):
         )
 
 
-class SubscriptionView(View):  # pragma: no cover
+class SubscriptionView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             civil_services_title_all = CivilServicesTitle.objects.all()
@@ -106,7 +106,7 @@ class SubscriptionView(View):  # pragma: no cover
             return redirect(reverse("signin:signin"))
 
 
-class ExpiredSubscriptionView(View):  # pragma: no cover
+class ExpiredSubscriptionView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             civil_services_title_all = CivilServicesTitle.objects.all()
@@ -134,17 +134,19 @@ class ExpiredSubscriptionView(View):  # pragma: no cover
             return redirect(reverse("signin:signin"))
 
 
-class SaveCivilServiceTitleView(View):  # pragma: no cover
+class SaveUpcomingExamView(View):
     def post(self, request, *args, **kwargs):
         if self.request.method == "POST":
             cst = request.POST.get("civilservicetitleid")
             # cstname = request.POST.get("civilservicetitle")
             # print(cstname)
             user = request.user
-            response_data = {
-                "count_before": ExamSubscription.objects.filter(user=user).count()
-            }
+            response_data = {}
+
             if user.is_authenticated:
+                response_data = {
+                    "count_before": ExamSubscription.objects.filter(user=user).count()
+                }
                 civilServiceTitle = CivilServicesTitle.objects.get(pk=cst)
                 already_saved = ExamSubscription.objects.filter(
                     user=user, civil_service_title=civilServiceTitle
@@ -174,20 +176,21 @@ class SaveCivilServiceTitleView(View):  # pragma: no cover
                 return JsonResponse(response_data, status=200)
 
 
-class SaveExamNumberView(View):  # pragma: no cover
+class SaveExamNumberView(View):
     def post(self, request, *args, **kwargs):
 
         if self.request.method == "POST":
             examNo = request.POST.get("examno")
             # print(examNo)
             user = request.user
-            response_data = {
-                "count_before": ExamResultsSubscription.objects.filter(
-                    user=user
-                ).count()
-            }
-            if user.is_authenticated:
+            response_data = {}
 
+            if user.is_authenticated:
+                response_data = {
+                    "count_before": ExamResultsSubscription.objects.filter(
+                        user=user
+                    ).count()
+                }
                 already_saved = ExamResultsSubscription.objects.filter(
                     user=user, exam_number=examNo
                 )
@@ -223,28 +226,29 @@ class SaveExamNumberView(View):  # pragma: no cover
                 return JsonResponse(response_data, status=200)
 
 
-class ExamResultsDeleteView(View):  # pragma: no cover
+class DeleteExamResultsView(View):
     def post(self, request, *args, **kwargs):
 
         if self.request.method == "POST":
-            examNo = request.POST.get("examno")
+            examNo = request.POST.get("examnokey")
             user = request.user
-            response_data = {
-                "count_before": ExamResultsSubscription.objects.filter(
-                    user=user
-                ).count()
-            }
-            if user.is_authenticated:
+            response_data = {}
 
+            if user.is_authenticated:
+                response_data = {
+                    "count_before": ExamResultsSubscription.objects.filter(
+                        user=user
+                    ).count()
+                }
                 already_saved = ExamResultsSubscription.objects.get(id=examNo)
 
                 if already_saved:
                     already_saved.delete()
-                    response_data["response_data"] = "EXAM_SUBSCRIBED_DELETED"
+                    response_data["response_data"] = "EXAM_NO_DELETED"
                     response_data["exam_deleted_id"] = examNo
 
                 else:
-                    response_data["response_data"] = "EXAM_TITLE_NOT_PRESENT"
+                    response_data["response_data"] = "EXAM_NO_NOT_PRESENT"
 
                 return JsonResponse(response_data, status=200)
 
@@ -253,15 +257,16 @@ class ExamResultsDeleteView(View):  # pragma: no cover
                 return JsonResponse(response_data, status=200)
 
 
-class CivilServiceTitleDeleteView(View):  # pragma: no cover
+class DeleteUpcomingExamView(View):
     def post(self, request, *args, **kwargs):
         if self.request.method == "POST":
-            cst = request.POST.get("civilservicetitleid")
+            cst = request.POST.get("civilservicetitlekey")
             user = request.user
-            response_data = {
-                "count_before": ExamSubscription.objects.filter(user=user).count()
-            }
+            response_data = {}
             if user.is_authenticated:
+                response_data = {
+                    "count_before": ExamSubscription.objects.filter(user=user).count()
+                }
                 already_saved = ExamSubscription.objects.get(id=cst)
                 if already_saved:
                     already_saved.delete()
@@ -278,41 +283,43 @@ class CivilServiceTitleDeleteView(View):  # pragma: no cover
                 return JsonResponse(response_data, status=200)
 
 
-class ExpiredCivilServiceTitleView(View):  # pragma: no cover
-    def get(self, request, *args, **kwargs):
-        if self.request.method == "POST":
-            cst = request.POST.get("civilservicetitleid")
-            # cstname = request.POST.get("civilservicetitle")
-            # print(cstname)
-            user = request.user
-            response_data = {
-                "count_before": ExamSubscription.objects.filter(user=user).count()
-            }
-            if user.is_authenticated:
-                civilServiceTitle = CivilServicesTitle.objects.get(pk=cst)
-                already_saved = ExamSubscription.objects.filter(
-                    user=user, civil_service_title=civilServiceTitle
-                )
-                if already_saved.count() == 0:
-                    save_civilServiceTitle = ExamSubscription(
-                        user=user,
-                        civil_service_title=civilServiceTitle,
-                    )
-                    save_civilServiceTitle.save()
-                    response_data["response_data"] = "CIVIL_SERVICE_TITLE_SAVED"
-                    response_data[
-                        "subscribed_title"
-                    ] = civilServiceTitle.title_description
-                    response_data["subscribed_id"] = ExamSubscription.objects.get(
-                        user=user, civil_service_title=civilServiceTitle
-                    ).id
-                else:
-                    response_data[
-                        "response_data"
-                    ] = "CIVIL_SERVICE_TITLE_ALREADY_PRESENT"
+# below view is not being used anywhere in the application
 
-                return JsonResponse(response_data, status=200)
+# class ExpiredCivilServiceTitleView(View):
+#     def get(self, request, *args, **kwargs):
+#         if self.request.method == "POST":
+#             cst = request.POST.get("civilservicetitleid")
+#             # cstname = request.POST.get("civilservicetitle")
+#             # print(cstname)
+#             user = request.user
+#             response_data = {
+#                 "count_before": ExamSubscription.objects.filter(user=user).count()
+#             }
+#             if user.is_authenticated:
+#                 civilServiceTitle = CivilServicesTitle.objects.get(pk=cst)
+#                 already_saved = ExamSubscription.objects.filter(
+#                     user=user, civil_service_title=civilServiceTitle
+#                 )
+#                 if already_saved.count() == 0:
+#                     save_civilServiceTitle = ExamSubscription(
+#                         user=user,
+#                         civil_service_title=civilServiceTitle,
+#                     )
+#                     save_civilServiceTitle.save()
+#                     response_data["response_data"] = "CIVIL_SERVICE_TITLE_SAVED"
+#                     response_data[
+#                         "subscribed_title"
+#                     ] = civilServiceTitle.title_description
+#                     response_data["subscribed_id"] = ExamSubscription.objects.get(
+#                         user=user, civil_service_title=civilServiceTitle
+#                     ).id
+#                 else:
+#                     response_data[
+#                         "response_data"
+#                     ] = "CIVIL_SERVICE_TITLE_ALREADY_PRESENT"
 
-            else:
-                response_data["response_data"] = "User not authenticated"
-                return JsonResponse(response_data, status=200)
+#                 return JsonResponse(response_data, status=200)
+
+#             else:
+#                 response_data["response_data"] = "User not authenticated"
+#                 return JsonResponse(response_data, status=200)
