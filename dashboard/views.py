@@ -80,7 +80,7 @@ class HomeView(View):
         )
 
 
-class SubscriptionView(View):  # pragma: no cover
+class SubscriptionView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             civil_services_title_all = CivilServicesTitle.objects.all()
@@ -105,17 +105,19 @@ class SubscriptionView(View):  # pragma: no cover
             return redirect(reverse("signin:signin"))
 
 
-class SaveCivilServiceTitleView(View):  # pragma: no cover
+class SaveCivilServiceTitleView(View):
     def post(self, request, *args, **kwargs):
         if self.request.method == "POST":
             cst = request.POST.get("civilservicetitleid")
             # cstname = request.POST.get("civilservicetitle")
             # print(cstname)
             user = request.user
-            response_data = {
-                "count_before": ExamSubscription.objects.filter(user=user).count()
-            }
+            response_data = {}
+
             if user.is_authenticated:
+                response_data = {
+                    "count_before": ExamSubscription.objects.filter(user=user).count()
+                }
                 civilServiceTitle = CivilServicesTitle.objects.get(pk=cst)
                 already_saved = ExamSubscription.objects.filter(
                     user=user, civil_service_title=civilServiceTitle
@@ -145,19 +147,20 @@ class SaveCivilServiceTitleView(View):  # pragma: no cover
                 return JsonResponse(response_data, status=200)
 
 
-class SaveExamNumberView(View):  # pragma: no cover
+class SaveExamNumberView(View):
     def post(self, request, *args, **kwargs):
 
         if self.request.method == "POST":
             examNo = request.POST.get("examno")
             # print(examNo)
             user = request.user
-            response_data = {
-                "count_before": ExamResultsSubscription.objects.filter(
-                    user=user
-                ).count()
-            }
+            response_data = {}
             if user.is_authenticated:
+                response_data = {
+                    "count_before": ExamResultsSubscription.objects.filter(
+                        user=user
+                    ).count()
+                }
 
                 already_saved = ExamResultsSubscription.objects.filter(
                     user=user, exam_number=examNo
@@ -194,18 +197,19 @@ class SaveExamNumberView(View):  # pragma: no cover
                 return JsonResponse(response_data, status=200)
 
 
-class ExamResultsDeleteView(View):  # pragma: no cover
+class ExamResultsDeleteView(View):
     def post(self, request, *args, **kwargs):
 
         if self.request.method == "POST":
             examNo = request.POST.get("examno")
             user = request.user
-            response_data = {
-                "count_before": ExamResultsSubscription.objects.filter(
-                    user=user
-                ).count()
-            }
+            response_data = {}
             if user.is_authenticated:
+                response_data = {
+                    "count_before": ExamResultsSubscription.objects.filter(
+                        user=user
+                    ).count()
+                }
 
                 already_saved = ExamResultsSubscription.objects.get(id=examNo)
 
@@ -224,15 +228,16 @@ class ExamResultsDeleteView(View):  # pragma: no cover
                 return JsonResponse(response_data, status=200)
 
 
-class CivilServiceTitleDeleteView(View):  # pragma: no cover
+class CivilServiceTitleDeleteView(View):
     def post(self, request, *args, **kwargs):
         if self.request.method == "POST":
             cst = request.POST.get("civilservicetitleid")
             user = request.user
-            response_data = {
-                "count_before": ExamSubscription.objects.filter(user=user).count()
-            }
+            response_data = {}
             if user.is_authenticated:
+                response_data = {
+                    "count_before": ExamSubscription.objects.filter(user=user).count()
+                }
                 already_saved = ExamSubscription.objects.get(id=cst)
                 if already_saved:
                     already_saved.delete()
