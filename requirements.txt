@@ -13,3 +13,4 @@ ftfy
 camelot-py[cv]
 django-datatables-view
 opencv-python-headless
+django_apscheduler

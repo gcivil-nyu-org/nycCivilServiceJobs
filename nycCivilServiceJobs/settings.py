@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "django.contrib.humanize",
+    "django_apscheduler",
 ]
 
 MIDDLEWARE = [
@@ -155,3 +156,11 @@ django_heroku.settings(locals(), test_runner=False)
 
 # User Model with added Hiring Manger Field
 AUTH_USER_MODEL = "register.User"
+
+SCHEDULER_CONFIG = {
+    "apscheduler.jobstores.default": {
+        "class": "django_apscheduler.jobstores:DjangoJobStore"
+    },
+    "apscheduler.executors.processpool": {"type": "threadpool"},
+    "apscheduler.timezone": TIME_ZONE,
+}
