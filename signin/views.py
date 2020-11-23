@@ -53,7 +53,7 @@ class SignInView(FormView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             nxt = self.request.GET.get("next")
-            print(nxt)
+            # print(nxt)
             if nxt is None:
                 return redirect("dashboard:dashboard")
             elif not is_safe_url(
