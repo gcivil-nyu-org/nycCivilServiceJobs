@@ -25,7 +25,7 @@ def notify_exams():
     email = ""
     current_site = Site.objects.get_current()
     dashboard_url = "".join(
-        ["http://", current_site.domain, reverse("dashboard:dashboard")]
+        ["http://", current_site.domain, "/signin/?next=/dashboard"]
     )
 
     for user in users:
