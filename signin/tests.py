@@ -68,6 +68,20 @@ class SigninTest(TestCase):
             response, reverse("jobs:jobs"), fetch_redirect_response=False
         )
 
+        # already logged in redirect to next tag
+        response = self.client.get(
+            reverse("signin:signin"),
+            {
+                "next": "/dashboard/savedjobs",
+                "username": "testuser",
+                "password": "secret",
+            },
+            follow=True,
+        )
+        self.assertRedirects(
+            response, reverse("dashboard:savedjobs"), fetch_redirect_response=False
+        )
+
     def test_wrong_username(self):
 
         response = self.client.post(
@@ -290,29 +304,29 @@ class UserProfileTest(TestCase):
             "Please use a different email address.",
         )
 
-    def test_user_profile_update_form_invalid_email_hm(self):
-        user_login = self.client.login(
-            username=self.test_user_hm.username, password="thisisapassword"
-        )
-        self.assertTrue(user_login)
-        response = self.client.post(
-            reverse("userprofile"),
-            data={
-                "is_hiring_manager": True,
-                "username": "testHM",
-                "first_name": "Jane_updated",
-                "last_name": "Doe_updated",
-                "dob": "01/10/1992",
-                "email": "testHM@test.com",
-            },
-        )
-        self.assertEqual(response.status_code, 200)
-        form = response.context["form"]
-        form.has_error(
-            "email",
-            "This email is not a valid Email Address for Hiring Manager. "
-            "Please use a different email address.",
-        )
+    # def test_user_profile_update_form_invalid_email_hm(self):
+    #     user_login = self.client.login(
+    #         username=self.test_user_hm.username, password="thisisapassword"
+    #     )
+    #     self.assertTrue(user_login)
+    #     response = self.client.post(
+    #         reverse("userprofile"),
+    #         data={
+    #             "is_hiring_manager": True,
+    #             "username": "testHM",
+    #             "first_name": "Jane_updated",
+    #             "last_name": "Doe_updated",
+    #             "dob": "01/10/1992",
+    #             "email": "testHM@test.com",
+    #         },
+    #     )
+    #     self.assertEqual(response.status_code, 200)
+    #     form = response.context["form"]
+    #     form.has_error(
+    #         "email",
+    #         "This email is not a valid Email Address for Hiring Manager. "
+    #         "Please use a different email address.",
+    #     )
 
 
 class UserPreferencesSaveTest(TestCase):

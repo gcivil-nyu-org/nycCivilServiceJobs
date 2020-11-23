@@ -8,19 +8,19 @@ New Exams related to your subscribed Civil Service Titles are coming up!
 <table style="border:1px solid #333;border-collapse: collapse;">
 
   <tr>
-    <th style="border: 1px solid #000000;"> Exam Number </th>
-    <th style="border: 1px solid #000000;"> Civil Service Title </th>
-    <th style="border: 1px solid #000000;"> Application Start Date </th>
-    <th style="border: 1px solid #000000;"> Application End Date </th>
-    <th style="border: 1px solid #000000;"> Exam Type </th>
+    <th style="border: 1px solid #000000;text-align: center; padding: 10px"> Exam Number </th>
+    <th style="border: 1px solid #000000;text-align: center; padding: 10px"> Civil Service Title </th>
+    <th style="border: 1px solid #000000;text-align: center; padding: 10px"> Application Start Date </th>
+    <th style="border: 1px solid #000000;text-align: center; padding: 10px"> Application End Date </th>
+    <th style="border: 1px solid #000000;text-align: center; padding: 10px"> Exam Type </th>
     </tr>
  {% for exam in exams %}
  <tr>
-     <td style="border: 1px solid #000000;">{{exam.exam_number}}</td>
-     <td style="border: 1px solid #000000;">{{exam.exam_title_civil_service_title}}</td>
-     <td style="border: 1px solid #000000;">{{exam.application_start_date}}</td>
-     <td style="border: 1px solid #000000;">{{exam.application_end_date}}</td>
-     <td style="border: 1px solid #000000;">{% if exam.exam_type == 'QIE' %}
+     <td style="border: 1px solid #000000;text-align: center; padding: 10px">{{exam.exam_number}}</td>
+     <td style="border: 1px solid #000000;text-align: center; padding: 10px">{{exam.exam_title_civil_service_title}}</td>
+     <td style="border: 1px solid #000000;text-align: center; padding: 10px">{{exam.application_start_date}}</td>
+     <td style="border: 1px solid #000000;text-align: center; padding: 10px">{{exam.application_end_date}}</td>
+     <td style="border: 1px solid #000000;text-align: center; padding: 10px">{% if exam.exam_type == 'QIE' %}
          Qualifield Incumbent Exam
          {% else %}
          {{exam.exam_type}}
@@ -28,6 +28,8 @@ New Exams related to your subscribed Civil Service Titles are coming up!
  </tr>
  {% endfor %}
 </table>
+<br><br>
+For complete details regarding upcoming exams visit our <a href="{{url}}">site</a>.
 <br><br>
 Thank You,
 <br>
