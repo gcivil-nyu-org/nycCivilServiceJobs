@@ -27,7 +27,7 @@ def notify_jobs():
 
     current_site = Site.objects.get_current()
     savedjobs_url = "".join(
-        ["http://", current_site.domain, reverse("dashboard:savedjobs")]
+        ["http://", current_site.domain, "/signin/?next=/dashboard/savedjobs"]
     )
 
     for user in users:

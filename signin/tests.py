@@ -68,6 +68,20 @@ class SigninTest(TestCase):
             response, reverse("jobs:jobs"), fetch_redirect_response=False
         )
 
+        # already logged in redirect to next tag
+        response = self.client.get(
+            reverse("signin:signin"),
+            {
+                "next": "/dashboard/savedjobs",
+                "username": "testuser",
+                "password": "secret",
+            },
+            follow=True,
+        )
+        self.assertRedirects(
+            response, reverse("dashboard:savedjobs"), fetch_redirect_response=False
+        )
+
     def test_wrong_username(self):
 
         response = self.client.post(
