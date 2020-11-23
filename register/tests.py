@@ -19,7 +19,7 @@ class BaseTest(TestCase):
         )
 
         self.user = {
-            "is_hiring_manager": "True",
+            "is_hiring_manager": "False",
             "username": "testuser",
             "first_name": "john",
             "last_name": "doe",
@@ -61,16 +61,16 @@ class BaseTest(TestCase):
             "password2": "thisisapassword",
         }
 
-        self.user_hm_invalid_email = {
-            "is_hiring_manager": "True",
-            "username": "testjane",
-            "first_name": "john",
-            "last_name": "doe",
-            "dob": "01/10/1992",
-            "email": "jane@username.com",
-            "password1": "thisisapassword",
-            "password2": "thisisapassword",
-        }
+        # self.user_hm_invalid_email = {
+        #     "is_hiring_manager": "True",
+        #     "username": "testjane",
+        #     "first_name": "john",
+        #     "last_name": "doe",
+        #     "dob": "01/10/1992",
+        #     "email": "jane@username.com",
+        #     "password1": "thisisapassword",
+        #     "password2": "thisisapassword",
+        # }
 
         return super().setUp
 
@@ -96,12 +96,12 @@ class RegisterFormTest(BaseTest):
             "Please use a different email address.",
         )
 
-    def test_form_hm_invalid_email(self):
-        form = SignUpForm(self.user_hm_invalid_email)
-        form.has_error(
-            "This email is not a valid Email Address for Hiring Manager. "
-            "Please use a different email address."
-        )
+    # def test_form_hm_invalid_email(self):
+    #     form = SignUpForm(self.user_hm_invalid_email)
+    #     form.has_error(
+    #         "This email is not a valid Email Address for Hiring Manager. "
+    #         "Please use a different email address."
+    #     )
 
 
 class RegisterTestView(BaseTest):
@@ -112,7 +112,7 @@ class RegisterTestView(BaseTest):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "register/signup.html")
 
-    def test_user_can_register_as_HM(self):
+    def test_user_can_register_as_JOB(self):
         user_count = User.objects.count()
         response = self.client.post(self.register_url, self.user, format="text/html")
         user_count = user_count + 1

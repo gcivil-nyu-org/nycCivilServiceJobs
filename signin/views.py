@@ -52,7 +52,18 @@ class SignInView(FormView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect(reverse("dashboard:dashboard"))
+            nxt = self.request.GET.get("next")
+            # print(nxt)
+            if nxt is None:
+                return redirect("dashboard:dashboard")
+            elif not is_safe_url(
+                url=nxt,
+                allowed_hosts={self.request.get_host()},
+                require_https=self.request.is_secure(),
+            ):
+                return redirect("dashboard:dashboard")
+            else:
+                return redirect(nxt)
         return super(SignInView, self).get(request, *args, **kwargs)
 
 

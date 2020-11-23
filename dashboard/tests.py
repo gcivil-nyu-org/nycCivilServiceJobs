@@ -2,7 +2,12 @@ from django.test import TestCase
 from django.urls import reverse
 from register.models import User
 from jobs.models import UserSavedJob, job_record
+from dashboard.models import ExamSubscription
+from examresults.models import CivilServicesTitle, ExamResultsActive
+from django.db.models import Q
 from django.utils import timezone
+import datetime
+import json
 
 
 class JobDataTest(TestCase):
@@ -16,6 +21,8 @@ class JobDataTest(TestCase):
             email="testjane@test.com",
             password="thisisapassword",
         )
+
+        # set up fake jobs
         for i in range(10):
             job = job_record(
                 job_id=i,
@@ -51,13 +58,39 @@ class JobDataTest(TestCase):
             )
             job.save()
 
+        # set up fake Civil Service title
+        civil_service_title = CivilServicesTitle(
+            title_code=1, title_description="title_description_1"
+        )
+        civil_service_title_2 = CivilServicesTitle(
+            title_code=2, title_description="title_description_2"
+        )
+        civil_service_title.save()
+        civil_service_title_2.save()
+
+        # set up fake Exam Reuslt Service title
+        exam = ExamResultsActive(
+            exam_number=1,
+            list_number=1,
+            first_name="first_name",
+            last_name="last_name",
+            middle_initial="middle",
+            adjust_final_average=100.0,
+            list_title_code="1234",
+            list_title_desc="test_desc",
+        )
+        exam.save()
+
     def test_home_page(self):
         # not logged in home returns landing page
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "index.html")
         # landing page shows correct jobs count from database
-        self.assertEqual(response.context["total_jobs"], job_record.objects.count())
+        expected_count = job_record.objects.filter(
+            Q(post_until__gte=datetime.date.today()) | Q(post_until__isnull=True)
+        ).count()
+        self.assertEqual(response.context["total_jobs"], expected_count)
 
         # not logged in try accessing dashboard redirected to landing
         response = self.client.get(reverse("dashboard:dashboard"))
@@ -95,3 +128,158 @@ class JobDataTest(TestCase):
         response = self.client.get(reverse("dashboard:dashboard"))
         self.assertTrue(response.context["user"].is_authenticated)
         self.assertEqual(len(response.context["saved_jobs_user"]), saved_job_count)
+
+    def test_subscription_view(self):
+
+        # not logged in try accessing subscription page redirects signin
+        response = self.client.get(reverse("dashboard:subscription"))
+        self.assertRedirects(
+            response, reverse("signin:signin"), fetch_redirect_response=False
+        )
+
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+        response = self.client.get(reverse("dashboard:subscription"))
+        self.assertTrue(response.context["user"].is_authenticated)
+        self.assertTemplateUsed(response, "dashboard/subscription.html")
+
+        expected_cst_qs = list(CivilServicesTitle.objects.all())
+        actual_cst_qs = list(response.context["civil_services_title_all"])
+        self.assertEqual(expected_cst_qs, actual_cst_qs)
+
+        self.assertQuerysetEqual(
+            response.context["user_subscribed_exams"],
+            ExamSubscription.objects.filter(
+                user=response.context["user"], is_notified=False
+            ),
+        )
+        self.assertQuerysetEqual(
+            response.context["user_subscribed_exam_results"],
+            ExamSubscription.objects.filter(
+                user=response.context["user"], is_notified=False
+            ),
+        )
+
+    def test_save_subscription_upcoming_exam_view_user_not_logged_in_save(self):
+        response = self.client.post(
+            reverse("dashboard:SaveCivilServiceTitleView"),
+            data={"civilservicetitleid": 1},
+        )
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "User not authenticated"
+        )
+
+    def test_save_subscription_upcoming_exam_view_user_logged_in_save(self):
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+        response = self.client.post(
+            reverse("dashboard:SaveCivilServiceTitleView"),
+            data={"civilservicetitleid": 1},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "CIVIL_SERVICE_TITLE_SAVED"
+        )
+
+        response = self.client.post(
+            reverse("dashboard:SaveCivilServiceTitleView"),
+            data={"civilservicetitleid": 1},
+        )
+        self.assertEqual(
+            json.loads(response.content)["response_data"],
+            "CIVIL_SERVICE_TITLE_ALREADY_PRESENT",
+        )
+
+    def test_delete_subscription_upcoming_exam_view_user_not_logged_in_save(self):
+        response = self.client.post(
+            reverse("dashboard:CivilServiceTitleDeleteView"),
+            data={"civilservicetitleid": 1},
+        )
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "User not authenticated"
+        )
+
+    def test_delete_subscription_upcoming_exam_view_user_logged_in_save(self):
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+        response = self.client.post(
+            reverse("dashboard:SaveCivilServiceTitleView"),
+            data={"civilservicetitleid": 2},
+        )
+
+        # civilservicetitleid is the backend key(id) for the oject added in line 233
+        response = self.client.post(
+            reverse("dashboard:CivilServiceTitleDeleteView"),
+            data={"civilservicetitleid": 1},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "CIVIL_SERVICE_TITLE_DELETED"
+        )
+
+    def test_save_subscription_upcoming_exam_result_view_user_not_logged_in_save(self):
+        response = self.client.post(
+            reverse("dashboard:SaveExamNumberView"), data={"examno": 5415}
+        )
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "User not authenticated"
+        )
+
+    def test_save_subscription_upcoming_exam_result_view_user_logged_in_save(self):
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+        response = self.client.post(
+            reverse("dashboard:SaveExamNumberView"), data={"examno": 1}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "EXAM_ALREADY_RELEASED"
+        )
+        response = self.client.post(
+            reverse("dashboard:SaveExamNumberView"), data={"examno": 2}
+        )
+        self.assertEqual(json.loads(response.content)["response_data"], "EXAM_SAVED")
+
+        response = self.client.post(
+            reverse("dashboard:SaveExamNumberView"), data={"examno": 2}
+        )
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "EXAM_ALREADY_PRESENT"
+        )
+
+    def test_delete_subscription_upcoming_exam_result_view_user_not_logged_in_save(
+        self,
+    ):
+        response = self.client.post(
+            reverse("dashboard:ExamResultsDeleteView"), data={"examno": 1}
+        )
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "User not authenticated"
+        )
+
+    def test_delete_subscription_upcoming_exam_result_view_user_logged_in_save(self):
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+        response = self.client.post(
+            reverse("dashboard:SaveExamNumberView"), data={"examno": 5410}
+        )
+
+        # examno here is the backend end key(id) for the object added in line 265
+
+        response = self.client.post(
+            reverse("dashboard:ExamResultsDeleteView"), data={"examno": 1}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            json.loads(response.content)["response_data"], "EXAM_SUBSCRIBED_DELETED"
+        )

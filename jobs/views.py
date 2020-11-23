@@ -3,6 +3,7 @@ from .models import job_record, UserSavedJob
 from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+import datetime
 
 
 class JobsView(TemplateView):
@@ -10,7 +11,11 @@ class JobsView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = {
-            "jobs": job_record.objects.all().order_by("posting_date").reverse()[:10],
+            "jobs": job_record.objects.all()
+            .filter(
+                Q(post_until__gte=datetime.date.today()) | Q(post_until__isnull=True)
+            )
+            .order_by("-posting_date")[:10],
         }
         if self.request.user.is_authenticated:
             context["saved_jobs_user"] = list(
@@ -38,10 +43,13 @@ class SearchResultsView(ListView):
         queryset = job_record.objects.all()
         if query:
             queryset = job_record.objects.filter(
-                Q(agency__icontains=query)
-                | Q(business_title__icontains=query)
-                | Q(civil_service_title__icontains=query)
-            )
+                (
+                    Q(agency__icontains=query)
+                    | Q(business_title__icontains=query)
+                    | Q(civil_service_title__icontains=query)
+                ),
+                (Q(post_until__gte=datetime.date.today()) | Q(post_until__isnull=True)),
+            ).order_by("-posting_date")
 
         self.agencies = [x["agency"] for x in queryset.values("agency").distinct()]
         self.career_level = [
@@ -79,9 +87,12 @@ class SearchResultsView(ListView):
         # posting_type_query = self.request.GET.get("posting_type_query", None)
 
         object_list = job_record.objects.filter(
-            Q(agency__icontains=query)
-            | Q(business_title__icontains=query)
-            | Q(civil_service_title__icontains=query)
+            (
+                Q(agency__icontains=query)
+                | Q(business_title__icontains=query)
+                | Q(civil_service_title__icontains=query)
+            ),
+            (Q(post_until__gte=datetime.date.today()) | Q(post_until__isnull=True)),
         ).order_by("-posting_date")
 
         self.query_set = object_list
@@ -91,10 +102,14 @@ class SearchResultsView(ListView):
         if request.is_ajax():
             query = request.POST.get("query")
             jobs = job_record.objects.filter(
-                Q(agency__icontains=query)
-                | Q(business_title__icontains=query)
-                | Q(civil_service_title__icontains=query)
-            )
+                (
+                    Q(agency__icontains=query)
+                    | Q(business_title__icontains=query)
+                    | Q(civil_service_title__icontains=query)
+                ),
+                (Q(post_until__gte=datetime.date.today()) | Q(post_until__isnull=True)),
+            ).order_by("-posting_date")
+
             form_filters = {}
 
             posting_type = request.POST.get("posting_type")

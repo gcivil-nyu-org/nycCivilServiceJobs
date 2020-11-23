@@ -34,27 +34,29 @@ def get_cst():
         CivilServicesTitle.objects.all().delete()
         print("\nDeleted Previous Entries for Civil Services Titles")
         cst_df = pd.DataFrame.from_records(cst)
+        print("Number of Records Found: ", len(cst_df.index))
 
         entries = []
+        seen = set()
 
         for index, row in cst_df.iterrows():
             try:
-
-                entries.append(
-                    CivilServicesTitle(
-                        title_code=row["title_code_no"],
-                        title_description=civil_service_title_cleanup(
-                            row["civil_service_title"]
-                        ),
+                title_code = row["title_code_no"]
+                title_desc = civil_service_title_cleanup(row["civil_service_title"])
+                if not (title_desc in seen or seen.add(title_desc)):
+                    entries.append(
+                        CivilServicesTitle(
+                            title_code=title_code, title_description=title_desc
+                        )
                     )
-                )
             except Exception as e:
                 print("Error", e)
 
         CivilServicesTitle.objects.bulk_create(entries, ignore_conflicts=True)
         print(".", end="", flush=True)
+
     print(
-        "\nCreated Objects in Civil Services Titles: ",
+        "\nNumber of Objects created after data cleanup: ",
         CivilServicesTitle.objects.count(),
     )
 
