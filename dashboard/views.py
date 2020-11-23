@@ -5,6 +5,7 @@ from examresults.models import ExamSchedule
 import datetime
 from django.http.response import JsonResponse
 from examresults.models import CivilServicesTitle, ExamResultsActive
+from django.db.models import Q
 
 # import json
 from dashboard.models import ExamSubscription, ExamResultsSubscription
@@ -72,7 +73,9 @@ class HomeView(View):
         if request.user.is_authenticated:
             return redirect(reverse("dashboard:dashboard"))
 
-        total_jobs = job_record.objects.count()
+        total_jobs = job_record.objects.filter(
+            Q(post_until__gte=datetime.date.today()) | Q(post_until__isnull=True)
+        ).count()
         return render(
             request=request,
             template_name="index.html",

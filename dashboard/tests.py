@@ -4,7 +4,9 @@ from register.models import User
 from jobs.models import UserSavedJob, job_record
 from dashboard.models import ExamSubscription
 from examresults.models import CivilServicesTitle, ExamResultsActive
+from django.db.models import Q
 from django.utils import timezone
+import datetime
 import json
 
 
@@ -85,7 +87,10 @@ class JobDataTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "index.html")
         # landing page shows correct jobs count from database
-        self.assertEqual(response.context["total_jobs"], job_record.objects.count())
+        expected_count = job_record.objects.filter(
+            Q(post_until__gte=datetime.date.today()) | Q(post_until__isnull=True)
+        ).count()
+        self.assertEqual(response.context["total_jobs"], expected_count)
 
         # not logged in try accessing dashboard redirected to landing
         response = self.client.get(reverse("dashboard:dashboard"))
