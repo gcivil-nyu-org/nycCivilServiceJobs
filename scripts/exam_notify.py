@@ -65,7 +65,7 @@ def notify_exams():
                     "url": dashboard_url,
                 },
             )
-            send_email(email, "Upcoming Exam Notification", message)
+            send_email(email, "Upcoming Exams Notification", message)
 
 
 def notify_results():
