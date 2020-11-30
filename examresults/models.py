@@ -3,6 +3,7 @@ from django.db import models
 
 class ExamResultsActive(models.Model):
     exam_number = models.IntegerField(null=True)
+    display_exam_number = models.CharField(max_length=5, null=True, blank=True)
     list_number = models.FloatField(null=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
