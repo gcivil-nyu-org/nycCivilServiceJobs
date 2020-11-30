@@ -49,7 +49,7 @@ class SearchResultsView(ListView):
                     | Q(civil_service_title__icontains=query)
                 ),
                 (Q(post_until__gte=datetime.date.today()) | Q(post_until__isnull=True)),
-            ).order_by("-posting_date")
+            )
 
         self.agencies = [x["agency"] for x in queryset.values("agency").distinct()]
         self.career_level = [

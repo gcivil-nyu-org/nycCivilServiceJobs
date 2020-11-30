@@ -42,7 +42,7 @@ class ExamsActiveView(TemplateView):
 class ExamJSON(BaseDatatableView):
     model = ExamResultsActive
     columns = [
-        "exam_number",
+        "display_exam_number",
         "list_title_code",
         "list_title_desc",
         "first_name",
@@ -51,7 +51,7 @@ class ExamJSON(BaseDatatableView):
         "adjust_final_average",
     ]
     order_columns = [
-        "exam_number",
+        "display_exam_number",
         "list_title_code",
         "list_title_desc",
         "first_name",
