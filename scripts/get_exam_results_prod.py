@@ -116,7 +116,7 @@ def save_exam_result_active():
                             list_div_code_promo=row["list_div_code"],
                             anniversary_date=getAwareDate(row["anniversary_date"]),
                             published_date=getAwareDate(row["published_date"]),
-                            established_date = getAwareDate(row['established_date']),
+                            established_date=getAwareDate(row["established_date"]),
                             extension_date=getAwareDate(row["extension_date"]),
                             veteran_credit=row["veteran_credit"],
                             parent_legacy_credit=row["parent_lgy_credit"],
