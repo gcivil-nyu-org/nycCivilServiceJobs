@@ -248,6 +248,7 @@
     }
     function senddata(page=-1) {
       console.log(page);
+      console.log("senddata");
         var query = $('#id_q').val()
         var posting_type = $('#posting-type').find(":selected").val()
         var date = $('#post-after').val();
@@ -302,11 +303,11 @@
       $('#cs_title').val('').trigger('change.select2');
       $("#agency").val('').trigger('change.select2');
       $("#career-level").val('').trigger('change.select2');
-      $("#fp").val('').trigger('change.select2');
       $("input[type=date]").val('');
       document.getElementById('salary-range').value = 0;
       updateInput(0);
-      sort("");
+      $("#fp").val('').trigger('change');
+      // sort("");
 
     }
     function putTableData(data) {
@@ -321,7 +322,7 @@
             $('#jobCount').text("No matching jobs found");
             $('#sort-order').css('display','none');
         }
-            
+
         //$('[id^="favBtnID"]').tooltip();
         $('[data-toggle="tooltip"]').tooltip();
         var form = $('.favJob');
