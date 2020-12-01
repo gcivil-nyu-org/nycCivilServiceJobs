@@ -177,7 +177,7 @@
                 <div class="row col-md-12 mb-3" style="margin: 0;padding: 0;">
                     <div class="col-md-11 justify-content-center" style="padding: 0;">
                         <div class="heading-section">
-                            <h2 id='jobCount'>Found {{page_obj.paginator.count}} matching jobs: </h2>
+                            <h2 id='jobCount' class="pb-2" style="font-weight: 800; font-size: 25px;">Showing  {{page_obj.start_index}} - {{page_obj.end_index}} of {{page_obj.paginator.count}} found jobs</h2>
                         </div>
                     </div>
                     <div class="col-sm-1 btn-group sort-btn">
@@ -313,7 +313,9 @@
     function putTableData(data) {
         console.log()
         $("#listing").html(data.rendered_table);
-        $('#jobCount').text("Found " + data.count + " matching jobs: ");
+        debugger;
+        // $('#jobCount').text("Found " + data.count + " matching jobs");
+        $('#jobCount').text("Showing " + data.page_start_index + ' - ' + data.page_end_index + " of "+ data.count + " found jobs");
         $('[id^="favBtnID"]').tooltip();
         var form = $('.favJob');
         var formMessages = $('#form-messages');

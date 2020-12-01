@@ -177,6 +177,8 @@ class SearchResultsView(ListView):
                     "jobs/table_content.html", context=context, request=request
                 ),
                 "count": jobs.count(),
+                "page_start_index": paginator.page(page_number).start_index(),
+                "page_end_index": paginator.page(page_number).end_index(),
             }
 
             return JsonResponse(data, safe=False)
