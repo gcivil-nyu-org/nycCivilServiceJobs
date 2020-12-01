@@ -3,6 +3,7 @@ from .models import job_record, UserSavedJob
 from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.core.paginator import Paginator
 import datetime
 
 
@@ -37,6 +38,7 @@ class SearchResultsView(ListView):
     career_level = []
     cs_titles = []
     salary_ranges = []
+    paginate_by = 20
 
     def dispatch(self, request, *args, **kwargs):
         query = self.request.GET.get("q") or request.POST.get("query")
@@ -118,10 +120,10 @@ class SearchResultsView(ListView):
             career_level = request.POST.get("career_level")
             salary_range = request.POST.get("salary_range")
             cs_title_index = request.POST.get("cs_title")
-
+            fp = request.POST.get("fp")
             sort_order = request.POST.get("sort_order")
             asc = request.POST.get("asc")
-            fp = request.POST.get("fp")
+
             if posting_type:
                 form_filters["posting_type"] = posting_type
             if date:
@@ -141,7 +143,7 @@ class SearchResultsView(ListView):
 
             jobs = jobs.filter(**form_filters)
 
-            sort_field = ""
+            sort_field = "-posting_date"
             if sort_order:
                 if sort_order == "sort-posting":
                     sort_field = "posting_date"
@@ -149,9 +151,19 @@ class SearchResultsView(ListView):
                     sort_field = "salary_range_from"
                 if asc == "false":
                     sort_field = "-" + sort_field
-                jobs = jobs.order_by(sort_field)
-
+            jobs = jobs.order_by(sort_field)
             context = {"jobs": jobs}
+            paginator = Paginator(jobs, 20)
+            context["paginator"] = paginator
+            page_number = 1
+            if len(jobs):
+                context["is_paginated"] = True
+                page = request.POST.get("page")
+                if page and int(page) != -1:
+                    page_number = int(page)
+                context["jobs"] = paginator.page(page_number)
+            else:
+                context["is_paginated"] = False
 
             if self.request.user.is_authenticated:
                 context["saved_jobs_user"] = list(
@@ -167,6 +179,8 @@ class SearchResultsView(ListView):
                     "jobs/table_content.html", context=context, request=request
                 ),
                 "count": jobs.count(),
+                "page_start_index": paginator.page(page_number).start_index(),
+                "page_end_index": paginator.page(page_number).end_index(),
             }
 
             return JsonResponse(data, safe=False)
