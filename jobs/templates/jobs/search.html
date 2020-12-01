@@ -314,7 +314,14 @@
         $("#listing").html(data.rendered_table);
         debugger;
         // $('#jobCount').text("Found " + data.count + " matching jobs");
-        $('#jobCount').text("Showing " + data.page_start_index + ' - ' + data.page_end_index + " of "+ data.count + " found jobs");
+        if(data.count>0){
+            $('#jobCount').text("Showing " + data.page_start_index + ' - ' + data.page_end_index + " of "+ data.count + " found jobs");
+            $('#sort-order').css('display','block');
+        }else{
+            $('#jobCount').text("No matching jobs found");
+            $('#sort-order').css('display','none');
+        }
+            
         $('[id^="favBtnID"]').tooltip();
         var form = $('.favJob');
         var formMessages = $('#form-messages');
@@ -454,7 +461,6 @@
 
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
-
 
         });
 
