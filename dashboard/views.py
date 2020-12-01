@@ -33,7 +33,9 @@ class DashboardView(View):
             user_subscriptions_count = (
                 user_subscribed_exams_count + user_subscribed_exam_results_count
             )
-            recommendations_count = RecommendedJobs.recommendjobs(self, request).count()
+            recommendations_count = RecommendedJobs.recommendjobs(
+                self, request
+            ).count()  # pragma: no cover
             return render(
                 request=request,
                 template_name="dashboard/home.html",
@@ -261,7 +263,7 @@ class CivilServiceTitleDeleteView(View):
                 return JsonResponse(response_data, status=200)
 
 
-class RecommendedJobs(View):
+class RecommendedJobs(View):  # pragma: no cover
     def get(self, request, *args, **kwargs):
 
         if request.user.is_authenticated:
