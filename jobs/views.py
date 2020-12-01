@@ -155,7 +155,10 @@ class SearchResultsView(ListView):
             context = {"jobs": jobs}
             paginator = Paginator(jobs, 20)
             context["paginator"] = paginator
-            context["is_paginated"] = True
+            if len(jobs):
+                context["is_paginated"] = True
+            else:
+                context["is_paginated"] = False
             page = request.POST.get("page")
             page_number = 1
             if page and int(page) != -1:
