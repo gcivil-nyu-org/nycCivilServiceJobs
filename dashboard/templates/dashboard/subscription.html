@@ -1,0 +1,404 @@
+{% extends 'landing_base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Saved Jobs</title>
+    <style>
+        .filter-summary-selectedFilterContainer {
+            padding-top: 20px;
+        }
+
+        .filter-summary-filter {
+            position: relative;
+            background-color: #ffffff;
+            text-transform: capitalize;
+            color: black;
+            cursor: default;
+            font-size: 15px;
+            padding: 7px 28px 7px 14px;
+            -webkit-transition: all .2s ease-out;
+            transition: all .2s ease-out;
+            border-radius: 15px;
+            border: 1px solid #d4d5d9;
+            margin: 5px 5px 5px 5px;
+        }
+
+
+        .filter-summary-filterList {
+            list-style-type: none;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -webkit-box-direction: normal;
+            -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+            -webkit-box-align: baseline;
+            -ms-flex-align: baseline;
+            align-items: baseline;
+            margin: 0;
+            padding-left: 0px !important;
+        }
+
+
+        .filter-summary-removeFilter {
+            color: black;
+            position: absolute;
+            top: 8px;
+            /* right: 4px; */
+            width: 18px;
+            height: 20px;
+            z-index: 1;
+            text-align: center;
+            cursor: pointer;
+
+        }
+
+        .btn-fix {
+            margin-top: -2px !important;
+            margin-left: 10px
+        }
+
+        .myfont {
+            height: 35px !important;
+            font-size: 15px;
+            font-family: "Nunito Sans", Arial, sans-serif;
+            font-weight: 400;
+            border: 1px solid #aaa;
+            color: black !important;
+        }
+    </style>
+</head>
+<br>
+<br>
+<br>
+<br>
+
+
+<section class="ftco-section bg-light">
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading" style="color:black"><b>Welcome {{user.first_name}}!</b></div>
+            <div class="list-group list-group-flush">
+                <a href="{% url 'dashboard:dashboard' %}"
+                    class="nav-item list-group-item list-group-item-action bg-light">Dashboard</a>
+                <a href="{% url 'dashboard:savedjobs' %}"
+                    class="nav-item list-group-item list-group-item-action bg-light "> Saved Jobs</a>
+                <a href="{% url 'dashboard:subscription' %}"
+                    class="list-group-item list-group-item-action bg-light text-success">Subscriptions</a>
+            </div>
+        </div>
+
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <div id="layoutSidenav">
+                <div id="layoutSidenav_content">
+                    <div class="container-fluid " style="padding-top: 10px;">
+                        <div class="row bg-light">
+                            <div class="col-md-12 ftco-animate">
+                                <div class="job-post-item p-4 d-block align-items-left">
+                                    <div class="mb-4 mb-md-0">
+                                        <div class="col mr-2 text-black"></a>
+                                            <h4><b>Upcoming Exam Subscriptions</b></h4>
+                                        </div>
+                                        <div id="alertCstAlreadySaved"
+                                            class="alert alert-warning alert-dismissible fade show" role="alert"
+                                            style="display: none;">
+                                            You are already subscribed to this Civil Service Title.
+                                            <button type="button" class="close"
+                                                onclick="$('#alertCstAlreadySaved').css('display','none');"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="d-flex" style="padding-top: 20px">
+                                            <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
+                                                    style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
+                                            </div>
+                                            <div class=col-9 style="padding-left: 20px;"><select
+                                                    class="js-example-basic-single" name="civilservicetitle"
+                                                    id="civilservicetitle">
+                                                    <option></option>
+                                                    {% for civilServTitle in civil_services_title_all %}
+                                                    <option value={{civilServTitle.id}}>
+                                                        {{civilServTitle.title_description}} </option>
+                                                    {% endfor %}
+                                                </select>
+                                                <button class="btn btn-success mt-3 btn-fix"
+                                                    onclick="saveTitle()">Subscribe</button>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="filter-summary-selectedFilterContainer d-flex">
+                                            <div class="col mr-2 text-black" style="padding-top:8px; max-width:20%; ">
+                                                <b>Active Subscription(s): </b> </div>
+                                            <div class="col">
+                                                <ul class="filter-summary-filterList" id="cstID">
+                                                    {% for userCST in user_subscribed_exams %}
+                                                    <li id="cst{{userCST.id}}">
+                                                        <div class="filter-summary-filter">
+                                                            {{userCST.civil_service_title.title_description}}
+                                                            <label class="filter-summary-removeFilter">
+                                                                <button type="button" class="close" aria-label="Close"
+                                                                    onclick="deleteTitle('{{userCST.id}}')">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="job-post-item p-4 d-block align-items-left">
+                                    <div class="mb-4 mb-md-0" style="width: 100%;">
+                                        <div class="col mr-2 text-black"></a>
+                                            <h4><b>Upcoming Exam Result Subscriptions</b></h4>
+                                        </div>
+                                        <div id="alertExamAlreadySaved"
+                                            class="alert alert-warning alert-dismissible fade show" role="alert"
+                                            style="display: none;">
+                                            You are already subscribed to this Exam.
+                                            <button type="button" class="close"
+                                                onclick="$('#alertExamAlreadySaved').css('display','none');"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div id="alertExamAlreadyReleased"
+                                            class="alert alert-warning alert-dismissible fade show" role="alert"
+                                            style="display: none;">
+                                            The results for this Exam are already released. You may find the results <a id='examResUrlID' target="_blank">here</a>.
+                                            <button type="button" class="close"
+                                                onclick="$('#alertExamAlreadyReleased').css('display','none');"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="d-flex" style="padding-top: 20px">
+                                            <div class="col mr-2 text-black" style="max-width:20%!important;"> <a
+                                                    style="padding:20px 60px 20px 0px; "><b>Add Subscription: </b></a>
+                                            </div>
+
+                                            <div class=col-9 style="padding-left: 20px;">
+                                                <form onsubmit="return false;"
+                                                    save_exam_url="{% url 'dashboard:SaveExamNumberView' %}" method=POST
+                                                    class="save_exam_no">
+                                                    {% csrf_token %}
+                                                    <div class="row" style="margin-left: 0px;">
+                                                        <div class="col-xs-3">
+                                                            <input class="form-control-sm myfont" type="number"
+                                                                name="examno" id="examno" placeholder="Enter an Exam Number"
+                                                                value="" min=1 max="9999" style="width: 13em"/>
+                                                        </div>
+                                                        <button class="btn btn-success mt-3 btn-fix"
+                                                            type="submit">Subscribe </button>
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <div class="filter-summary-selectedFilterContainer d-flex">
+                                            <div class="col mr-2 text-black" style="padding-top:8px; max-width:20%; ">
+                                                <b>Active Subscription(s): </b> </div>
+                                            <div class="col">
+                                                <ul class="filter-summary-filterList" id="examid">
+                                                    {% for userExamRes in user_subscribed_exam_results %}
+                                                    <li id="exam{{userExamRes.id}}">
+                                                        <div class="filter-summary-filter">
+                                                            {{userExamRes.exam_number}}
+                                                            <label class="filter-summary-removeFilter">
+                                                                <button type="button" class="close" aria-label="Close"
+                                                                    onclick="deleteExamno('{{userExamRes.id}}')">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function () {
+
+        $('.js-example-basic-single').select2(
+            {
+                width: '40%',
+                placeholder: "Select a Civil Service Title",
+                allowClear: false,
+
+            }
+        );
+
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    function saveTitle() {
+        $("#alertCstAlreadySaved").css('display', 'none');
+        var civilservicetitle = $('#civilservicetitle').find(":selected").text();
+        var civilservicetitleid = $('#civilservicetitle').find(":selected").val();
+        const csrftoken = getCookie('csrftoken');
+        var user = "{{user}}";
+        //alert(user);
+        //debugger;
+        if (civilservicetitle != "" && civilservicetitleid != "") {
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'dashboard:SaveCivilServiceTitleView' %}",
+                data: {
+                    csrfmiddlewaretoken: csrftoken,
+                    civilservicetitleid: civilservicetitleid,
+                    civilservicetitle: civilservicetitle,
+                }
+            }).done(function (response) {
+                if (response["response_data"] == "CIVIL_SERVICE_TITLE_SAVED") {
+                    debugger;
+                    var user_subscribed_services_title = response["subscribed_title"];
+                    $("#cstID").prepend('<li id=cst' + response["subscribed_id"] + '><div class="filter-summary-filter">' + user_subscribed_services_title + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close"><span aria-hidden="true" onClick="deleteTitle('+response["subscribed_id"]+')">&times;</span></button></label></li>');
+                    $('#civilservicetitle').val("").trigger('change');
+                }
+                else if (response["response_data"] == "CIVIL_SERVICE_TITLE_ALREADY_PRESENT") {
+                    $("#alertCstAlreadySaved").css('display', 'block');
+                }
+            }).fail(function (data) {
+                console.log("fail")
+                debugger;
+
+            });
+        }
+
+    }
+
+    function deleteTitle(id) {
+        $("#alertCstAlreadySaved").css('display', 'none');
+        var cst_id = parseInt(id);
+        //var action = confirm("Are you sure you want to delete subscription?");
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url: "{% url 'dashboard:CivilServiceTitleDeleteView' %}",
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: csrftoken,
+                civilservicetitleid: cst_id,
+            },
+            success: function (response) {
+                if (response["response_data"] == "CIVIL_SERVICE_TITLE_DELETED") {
+                    var cst_id_deleted = '#cst' + response["cst_deleted_id"];
+                    debugger;
+                    $(cst_id_deleted).remove();
+                }
+            }
+
+        });
+    }
+
+    var form = $('.save_exam_no');
+    var formMessages = $('#form-messages');
+    $(form).submit(function (event) {
+        var currentForm = $(this);
+        // Stop the browser from submitting the form.
+        event.preventDefault();
+        $("#alertExamAlreadySaved").css('display', 'none');
+        $("#alertExamAlreadyReleased").css('display', 'none');
+        // Serialize the form data.
+        var formData = currentForm.serialize();
+        var user = "{{user}}";
+        debugger;
+        if($("#examno").val() != "")
+        {
+            $.ajax({
+                type: 'POST',
+                url: currentForm.attr('save_exam_url'),
+                data: formData
+            }).done(function (response, data) {
+                if (response["response_data"] == "EXAM_SAVED") {
+                    $("#examid").prepend('<li id=exam' + response["subscribed_exam_id"] + '><div class="filter-summary-filter">' + response["subscribed_exam_num"] + '<label class="filter-summary-removeFilter"><button type="button" class="close" aria-label="Close" onClick="deleteExamno('+response["subscribed_exam_id"]+')"><span aria-hidden="true">&times;</span></button></label></li>');
+                    $("#examno").val("");
+                }
+                else if (response["response_data"] == "EXAM_ALREADY_PRESENT") {
+                    $("#alertExamAlreadySaved").css('display', 'block');
+                }
+                else if (response["response_data"] == "EXAM_ALREADY_RELEASED") {
+                    
+                    $("#examResUrlID").attr('href',"{% url 'examresults:exams' %}?q=" + response["subscribed_exam_num"]);
+                    $("#alertExamAlreadyReleased").css('display', 'block');
+                }
+            }).fail(function (data) {
+                //Do something
+                console.log("fail")
+            });
+        }
+    });
+
+    function deleteExamno(id) {
+        $("#alertExamAlreadySaved").css('display', 'none');
+        var exam_id = parseInt(id);
+        //var action = confirm("Are you sure you want to delete subscription?");
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url: "{% url 'dashboard:ExamResultsDeleteView' %}",
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: csrftoken,
+                examno: exam_id,
+            },
+            success: function (response) {
+                if (response["response_data"] == "EXAM_SUBSCRIBED_DELETED") {
+
+                    var exam_id_deleted = '#exam' + response["exam_deleted_id"];
+                    debugger;
+                    $(exam_id_deleted).remove();
+                }
+            }
+
+        })
+
+    }
+</script>
+{% endblock javascript %}

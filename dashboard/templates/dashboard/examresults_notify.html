@@ -8,27 +8,31 @@ Exams Results for your subscribed Exams are available!
 <table style="border:1px solid #333;border-collapse: collapse;">
 
   <tr>
-    <th style="border: 1px solid #000000;">Civil Service Title </th>
-    <th style="border: 1px solid #000000;"> Exam Number </th>
-    <th style="border: 1px solid #000000;"> First Name </th>
+    <th style="border: 1px solid #000000; text-align: center; padding: 10px">Exam Number</th>
+    <th style="border: 1px solid #000000; text-align: center; padding: 10px">Civil Service Title</th>
+    <!-- <th style="border: 1px solid #000000;"> First Name </th>
     <th style="border: 1px solid #000000;"> Middle Name </th>
-    <th style="border: 1px solid #000000;">Last  Name </th>
-    <th style="border: 1px solid #000000;"> Final Adjusted Average </th>
+    <th style="border: 1px solid #000000;">Last  Name </th> -->
+    <!-- <th style="border: 1px solid #000000;"> Final Adjusted Average </th> -->
     </tr>
  {% for result in results %}
  <tr>
-     <td style="border: 1px solid #000000;">{{result.list_title_desc}}</td>
-     <td style="border: 1px solid #000000;">{{result.exam_number}}</td>
-     <td style="border: 1px solid #000000;">{{result.first_name}}</td>
+     <td style="border: 1px solid #000000;text-align: center; padding: 10px"><a href="{{url}}?q={{result.exam_number}}">{{result.exam_number}}</a></td>
+     <td style="border: 1px solid #000000;text-align: center; padding: 10px">{{result.list_title_desc}}</td>
+     <!-- <td style="border: 1px solid #000000;">{{result.first_name}}</td>
      <td style="border: 1px solid #000000;">{{result.middle_initial}}</td>
-      <td style="border: 1px solid #000000;">{{result.last_name}}</td>
-      <td style="border: 1px solid #000000;">{{result.adjust_final_average}}</td>
+      <td style="border: 1px solid #000000;">{{result.last_name}}</td> -->
+      <!-- <td style="border: 1px solid #000000;">{{result.adjust_final_average}}</td> -->
 
 
  </tr>
 
  {% endfor %}
 </table>
+<br><br>
+Thank You,
+<br>
+nycCivilServiceJobs Team
 
 {% endautoescape %}
 </html>
