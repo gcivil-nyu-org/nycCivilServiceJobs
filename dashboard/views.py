@@ -299,6 +299,7 @@ class RecommendedJobs(View):
                     job_record.objects.filter(
                         Q(civil_service_title__iexact=title)
                         & (Q(post_until__gte=datetime.date.today()))
+                        & Q(posting_type__iexact="External")
                     )
                     .distinct()
                     .order_by("-posting_date")[:10]
@@ -319,6 +320,7 @@ class RecommendedJobs(View):
                 int_job = job_record.objects.filter(
                     Q(civil_service_title__iexact=int_title)
                     & (Q(post_until__gte=datetime.date.today()))
+                    & Q(posting_type__iexact="External")
                 ).order_by("-posting_date")[:10]
 
             for job in int_job:
@@ -345,6 +347,7 @@ class RecommendedJobs(View):
                 saved_cst = job_record.objects.filter(
                     Q(civil_service_title__iexact=save_job)
                     & (Q(post_until__gte=datetime.date.today()))
+                    & Q(posting_type__iexact="External")
                 ).order_by("-posting_date")[:10]
             # print(saved_cst)
 
