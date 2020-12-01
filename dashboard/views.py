@@ -33,6 +33,7 @@ class DashboardView(View):
             user_subscriptions_count = (
                 user_subscribed_exams_count + user_subscribed_exam_results_count
             )
+            recommendations_count = RecommendedJobs.recommendjobs(self, request).count()
             return render(
                 request=request,
                 template_name="dashboard/home.html",
@@ -42,6 +43,7 @@ class DashboardView(View):
                     "saved_jobs_user": saved_jobs_user,
                     "exam_schedule": exam_schedule,
                     "user_subscriptions_count": user_subscriptions_count,
+                    "recommendations_count": recommendations_count,
                 },
             )
         else:
@@ -288,80 +290,75 @@ class RecommendedJobs(View):
             )
 
             user_curr_civil_services_title = list(
-                user_civil_services_title.filter(is_interested=False).values_list(
-                    "civil_service_title__title_description", flat=True
-                )
+                user_civil_services_title.filter(is_interested=False)
+                .values_list("civil_service_title__title_description", flat=True)
+                .distinct()
             )
-            # print(user_curr_civil_services_title)
-            hold_cst = set()
-            for title in user_curr_civil_services_title:
-                hold_job = (
-                    job_record.objects.filter(
-                        Q(civil_service_title__iexact=title)
-                        & (Q(post_until__gte=datetime.date.today()))
-                        & Q(posting_type__iexact="External")
-                    )
-                    .distinct()
-                    .order_by("-posting_date")[:10]
-                )
-            for job in hold_job:
-                hold_cst.add(job.civil_service_title)
 
-            hold_cst = list(hold_cst)
-            # print(hold_cst)
+            hold_job = (
+                job_record.objects.filter(
+                    civil_service_title__in=user_curr_civil_services_title
+                )
+                .filter(
+                    Q(post_until__gte=datetime.date.today())
+                    | Q(post_until__isnull=True)
+                )
+                .filter(posting_type__iexact="External")
+                .distinct()
+                .order_by("-posting_date")[:10]
+            )
 
             user_interested_civil_services_title = list(
-                user_civil_services_title.filter(is_interested=True).values_list(
-                    "civil_service_title__title_description", flat=True
-                )
+                user_civil_services_title.filter(is_interested=True)
+                .values_list("civil_service_title__title_description", flat=True)
+                .distinct()
             )
-            interested_cst = set()
-            for int_title in user_interested_civil_services_title:
-                int_job = job_record.objects.filter(
-                    Q(civil_service_title__iexact=int_title)
-                    & (Q(post_until__gte=datetime.date.today()))
-                    & Q(posting_type__iexact="External")
-                ).order_by("-posting_date")[:10]
 
-            for job in int_job:
-                interested_cst.add(job.civil_service_title)
+            int_job = (
+                job_record.objects.filter(
+                    civil_service_title__in=user_interested_civil_services_title
+                )
+                .filter(
+                    Q(post_until__gte=datetime.date.today())
+                    | Q(post_until__isnull=True)
+                )
+                .filter(posting_type__iexact="External")
+                .distinct()
+                .order_by("-posting_date")[:10]
+            )
 
-            interested_cst = list(interested_cst)
-            # print(interested_cst)
-
-            user_saved_civil_service = list(
+            user_saved_civil_service_title = list(
                 UserSavedJob.objects.filter(user=self.request.user)
                 .values_list("job__civil_service_title", flat=True)
                 .distinct()
             )
-            # print(user_saved_civil_service)
 
             new_saved_cst = []
-            for job in user_saved_civil_service:
-                if (job not in hold_cst) and (job not in interested_cst):
-                    new_saved_cst.append(job)
-            # print(new_saved_cst)
+            for cst in user_saved_civil_service_title:
+                if (cst not in user_curr_civil_services_title) and (
+                    cst not in user_interested_civil_services_title
+                ):
+                    new_saved_cst.append(cst)
 
-            new_saved_job = set()
-            for save_job in new_saved_cst:
-                saved_cst = job_record.objects.filter(
-                    Q(civil_service_title__iexact=save_job)
-                    & (Q(post_until__gte=datetime.date.today()))
-                    & Q(posting_type__iexact="External")
-                ).order_by("-posting_date")[:10]
-            # print(saved_cst)
+            saved_job = (
+                job_record.objects.filter(civil_service_title__in=new_saved_cst)
+                .filter(
+                    Q(post_until__gte=datetime.date.today())
+                    | Q(post_until__isnull=True)
+                )
+                .filter(posting_type__iexact="External")
+                .distinct()
+                .order_by("-posting_date")[:10]
+            )
 
-            for job in saved_cst:
-                new_saved_job.add(job.civil_service_title)
-            new_saved_job = list(new_saved_job)
-            # print(new_saved_job)
+            if hold_job.count() > 0 and int_job.count() > 0:
+                final_jobs = (hold_job | int_job).distinct()
+            else:
+                final_jobs = (hold_job | int_job | saved_job).distinct()
 
-            final_jobs = hold_job | int_job | saved_cst
-
-            # print(final_jobs.count())
             if final_jobs.count() > 10:
                 final_jobs = final_jobs.order_by("-posting_date")[:10]
-                return final_jobs
-
             else:
-                return final_jobs
+                final_jobs = final_jobs.order_by("-posting_date")
+
+            return final_jobs
