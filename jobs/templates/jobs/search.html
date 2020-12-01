@@ -169,6 +169,7 @@
                             type="date" id="post-after" name="post-after">
                     </div>
                     <br>
+                    <button type="button" class="form-group btn btn-primary" onclick=resetfilter()>Reset Filters</button>
                 </div>
             </div>
             <!-- <div class="col-lg-9 pr-lg-4"> -->
@@ -213,6 +214,7 @@
     var salary_asc = false;
     var cs_title = "";
     function sort(id) {
+
         var button_text = "Sort "
         if (id == "sort-posting") {
             date_asc = !date_asc
@@ -292,6 +294,21 @@
                 console.log("error")
             }
         });
+    }
+    function resetfilter(){
+
+      console.log("reset")
+      sort("")
+      $("#posting-type").val('').trigger('change')
+      $('#cs_title').val('').trigger('change')
+      $("#agency").val('').trigger('change')
+      $("#career-level").val('').trigger('change')
+      $("#fp").val('').trigger('change')
+      $("input[type=date]").val('').trigger('change')
+      document.getElementById('salary-range').value = 0;
+      updateInput(0);
+
+
     }
     function putTableData(data) {
         console.log()
@@ -382,7 +399,7 @@
 
     $(window).on('load', function () {
 
-        $('.active').removeClass('active');
+        $('.nav-item').removeClass('active');
         $('.navbar-nav li').eq(1).addClass('active');
 
         $("#posting-type").change(function (event) {
@@ -419,19 +436,19 @@
             width: '100%'
         });
 
-        $( '.pagination #prev' ).click( function(e) {
-  e.preventDefault();
-  url = ($( '.step-links #prev' )[0].href);
-  console.log(url);
-  // ajax_get_update();
-  });
-  $( '.pagination #next' ).click( function(e) {
-  e.preventDefault();
-  url = ($( '.step-links #next' )[0].href);
-  conosole.log(url);
-  // ajax_get_update();
-
-  });
+  //       $( '.pagination #prev' ).click( function(e) {
+  // e.preventDefault();
+  // url = ($( '.step-links #prev' )[0].href);
+  // console.log(url);
+  // // ajax_get_update();
+  // });
+  // $( '.pagination #next' ).click( function(e) {
+  // e.preventDefault();
+  // url = ($( '.step-links #next' )[0].href);
+  // conosole.log(url);
+  // // ajax_get_update();
+  //
+  // });
 
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();

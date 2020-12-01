@@ -137,8 +137,8 @@
 {% endfor %}
 
 {% if is_paginated %}
-<div class=" row md-5 d-flex  justify-content-center">
-  <div class="col text-center">
+<div class="row md-12">
+  <div class="col text-center d-flex justify-content-center">
     <div class="block-27">
   <ul class="pagination links" >
 
@@ -176,7 +176,7 @@
     <li><a href="javascript:senddata({{jobs.number|add:'3'}})">&hellip;</a></li>
 {% endif %}
 {% if paginator.num_pages > 1 %}
-{% if jobs.number == paginator.num_pages %}
+{% if jobs.number == paginator.num_pages  and jobs.number > 1 %}
   <li class="active"><span>{{paginator.num_pages}} <span class="sr-only">(current)</span></span></li>
 {% else %}
 <li><a href="javascript:senddata({{paginator.num_pages}})">{{paginator.num_pages}}</a></li>
@@ -190,3 +190,6 @@
 
   </ul>
 {% endif %}
+</div>
+</div>
+</div>

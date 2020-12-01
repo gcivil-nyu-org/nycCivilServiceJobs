@@ -9593,16 +9593,16 @@ textarea.form-control {
     margin-bottom: 4px;
     font-weight: 400; }
     .block-27 ul li a, .block-27 ul li span {
-      color: #ff6347;
+      color: #28a745;
       text-align: center;
       display: inline-block;
       width: 40px;
       height: 40px;
       line-height: 40px;
       border-radius: 50%;
-      border: 1px solid #ffe5e0; }
+      border: 1px solid #28a745; }
     .block-27 ul li.active a, .block-27 ul li.active span {
-      background: #ff6347;
+      background: #28a745;
       color: #fff;
       border: 1px solid transparent; }
 
@@ -9892,7 +9892,7 @@ textarea.form-control {
     color: #000000;
     font-style: italic; }
 
-    
+
 
 #ftco-loader {
   position: fixed;
