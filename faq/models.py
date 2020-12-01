@@ -1,7 +1,6 @@
 from django.db import models
-import uuid
-
 # Create your models here.
+
 
 class faq(models.Model):
     faq_id = models.AutoField(primary_key=True)

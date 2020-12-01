@@ -24,12 +24,11 @@ def get_faqs():
                 if val:
                     continue
                 else:
-                    item=(faq(
-                        question = row[0],
-                        answer = row[1],
-                        date_published = datetime.date.today(),
+                    item = faq(
+                        question=row[0],
+                        answer=row[1],
+                        date_published=datetime.date.today(),
                     )
-                )
                 entries.append(item)
 
             except Exception as e:

@@ -7,20 +7,19 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='faq',
+            name="faq",
             fields=[
-                ('faq_id', models.AutoField(primary_key=True, serialize=False)),
-                ('question', models.CharField(blank=True, max_length=1000, null=True)),
-                ('answer', models.CharField(blank=True, max_length=1000, null=True)),
-                ('date_published', models.DateField(blank=True, null=True)),
+                ("faq_id", models.AutoField(primary_key=True, serialize=False)),
+                ("question", models.CharField(blank=True, max_length=1000, null=True)),
+                ("answer", models.CharField(blank=True, max_length=1000, null=True)),
+                ("date_published", models.DateField(blank=True, null=True)),
             ],
             options={
-                'verbose_name_plural': 'Frequently Asked Questions',
+                "verbose_name_plural": "Frequently Asked Questions",
             },
         ),
     ]
