@@ -94,15 +94,41 @@
   </nav>
 
 </head>
+<!-- END nav -->
 
 <body>
 
 
-  <!-- END nav -->
 
-  {% block content %}
+    {% block content %}
 
-  {% endblock %}
+    {% endblock %}
+
+        <!-- Footer Area Start -->
+    <footer>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">
+                        Copyright &copy; nycCivilServiceJobs 2020
+                        &middot;
+                        All rights reserved by Team Python Pirates
+                    </div>
+
+                    <div>
+                        <a href="{% url 'aboutus' %}">About Us</a>
+                        &middot;
+                        <a href="#">Contact Us</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                        </main>
+
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </footer>
+    <!-- Footer area End -->
 
 
   <script src="{% static 'js/jquery.min.js' %}"></script>

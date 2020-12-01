@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 from signin.views import UserProfileView
 from dashboard.views import HomeView
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path("", HomeView.as_view(), name="index"),
@@ -29,4 +30,5 @@ urlpatterns = [
     path("exams/", include("examresults.urls")),
     path("profile/", UserProfileView.as_view(), name="userprofile"),
     path("dashboard/", include("dashboard.urls")),
+    path("about/", TemplateView.as_view(template_name='aboutus.html'), name="aboutus"),
 ]
