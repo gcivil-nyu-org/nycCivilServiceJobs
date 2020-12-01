@@ -19,6 +19,7 @@ from django.contrib.auth.views import LogoutView
 from signin.views import UserProfileView
 from dashboard.views import HomeView
 from django.views.generic import TemplateView
+from faq.views import FAQView
 
 urlpatterns = [
     path("", HomeView.as_view(), name="index"),
@@ -31,4 +32,5 @@ urlpatterns = [
     path("profile/", UserProfileView.as_view(), name="userprofile"),
     path("dashboard/", include("dashboard.urls")),
     path("about/", TemplateView.as_view(template_name="aboutus.html"), name="aboutus"),
+    path("faq/", include("faq.urls")),
 ]

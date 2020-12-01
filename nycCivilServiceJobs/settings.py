@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "k+tn5j8qfeobma9htaho2%z4c@gen801k0h)-xr_9)we6@)y#w"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "dashboard.apps.DashboardConfig",
+    "faq.apps.FaqConfig",
     "examresults.apps.ExamresultsConfig",
     "jobs.apps.JobsConfig",
     "register.apps.RegisterConfig",
