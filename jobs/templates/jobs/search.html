@@ -297,17 +297,16 @@
     }
     function resetfilter(){
 
-      console.log("reset")
-      sort("")
-      $("#posting-type").val('').trigger('change')
-      $('#cs_title').val('').trigger('change')
-      $("#agency").val('').trigger('change')
-      $("#career-level").val('').trigger('change')
-      $("#fp").val('').trigger('change')
-      $("input[type=date]").val('').trigger('change')
+      console.log("reset");
+      $("#posting-type").val('').trigger('change.select2');
+      $('#cs_title').val('').trigger('change.select2');
+      $("#agency").val('').trigger('change.select2');
+      $("#career-level").val('').trigger('change.select2');
+      $("#fp").val('').trigger('change.select2');
+      $("input[type=date]").val('');
       document.getElementById('salary-range').value = 0;
       updateInput(0);
-
+      sort("");
 
     }
     function putTableData(data) {
