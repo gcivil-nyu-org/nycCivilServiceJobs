@@ -304,6 +304,54 @@ class UserProfileTest(TestCase):
             "Please use a different email address.",
         )
 
+    def test_user_profile_update_form_dob(self):
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+
+        # test valid dob
+        response = self.client.post(
+            reverse("userprofile"),
+            data={
+                "username": "testjane",
+                "first_name": "Jane_updated",
+                "last_name": "Doe_updated",
+                "dob": "01/10/1992",
+                "email": "testjohn@test.com",
+            },
+        )
+        messages = [m.message for m in get_messages(response.wsgi_request)]
+        self.assertIn("Your profile was successfully updated", messages)
+
+        # test invalid dob in the past(-100yr)
+        self.assertTrue(user_login)
+        response = self.client.post(
+            reverse("userprofile"),
+            data={
+                "dob": "01/10/1802",
+                "email": "testjohn@test.com",
+            },
+        )
+        form = response.context["form"]
+        form.has_error(
+            "dob",
+            "Invalid Date of Birth",
+        )
+
+        # test invalid dob in the future
+        response = self.client.post(
+            reverse("userprofile"),
+            data={
+                "dob": "01/10/2030",
+                "email": "testjohn@test.com",
+            },
+        )
+        form = response.context["form"]
+        form.has_error(
+            "dob",
+            "Invalid Date of Birth",
+        )
+
     # def test_user_profile_update_form_invalid_email_hm(self):
     #     user_login = self.client.login(
     #         username=self.test_user_hm.username, password="thisisapassword"
