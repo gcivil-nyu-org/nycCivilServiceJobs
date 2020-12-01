@@ -255,3 +255,25 @@ class CivilServiceTitleDeleteView(View):
             else:
                 response_data["response_data"] = "User not authenticated"
                 return JsonResponse(response_data, status=200)
+
+
+class RecommendedJobs(View):
+    def get(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated:
+
+            user_saved_jobs = UserSavedJob.objects.filter(user=self.request.user)
+            saved_jobs_user = list(user_saved_jobs.values_list("job", flat=True))
+            jobs = map(lambda x: x.job, user_saved_jobs)
+
+            return render(
+                request=request,
+                template_name="dashboard/recommendedjobs.html",
+                context={
+                    "user": request.user,
+                    "jobs": jobs,
+                    "saved_jobs_user": saved_jobs_user,
+                },
+            )
+        else:
+            return redirect(reverse("index"))

@@ -22,6 +22,7 @@ from dashboard.views import (
     SaveExamNumberView,
     CivilServiceTitleDeleteView,
     ExamResultsDeleteView,
+    RecommendedJobs,
 )
 
 
@@ -50,4 +51,5 @@ urlpatterns = [
         ExamResultsDeleteView.as_view(),
         name="ExamResultsDeleteView",
     ),
+    path("recommendations", RecommendedJobs.as_view(), name="recommendedjobs"),
 ]
