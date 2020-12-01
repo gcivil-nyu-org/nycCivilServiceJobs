@@ -100,7 +100,7 @@
                 <div id="layoutSidenav_content">
                     <div class="container-fluid " style="padding-top: 10px;">
                         <div class="row bg-light">
-                            {% if jobs and saved_jobs_user %}
+                            {% if jobs %}
 
                             {% for job in jobs %}
                             <div class="col-md-12 ftco-animate">
@@ -265,7 +265,7 @@
 
                         </div>
                         {% else %}
-                        <h2 class="ml-4">You do not have any saved jobs.</h2>
+                        <h4 class="ml-4 pt-1 pl-4">In order for nycCivilServiceJobs to recommend jobs please update your preferences.</h4>
                         {% endif %}
 
                     </div>
