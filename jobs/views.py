@@ -155,16 +155,15 @@ class SearchResultsView(ListView):
             context = {"jobs": jobs}
             paginator = Paginator(jobs, 20)
             context["paginator"] = paginator
+            page_number = 1
             if len(jobs):
                 context["is_paginated"] = True
+                page = request.POST.get("page")
+                if page and int(page) != -1:
+                    page_number = int(page)
+                context["jobs"] = paginator.page(page_number)
             else:
                 context["is_paginated"] = False
-            page = request.POST.get("page")
-            page_number = 1
-            if page and int(page) != -1:
-                page_number = int(page)
-
-            context["jobs"] = paginator.page(page_number)
 
             if self.request.user.is_authenticated:
                 context["saved_jobs_user"] = list(
