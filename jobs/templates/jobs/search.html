@@ -322,7 +322,8 @@
             $('#sort-order').css('display','none');
         }
             
-        $('[id^="favBtnID"]').tooltip();
+        //$('[id^="favBtnID"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();
         var form = $('.favJob');
         var formMessages = $('#form-messages');
         $(form).submit(function (event) {
@@ -461,7 +462,6 @@
 
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
-
         });
 
 
