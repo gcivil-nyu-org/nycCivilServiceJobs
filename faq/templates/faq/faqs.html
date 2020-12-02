@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <title>FAQ</title>
+    <title>FAQs</title>
 </head>
 <br>
 <br>
@@ -15,7 +15,9 @@
 <br>
 
 <section class="ftco-section bg-light">
-    <div class="title" style="text-align: center; padding-top:10px"><h2 style="font-weight: 800;  ">Frequently Asked Questions</h2></div>
+    <div class="title" style="text-align: center; padding-top:10px">
+        <h2 style="font-weight: 800;  ">Frequently Asked Questions</h2>
+    </div>
 
     <div class="d-flex" id="wrapper">
         <div id="page-content-wrapper" style="padding: 20px 100px 20px 100px">
@@ -28,9 +30,8 @@
                             <h5><a class="mr-2" style="font-weight: 700; color: black;" data-toggle="collapse"
                                     href="#demo{{faq.faq_id}}">{{faq.question}}</a>
                             </h5>
-                            <div id="demo{{faq.faq_id}}" class="collapse"
-                                style="overflow-y: auto; max-height: 30vh;;">
-                                <p >{{faq.answer|safe}}</p>
+                            <div id="demo{{faq.faq_id}}" class="collapse" style="overflow-y: auto; max-height: 30vh;">
+                                <p style="color:#3b3b3b !important;">{{faq.answer|safe}}</p>
                             </div>
                         </div>
                     </div>
@@ -46,9 +47,8 @@
 
 {% block javascript %}
 <script>
-$("#menu-toggle").click(function (e) {
-    e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
-});
+
+    $('.active').removeClass('active');
+    $('.navbar-nav li').eq(3).addClass('active');
 </script>
 {% endblock javascript %}
