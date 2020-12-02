@@ -62,3 +62,10 @@
 </section>
 
 {% endblock %}
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    $('li.nav-item.active').removeClass('active');   
+});
+</script>
+{% endblock javascript %}
