@@ -2,6 +2,7 @@ from django import forms
 from register.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+import datetime
 
 # Sign Up Form
 
@@ -51,3 +52,13 @@ class SignUpForm(UserCreationForm):
         #         "Please use a different email address."
         #     )
         return self.cleaned_data.get("email")
+
+    def clean_dob(self):
+        dob = self.cleaned_data.get("dob")
+        date_past_limit = datetime.date.today().replace(
+            datetime.date.today().year - 100
+        )
+        date_future_limit = datetime.date.today()
+        if dob >= date_future_limit or dob <= date_past_limit:
+            raise ValidationError("Invalid Date of Birth")
+        return dob

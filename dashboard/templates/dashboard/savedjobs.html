@@ -26,6 +26,8 @@
                     class="nav-item list-group-item list-group-item-action bg-light">Dashboard</a>
                 <a href="{% url 'dashboard:savedjobs' %}"
                     class="nav-item list-group-item list-group-item-action bg-light text-success"> Saved Jobs</a>
+                <a href="{% url 'dashboard:recommendedjobs' %}"
+                    class="nav-item list-group-item list-group-item-action bg-light"> Recommended Jobs</a>
                 <a href="{% url 'dashboard:subscription' %}" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
             </div>
         </div>
@@ -259,7 +261,7 @@
 
                         </div>
                         {% else %}
-                        <h2 class="ml-4">You do not have any saved jobs.</h2>
+                        <h4 class="ml-4 pt-1 pl-4">You do not have any saved jobs.</h4>
                         {% endif %}
 
                     </div>

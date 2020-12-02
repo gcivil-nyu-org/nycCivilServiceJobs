@@ -14,7 +14,7 @@ class BaseTest(TestCase):
             first_name="Jane",
             last_name="Doe",
             dob="1994-10-02",
-            email="janetest@username.gov",
+            email="janetest@username.com",
             password="thisisapassword",
         )
 
@@ -56,7 +56,29 @@ class BaseTest(TestCase):
             "first_name": "john",
             "last_name": "doe",
             "dob": "01/10/1992",
-            "email": "janetest@username.gov",
+            "email": "janetest@username.com",
+            "password1": "thisisapassword",
+            "password2": "thisisapassword",
+        }
+
+        self.user_invalid_dob_past = {
+            "is_hiring_manager": "False",
+            "username": "testjane",
+            "first_name": "Jane_updated",
+            "last_name": "Doe_updated",
+            "dob": "01/10/1802",
+            "email": "testjohn@test.com",
+            "password1": "thisisapassword",
+            "password2": "thisisapassword",
+        }
+
+        self.user_invalid_dob_future = {
+            "is_hiring_manager": "False",
+            "username": "testjane",
+            "first_name": "Jane_updated",
+            "last_name": "Doe_updated",
+            "dob": "01/10/2030",
+            "email": "testjohn@test.com",
             "password1": "thisisapassword",
             "password2": "thisisapassword",
         }
@@ -95,6 +117,24 @@ class RegisterFormTest(BaseTest):
             "This Email is already registered. "
             "Please use a different email address.",
         )
+
+    def test_form_dob_invalid_past(self):
+        form = SignUpForm(self.user_invalid_dob_past)
+        form.has_error(
+            "dob",
+            "Invalid Date of Birth",
+        )
+
+    def test_form_dob_invalid_future(self):
+        form = SignUpForm(self.user_invalid_dob_future)
+        form.has_error(
+            "dob",
+            "Invalid Date of Birth",
+        )
+
+    def test_form_dob_valid(self):
+        form = SignUpForm(self.user)
+        self.assertTrue(form.is_valid())
 
     # def test_form_hm_invalid_email(self):
     #     form = SignUpForm(self.user_hm_invalid_email)

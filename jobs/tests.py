@@ -210,6 +210,7 @@ class JobDataTest(TestCase):
         )
         self.assertEqual(json.loads(response.content)["response_data"], "Job Saved")
         response = self.client.get(reverse("jobs:results"), data={"q": ""})
+        response = self.client.get(reverse("jobs:results"))
         user_saved_jobs = list(
             UserSavedJob.objects.filter(user=self.test_user).values_list(
                 "job", flat=True
@@ -257,6 +258,7 @@ class JobDataTest(TestCase):
                 "cs_title": 0,
                 "salary_range": 2500,
                 "career_level": 0,
+                "page": "1",
                 "asc": "false",
                 "sort_order": "sort-posting",
             },
@@ -276,8 +278,29 @@ class JobDataTest(TestCase):
                 "cs_title": 0,
                 "salary_range": 2500,
                 "career_level": 0,
+                "page": "2",
                 "asc": "false",
                 "sort_order": "sort-salary",
+            },
+            **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
+        )
+
+        self.assertJSONNotEqual(str(response.content, encoding="utf8"), correctJSON)
+
+        response = self.client.post(
+            reverse("jobs:results"),
+            data={
+                "query": "",
+                "posting_type": "",
+                "date": "",
+                "agency": "",
+                "full_time_part_time_indicator": "F",
+                "cs_title": "",
+                "salary_range": "",
+                "career_level": "",
+                "page": "1",
+                "asc": "",
+                "sort_order": "",
             },
             **{"HTTP_X_REQUESTED_WITH": "XMLHttpRequest"}
         )

@@ -7,8 +7,10 @@ from django.http.response import JsonResponse
 from examresults.models import CivilServicesTitle, ExamResultsActive
 from django.db.models import Q
 
+
 # import json
 from dashboard.models import ExamSubscription, ExamResultsSubscription
+from signin.models import UsersCivilServiceTitle
 
 
 # Create your views here.
@@ -31,6 +33,9 @@ class DashboardView(View):
             user_subscriptions_count = (
                 user_subscribed_exams_count + user_subscribed_exam_results_count
             )
+            recommendations_count = RecommendedJobs.recommendjobs(
+                self, request
+            ).count()  # pragma: no cover
             return render(
                 request=request,
                 template_name="dashboard/home.html",
@@ -40,6 +45,7 @@ class DashboardView(View):
                     "saved_jobs_user": saved_jobs_user,
                     "exam_schedule": exam_schedule,
                     "user_subscriptions_count": user_subscriptions_count,
+                    "recommendations_count": recommendations_count,
                 },
             )
         else:
@@ -255,3 +261,106 @@ class CivilServiceTitleDeleteView(View):
             else:
                 response_data["response_data"] = "User not authenticated"
                 return JsonResponse(response_data, status=200)
+
+
+class RecommendedJobs(View):  # pragma: no cover
+    def get(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated:
+
+            user_saved_jobs = UserSavedJob.objects.filter(user=self.request.user)
+            saved_jobs_user = list(user_saved_jobs.values_list("job", flat=True))
+            jobs = self.recommendjobs(request)
+
+            return render(
+                request=request,
+                template_name="dashboard/recommendedjobs.html",
+                context={
+                    "user": request.user,
+                    "jobs": jobs,
+                    "saved_jobs_user": saved_jobs_user,
+                },
+            )
+        else:
+            return redirect(reverse("index"))
+
+    def recommendjobs(self, request):
+        if request.user.is_authenticated:
+
+            user_civil_services_title = UsersCivilServiceTitle.objects.filter(
+                user=self.request.user
+            )
+
+            user_curr_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=False)
+                .values_list("civil_service_title__title_description", flat=True)
+                .distinct()
+            )
+
+            hold_job = (
+                job_record.objects.filter(
+                    civil_service_title__in=user_curr_civil_services_title
+                )
+                .filter(
+                    Q(post_until__gte=datetime.date.today())
+                    | Q(post_until__isnull=True)
+                )
+                .filter(posting_type__iexact="External")
+                .distinct()
+                .order_by("-posting_date")[:10]
+            )
+
+            user_interested_civil_services_title = list(
+                user_civil_services_title.filter(is_interested=True)
+                .values_list("civil_service_title__title_description", flat=True)
+                .distinct()
+            )
+
+            int_job = (
+                job_record.objects.filter(
+                    civil_service_title__in=user_interested_civil_services_title
+                )
+                .filter(
+                    Q(post_until__gte=datetime.date.today())
+                    | Q(post_until__isnull=True)
+                )
+                .filter(posting_type__iexact="External")
+                .distinct()
+                .order_by("-posting_date")[:10]
+            )
+
+            user_saved_civil_service_title = list(
+                UserSavedJob.objects.filter(user=self.request.user)
+                .values_list("job__civil_service_title", flat=True)
+                .distinct()
+            )
+
+            new_saved_cst = []
+            for cst in user_saved_civil_service_title:
+                if (cst not in user_curr_civil_services_title) and (
+                    cst not in user_interested_civil_services_title
+                ):
+                    new_saved_cst.append(cst)
+
+            saved_job = (
+                job_record.objects.filter(civil_service_title__in=new_saved_cst)
+                .filter(
+                    Q(post_until__gte=datetime.date.today())
+                    | Q(post_until__isnull=True)
+                )
+                .filter(posting_type__iexact="External")
+                .distinct()
+                .order_by("-posting_date")[:10]
+            )
+
+            if hold_job.count() > 0 and int_job.count() > 0:
+                final_jobs = (hold_job | int_job).distinct()
+            else:
+                final_jobs = (hold_job | int_job | saved_job).distinct()
+
+            if final_jobs.count() > 10:
+                final_jobs = final_jobs.order_by("-posting_date")[:10]
+            else:
+                final_jobs = final_jobs.order_by("-posting_date")
+
+            return final_jobs
