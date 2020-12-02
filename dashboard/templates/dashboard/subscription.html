@@ -91,6 +91,8 @@
                     class="nav-item list-group-item list-group-item-action bg-light">Dashboard</a>
                 <a href="{% url 'dashboard:savedjobs' %}"
                     class="nav-item list-group-item list-group-item-action bg-light "> Saved Jobs</a>
+                <a href="{% url 'dashboard:recommendedjobs' %}"
+                    class="nav-item list-group-item list-group-item-action bg-light"> Recommended Jobs</a>
                 <a href="{% url 'dashboard:subscription' %}"
                     class="list-group-item list-group-item-action bg-light text-success">Subscriptions</a>
             </div>
@@ -175,6 +177,16 @@
                                             You are already subscribed to this Exam.
                                             <button type="button" class="close"
                                                 onclick="$('#alertExamAlreadySaved').css('display','none');"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div id="alertExamAlreadyReleased"
+                                            class="alert alert-warning alert-dismissible fade show" role="alert"
+                                            style="display: none;">
+                                            The results for this Exam are already released. You may find the results <a id='examResUrlID' target="_blank">here</a>.
+                                            <button type="button" class="close"
+                                                onclick="$('#alertExamAlreadyReleased').css('display','none');"
                                                 aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -270,10 +282,7 @@
 
 
     function saveTitle() {
-
         $("#alertCstAlreadySaved").css('display', 'none');
-        $("#alertExamAlreadySaved").css('display', 'none');
-
         var civilservicetitle = $('#civilservicetitle').find(":selected").text();
         var civilservicetitleid = $('#civilservicetitle').find(":selected").val();
         const csrftoken = getCookie('csrftoken');
@@ -309,6 +318,7 @@
     }
 
     function deleteTitle(id) {
+        $("#alertCstAlreadySaved").css('display', 'none');
         var cst_id = parseInt(id);
         //var action = confirm("Are you sure you want to delete subscription?");
         const csrftoken = getCookie('csrftoken');
@@ -324,8 +334,6 @@
                     var cst_id_deleted = '#cst' + response["cst_deleted_id"];
                     debugger;
                     $(cst_id_deleted).remove();
-
-
                 }
             }
 
@@ -338,9 +346,8 @@
         var currentForm = $(this);
         // Stop the browser from submitting the form.
         event.preventDefault();
-        $("#alertCstAlreadySaved").css('display', 'none');
         $("#alertExamAlreadySaved").css('display', 'none');
-
+        $("#alertExamAlreadyReleased").css('display', 'none');
         // Serialize the form data.
         var formData = currentForm.serialize();
         var user = "{{user}}";
@@ -359,6 +366,11 @@
                 else if (response["response_data"] == "EXAM_ALREADY_PRESENT") {
                     $("#alertExamAlreadySaved").css('display', 'block');
                 }
+                else if (response["response_data"] == "EXAM_ALREADY_RELEASED") {
+                    
+                    $("#examResUrlID").attr('href',"{% url 'examresults:exams' %}?q=" + response["subscribed_exam_num"]);
+                    $("#alertExamAlreadyReleased").css('display', 'block');
+                }
             }).fail(function (data) {
                 //Do something
                 console.log("fail")
@@ -367,6 +379,7 @@
     });
 
     function deleteExamno(id) {
+        $("#alertExamAlreadySaved").css('display', 'none');
         var exam_id = parseInt(id);
         //var action = confirm("Are you sure you want to delete subscription?");
         const csrftoken = getCookie('csrftoken');
@@ -383,8 +396,6 @@
                     var exam_id_deleted = '#exam' + response["exam_deleted_id"];
                     debugger;
                     $(exam_id_deleted).remove();
-
-
                 }
             }
 

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "dashboard.apps.DashboardConfig",
+    "faq.apps.FaqConfig",
     "examresults.apps.ExamresultsConfig",
     "jobs.apps.JobsConfig",
     "register.apps.RegisterConfig",
@@ -46,7 +47,10 @@ INSTALLED_APPS = [
     "crispy_forms",
     "django.contrib.humanize",
     "django_apscheduler",
+    "django.contrib.sites",
 ]
+SITE_ID = 1
+DEFAULT_SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -56,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "dashboard.middleware.DynamicSiteDomainMiddleware",
 ]
 
 ROOT_URLCONF = "nycCivilServiceJobs.urls"

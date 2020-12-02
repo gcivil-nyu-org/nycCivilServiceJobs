@@ -68,6 +68,20 @@ class SigninTest(TestCase):
             response, reverse("jobs:jobs"), fetch_redirect_response=False
         )
 
+        # already logged in redirect to next tag
+        response = self.client.get(
+            reverse("signin:signin"),
+            {
+                "next": "/dashboard/savedjobs",
+                "username": "testuser",
+                "password": "secret",
+            },
+            follow=True,
+        )
+        self.assertRedirects(
+            response, reverse("dashboard:savedjobs"), fetch_redirect_response=False
+        )
+
     def test_wrong_username(self):
 
         response = self.client.post(
@@ -290,29 +304,77 @@ class UserProfileTest(TestCase):
             "Please use a different email address.",
         )
 
-    def test_user_profile_update_form_invalid_email_hm(self):
+    def test_user_profile_update_form_dob(self):
         user_login = self.client.login(
-            username=self.test_user_hm.username, password="thisisapassword"
+            username=self.test_user.username, password="thisisapassword"
         )
+
+        # test valid dob
+        response = self.client.post(
+            reverse("userprofile"),
+            data={
+                "username": "testjane",
+                "first_name": "Jane_updated",
+                "last_name": "Doe_updated",
+                "dob": "01/10/1992",
+                "email": "testjohn@test.com",
+            },
+        )
+        messages = [m.message for m in get_messages(response.wsgi_request)]
+        self.assertIn("Your profile was successfully updated", messages)
+
+        # test invalid dob in the past(-100yr)
         self.assertTrue(user_login)
         response = self.client.post(
             reverse("userprofile"),
             data={
-                "is_hiring_manager": True,
-                "username": "testHM",
-                "first_name": "Jane_updated",
-                "last_name": "Doe_updated",
-                "dob": "01/10/1992",
-                "email": "testHM@test.com",
+                "dob": "01/10/1802",
+                "email": "testjohn@test.com",
             },
         )
-        self.assertEqual(response.status_code, 200)
         form = response.context["form"]
         form.has_error(
-            "email",
-            "This email is not a valid Email Address for Hiring Manager. "
-            "Please use a different email address.",
+            "dob",
+            "Invalid Date of Birth",
         )
+
+        # test invalid dob in the future
+        response = self.client.post(
+            reverse("userprofile"),
+            data={
+                "dob": "01/10/2030",
+                "email": "testjohn@test.com",
+            },
+        )
+        form = response.context["form"]
+        form.has_error(
+            "dob",
+            "Invalid Date of Birth",
+        )
+
+    # def test_user_profile_update_form_invalid_email_hm(self):
+    #     user_login = self.client.login(
+    #         username=self.test_user_hm.username, password="thisisapassword"
+    #     )
+    #     self.assertTrue(user_login)
+    #     response = self.client.post(
+    #         reverse("userprofile"),
+    #         data={
+    #             "is_hiring_manager": True,
+    #             "username": "testHM",
+    #             "first_name": "Jane_updated",
+    #             "last_name": "Doe_updated",
+    #             "dob": "01/10/1992",
+    #             "email": "testHM@test.com",
+    #         },
+    #     )
+    #     self.assertEqual(response.status_code, 200)
+    #     form = response.context["form"]
+    #     form.has_error(
+    #         "email",
+    #         "This email is not a valid Email Address for Hiring Manager. "
+    #         "Please use a different email address.",
+    #     )
 
 
 class UserPreferencesSaveTest(TestCase):

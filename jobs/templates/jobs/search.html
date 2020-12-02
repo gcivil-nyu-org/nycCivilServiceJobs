@@ -100,7 +100,7 @@
             <div class="col-lg-3 sidebar">
                 <div class="row justify-content-center">
                     <div class="col-md-12 heading-section">
-                        <h2 class="mb-4">&nbsp<h2>
+                        <h2 class="mb-3">&nbsp<h2>
                     </div>
                 </div>
                 <div class="sidebar-box bg-white p-4 ftco-animate">
@@ -169,6 +169,7 @@
                             type="date" id="post-after" name="post-after">
                     </div>
                     <br>
+                    <button type="button" class="form-group btn btn-primary" onclick=resetfilter()>Reset Filters</button>
                 </div>
             </div>
             <!-- <div class="col-lg-9 pr-lg-4"> -->
@@ -176,7 +177,7 @@
                 <div class="row col-md-12 mb-3" style="margin: 0;padding: 0;">
                     <div class="col-md-11 justify-content-center" style="padding: 0;">
                         <div class="heading-section">
-                            <h2 id='jobCount'>Found {{object_list.count}} matching jobs: </h2>
+                            <h2 id='jobCount' style="font-weight: 800; font-size: 25px;">Showing  {{page_obj.start_index}} - {{page_obj.end_index}} of {{page_obj.paginator.count}} found jobs</h2>
                         </div>
                     </div>
                     <div class="col-sm-1 btn-group sort-btn">
@@ -196,7 +197,7 @@
                 </div>
 
                 <div class="row" id="listing">
-                    {% include "jobs/table_content.html" with jobs=object_list %}
+                    {% include "jobs/table_content.html" with jobs=page_obj request=request paginator=paginator %}
                 </div>
             </div>
         </div>
@@ -213,6 +214,7 @@
     var salary_asc = false;
     var cs_title = "";
     function sort(id) {
+
         var button_text = "Sort "
         if (id == "sort-posting") {
             date_asc = !date_asc
@@ -244,7 +246,9 @@
 
         console.log(id, date_asc)
     }
-    function senddata() {
+    function senddata(page=-1) {
+      console.log(page);
+      console.log("senddata");
         var query = $('#id_q').val()
         var posting_type = $('#posting-type').find(":selected").val()
         var date = $('#post-after').val();
@@ -281,7 +285,8 @@
                 sort_order: sort_order,
                 asc: asc,
                 query: query,
-                fp: fp
+                fp: fp,
+                page:page
             },
             success: function (json) {
                 putTableData(json);
@@ -291,11 +296,35 @@
             }
         });
     }
+    function resetfilter(){
+
+      console.log("reset");
+      $("#posting-type").val('').trigger('change.select2');
+      $('#cs_title').val('').trigger('change.select2');
+      $("#agency").val('').trigger('change.select2');
+      $("#career-level").val('').trigger('change.select2');
+      $("input[type=date]").val('');
+      document.getElementById('salary-range').value = 0;
+      updateInput(0);
+      $("#fp").val('').trigger('change');
+      // sort("");
+
+    }
     function putTableData(data) {
         console.log()
         $("#listing").html(data.rendered_table);
-        $('#jobCount').text("Found " + data.count + " matching jobs: ");
-        $('[id^="favBtnID"]').tooltip();
+        debugger;
+        // $('#jobCount').text("Found " + data.count + " matching jobs");
+        if(data.count>0){
+            $('#jobCount').text("Showing " + data.page_start_index + ' - ' + data.page_end_index + " of "+ data.count + " found jobs");
+            $('#sort-order').css('display','block');
+        }else{
+            $('#jobCount').text("No matching jobs found");
+            $('#sort-order').css('display','none');
+        }
+
+        //$('[id^="favBtnID"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();
         var form = $('.favJob');
         var formMessages = $('#form-messages');
         $(form).submit(function (event) {
@@ -356,6 +385,7 @@
                 //debugger;
             });
         });
+        $(window).scrollTop(0);
     }
     function getCookie(name) {
         let cookieValue = null;
@@ -380,7 +410,7 @@
 
     $(window).on('load', function () {
 
-        $('.active').removeClass('active');
+        $('.nav-item').removeClass('active');
         $('.navbar-nav li').eq(1).addClass('active');
 
         $("#posting-type").change(function (event) {
@@ -416,6 +446,20 @@
             minimumResultsForSearch: Infinity,
             width: '100%'
         });
+
+  //       $( '.pagination #prev' ).click( function(e) {
+  // e.preventDefault();
+  // url = ($( '.step-links #prev' )[0].href);
+  // console.log(url);
+  // // ajax_get_update();
+  // });
+  // $( '.pagination #next' ).click( function(e) {
+  // e.preventDefault();
+  // url = ($( '.step-links #next' )[0].href);
+  // conosole.log(url);
+  // // ajax_get_update();
+  //
+  // });
 
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();

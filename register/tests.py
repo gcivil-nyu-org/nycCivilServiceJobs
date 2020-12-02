@@ -14,12 +14,12 @@ class BaseTest(TestCase):
             first_name="Jane",
             last_name="Doe",
             dob="1994-10-02",
-            email="janetest@username.gov",
+            email="janetest@username.com",
             password="thisisapassword",
         )
 
         self.user = {
-            "is_hiring_manager": "True",
+            "is_hiring_manager": "False",
             "username": "testuser",
             "first_name": "john",
             "last_name": "doe",
@@ -56,21 +56,43 @@ class BaseTest(TestCase):
             "first_name": "john",
             "last_name": "doe",
             "dob": "01/10/1992",
-            "email": "janetest@username.gov",
+            "email": "janetest@username.com",
             "password1": "thisisapassword",
             "password2": "thisisapassword",
         }
 
-        self.user_hm_invalid_email = {
-            "is_hiring_manager": "True",
+        self.user_invalid_dob_past = {
+            "is_hiring_manager": "False",
             "username": "testjane",
-            "first_name": "john",
-            "last_name": "doe",
-            "dob": "01/10/1992",
-            "email": "jane@username.com",
+            "first_name": "Jane_updated",
+            "last_name": "Doe_updated",
+            "dob": "01/10/1802",
+            "email": "testjohn@test.com",
             "password1": "thisisapassword",
             "password2": "thisisapassword",
         }
+
+        self.user_invalid_dob_future = {
+            "is_hiring_manager": "False",
+            "username": "testjane",
+            "first_name": "Jane_updated",
+            "last_name": "Doe_updated",
+            "dob": "01/10/2030",
+            "email": "testjohn@test.com",
+            "password1": "thisisapassword",
+            "password2": "thisisapassword",
+        }
+
+        # self.user_hm_invalid_email = {
+        #     "is_hiring_manager": "True",
+        #     "username": "testjane",
+        #     "first_name": "john",
+        #     "last_name": "doe",
+        #     "dob": "01/10/1992",
+        #     "email": "jane@username.com",
+        #     "password1": "thisisapassword",
+        #     "password2": "thisisapassword",
+        # }
 
         return super().setUp
 
@@ -96,12 +118,30 @@ class RegisterFormTest(BaseTest):
             "Please use a different email address.",
         )
 
-    def test_form_hm_invalid_email(self):
-        form = SignUpForm(self.user_hm_invalid_email)
+    def test_form_dob_invalid_past(self):
+        form = SignUpForm(self.user_invalid_dob_past)
         form.has_error(
-            "This email is not a valid Email Address for Hiring Manager. "
-            "Please use a different email address."
+            "dob",
+            "Invalid Date of Birth",
         )
+
+    def test_form_dob_invalid_future(self):
+        form = SignUpForm(self.user_invalid_dob_future)
+        form.has_error(
+            "dob",
+            "Invalid Date of Birth",
+        )
+
+    def test_form_dob_valid(self):
+        form = SignUpForm(self.user)
+        self.assertTrue(form.is_valid())
+
+    # def test_form_hm_invalid_email(self):
+    #     form = SignUpForm(self.user_hm_invalid_email)
+    #     form.has_error(
+    #         "This email is not a valid Email Address for Hiring Manager. "
+    #         "Please use a different email address."
+    #     )
 
 
 class RegisterTestView(BaseTest):
@@ -112,7 +152,7 @@ class RegisterTestView(BaseTest):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "register/signup.html")
 
-    def test_user_can_register_as_HM(self):
+    def test_user_can_register_as_JOB(self):
         user_count = User.objects.count()
         response = self.client.post(self.register_url, self.user, format="text/html")
         user_count = user_count + 1

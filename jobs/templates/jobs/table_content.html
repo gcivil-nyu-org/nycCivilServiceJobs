@@ -86,14 +86,14 @@
                         {%if saved_jobs_user is not None and job.id in saved_jobs_user%}
                         <i id="favBtnID{{job.id}}"
                             class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
-                            data-toggle="tooltip" data-placement="top" title="Unsave" 
+                            data-toggle="tooltip" data-placement="top" title="Unsave"
                             style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                             <span class="icon-heart" style="color:#fdab44;"></span>
                         </i>
                         {% else %}
                         <i id="favBtnID{{job.id}}"
                             class=" icon text-center d-flex justify-content-center align-items-center icon mr-2"
-                            data-toggle="tooltip" data-placement="top" title="Save" 
+                            data-toggle="tooltip" data-placement="top" title="Save"
                             style="opacity: 1; background-color: rgb(40, 167, 69) !important;">
                             <span class="icon-heart" style="color: rgb(255, 255, 255);"></span>
                         </i>
@@ -135,3 +135,61 @@
     </div>
 </div>
 {% endfor %}
+
+{% if is_paginated %}
+<div class="row md-12" style="margin: auto;">
+  <div class="col text-center d-flex justify-content-center">
+    <div class="block-27">
+  <ul class="pagination links" >
+
+
+
+
+    {% if jobs.has_previous %}
+      <!-- <li><a id="prev" href="javascript:senddata('You clicked!')?page={{ page_obj.previous_page_number }}&q={{request.GET.q}}">&laquo;</a></li> -->
+      <li><a id="prev" href="javascript:senddata({{ page_obj.previous_page_number }})">&laquo;</a></li>
+
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% if jobs.number == 1 %}
+      <li class="active"><span>1 <span class="sr-only">(current)</span></span></li>
+     {% else %}
+    <li><a href="javascript:senddata(1)">1</a></li>
+    {% endif %}
+    {% if jobs.number|add:'-2' > 2 %}
+    <li><a href="javascript:senddata({{jobs.number|add:'-3'}})">&hellip;</a></li>
+{% endif %}
+
+    {% for i in paginator.page_range %}
+    {% if i > 1 and i < paginator.num_pages %}
+      {% if jobs.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% elif i > jobs.number|add:'-3' and i < jobs.number|add:'3' %}
+        <li> <a href="javascript:senddata({{ i }})">{{ i }}</a> </li>
+      {% endif %}
+    {% endif %}
+
+    {% endfor %}
+
+    {% if paginator.num_pages > jobs.number|add:'3' %}
+    <li><a href="javascript:senddata({{jobs.number|add:'3'}})">&hellip;</a></li>
+{% endif %}
+{% if paginator.num_pages > 1 %}
+{% if jobs.number == paginator.num_pages  and jobs.number > 1 %}
+  <li class="active"><span>{{paginator.num_pages}} <span class="sr-only">(current)</span></span></li>
+{% else %}
+<li><a href="javascript:senddata({{paginator.num_pages}})">{{paginator.num_pages}}</a></li>
+{% endif %}
+{% endif %}
+    {% if jobs.has_next %}
+      <li><a id="next" href="javascript:senddata({{ jobs.next_page_number }})">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+
+  </ul>
+{% endif %}
+</div>
+</div>
+</div>
