@@ -90,6 +90,7 @@ def save_exam_result_active():
                             entries.append(
                                 ExamResultsActive(
                                     exam_number=row["exam_no"],
+                                    display_exam_number=row["exam_no"],
                                     list_number=row["list_no"],
                                     first_name=row["first_name"],
                                     last_name=row["last_name"],
@@ -105,6 +106,9 @@ def save_exam_result_active():
                                         row["anniversary_date"]
                                     ),
                                     published_date=getAwareDate(row["published_date"]),
+                                    established_date=getAwareDate(
+                                        row["established_date"]
+                                    ),
                                     extension_date=getAwareDate(row["extension_date"]),
                                     veteran_credit=row["veteran_credit"],
                                     parent_legacy_credit=row["parent_lgy_credit"],
