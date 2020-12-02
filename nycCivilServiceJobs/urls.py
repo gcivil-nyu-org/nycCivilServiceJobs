@@ -32,4 +32,5 @@ urlpatterns = [
     path("dashboard/", include("dashboard.urls")),
     path("about/", TemplateView.as_view(template_name="aboutus.html"), name="aboutus"),
     path("faq/", include("faq.urls")),
+    path("contact/", include("contactus.urls")),
 ]

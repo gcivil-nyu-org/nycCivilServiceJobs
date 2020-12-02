@@ -1,0 +1,73 @@
+{% extends 'landing_base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+<head>
+  <style>
+.asteriskField {
+  display: none;
+}
+</style>
+</head>
+
+<section class="ftco-section bg-light pt-5">
+
+<div class="pt-5">
+  <div class="container">
+      <div class="row align-items-center pt-5 flex">
+        <div class="col-lg-6 order-2 order-lg-1" style="margin:auto;text-align: center;">
+        <h2 class="font-weight-light">
+            <i class="fa fa-envelope-open fa-1x mb-3 text-primary"></i> Get in touch with us
+        </h2>
+        <p class="font-italic text-muted mb-4">We'd love to hear your feedback</p>
+        </div>
+      </div>
+  </div>
+</div>
+
+<div class="bg-white py-4">
+  <div class="container">
+
+    <!-- Contact Us Section -->
+    <!-- Start Row -->
+    <div class="row">
+        <aside class="col-sm-6" style="margin:auto">
+        <div class="card">
+                <article class="card-body">
+
+                 {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+                {% endfor %}
+
+                    <form method='POST' class="from-group">
+                        {% csrf_token %}
+                        {{form|crispy}}
+
+                        <input class="btn btn-lg btn-success btn-block" type="submit" value="Submit"/>
+
+                    </form>
+                </article>
+            </div>
+        </aside>
+
+    </div>
+    <!-- End Row -->
+    <!-- Contact Us Section End -->
+
+  </div>
+</div>
+
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    $('li.nav-item.active').removeClass('active');   
+});
+</script>
+{% endblock javascript %}

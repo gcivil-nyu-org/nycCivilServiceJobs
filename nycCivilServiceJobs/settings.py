@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
+    "contactus.apps.ContactUsConfig",
     "dashboard.apps.DashboardConfig",
     "faq.apps.FaqConfig",
     "examresults.apps.ExamresultsConfig",
