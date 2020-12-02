@@ -7,21 +7,20 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='ContactUsModel',
+            name="ContactUsModel",
             fields=[
-                ('contact_id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(blank=True, max_length=32, null=True)),
-                ('email', models.CharField(blank=True, max_length=64, null=True)),
-                ('subject', models.CharField(blank=True, max_length=256, null=True)),
-                ('message', models.CharField(blank=True, max_length=1000, null=True)),
+                ("contact_id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(blank=True, max_length=32, null=True)),
+                ("email", models.CharField(blank=True, max_length=64, null=True)),
+                ("subject", models.CharField(blank=True, max_length=256, null=True)),
+                ("message", models.CharField(blank=True, max_length=1000, null=True)),
             ],
             options={
-                'verbose_name_plural': 'Contact Us',
+                "verbose_name_plural": "Contact Us",
             },
         ),
     ]

@@ -38,12 +38,14 @@ class ContactUsView(CreateView):
 
         email_subject_admin = "A request has been submitted"
         to_email_admin = "nyccivilservice.csgy6063@gmail.com"
-        email_admin = EmailMessage(email_subject_admin, message_admin, to=[to_email_admin])
+        email_admin = EmailMessage(
+            email_subject_admin, message_admin, to=[to_email_admin]
+        )
         email_admin.send()
 
         return super(ContactUsView, self).form_valid(form)
 
     def get_success_url(self):
-        messages.success(self.request, 'Your request has been submitted')
+        messages.success(self.request, "Your request has been submitted")
 
-        return reverse('contactus:contactus')
+        return reverse("contactus:contactus")
