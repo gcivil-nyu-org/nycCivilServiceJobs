@@ -23,7 +23,7 @@ class ContactUsView(CreateView):
             },
         )
 
-        email_subject = "We have received your message"
+        email_subject = "We have received your request"
         to_email = form.cleaned_data.get("email")
         email = EmailMessage(email_subject, message, to=[to_email])
         email.send()
