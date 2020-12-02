@@ -33,6 +33,8 @@
 
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
+  <link rel="icon" type="image/png" href="{% static 'images/Favicon.png' %}"/>
+
   <!-- START nav -->
   <nav class="navbar navbar-expand-lg ftco-navbar-light" id="ftco-navbar" style="top:0;">
     <!-- <div class="container"> -->
@@ -104,30 +106,28 @@
 
   {% endblock %}
 
-  <!-- Footer Area Start -->
-  <footer>
+    <!-- Footer Area Start -->
     <footer class="py-4 bg-light mt-auto">
-      <div class="container-fluid">
-        <div class="d-flex align-items-center justify-content-between small">
-          <div class="text-muted">
-            Copyright &copy; nycCivilServiceJobs 2020
-            &middot;
-            All rights reserved by Team Python Pirates
-          </div>
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-muted">
+                    Copyright &copy; nycCivilServiceJobs 2020
+                    &middot;
+                    All rights reserved by Team Python Pirates
+                </div>
 
-          <div>
-            <a href="{% url 'aboutus' %}">About Us</a>
-            &middot;
-            <a href="#">Contact Us</a>
-            &middot;
-            <a href="#">Terms &amp; Conditions</a>
-            </main>
+                <div>
+                    <a href="{% url 'aboutus' %}">About Us</a>
+                    &middot;
+                    <a href="#">Contact Us</a>
+                    &middot;
+                    <a href="#">Terms &amp; Conditions</a> {# TO DO #}
+                    </main>
 
+                </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </footer>
-  </footer>
+      </footer>
   <!-- Footer area End -->
 
 
