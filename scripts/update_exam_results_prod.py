@@ -82,31 +82,30 @@ def update_exam_result_active():
                     last_name=row["last_name"],
                     middle_initial=row["mi"],
                 )
-                if val_in_db.exists():
-                    break
-                entries.append(
-                    ExamResultsActive(
-                        exam_number=row["exam_no"],
-                        list_number=row["list_no"],
-                        first_name=row["first_name"],
-                        last_name=row["last_name"],
-                        middle_initial=row["mi"],
-                        adjust_final_average=row["adj_fa"],
-                        list_title_code=row["list_title_code"],
-                        list_title_desc=row["list_title_desc"],
-                        group_number=row["group_no"],
-                        list_agency_code_promo=row["list_agency_code"],
-                        list_agency_code_promo_desc=row["list_agency_desc"],
-                        list_div_code_promo=row["list_div_code"],
-                        anniversary_date=getAwareDate(row["anniversary_date"]),
-                        extension_date=getAwareDate(row["extension_date"]),
-                        published_date=getAwareDate(row["published_date"]),
-                        veteran_credit=row["veteran_credit"],
-                        parent_legacy_credit=row["parent_lgy_credit"],
-                        sibling_legacy_credit=row["sibling_lgy_credit"],
-                        residency_credit=row["residency_credit"],
+                if not val_in_db.exists():
+                    entries.append(
+                        ExamResultsActive(
+                            exam_number=row["exam_no"],
+                            list_number=row["list_no"],
+                            first_name=row["first_name"],
+                            last_name=row["last_name"],
+                            middle_initial=row["mi"],
+                            adjust_final_average=row["adj_fa"],
+                            list_title_code=row["list_title_code"],
+                            list_title_desc=row["list_title_desc"],
+                            group_number=row["group_no"],
+                            list_agency_code_promo=row["list_agency_code"],
+                            list_agency_code_promo_desc=row["list_agency_desc"],
+                            list_div_code_promo=row["list_div_code"],
+                            anniversary_date=getAwareDate(row["anniversary_date"]),
+                            extension_date=getAwareDate(row["extension_date"]),
+                            published_date=getAwareDate(row["published_date"]),
+                            veteran_credit=row["veteran_credit"],
+                            parent_legacy_credit=row["parent_lgy_credit"],
+                            sibling_legacy_credit=row["sibling_lgy_credit"],
+                            residency_credit=row["residency_credit"],
+                        )
                     )
-                )
 
             except Exception as e:
                 print("Error", e)
