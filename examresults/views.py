@@ -2,6 +2,7 @@ from examresults.models import ExamResultsActive
 from django.db.models import Q
 from django.views.generic import ListView
 from django_datatables_view.base_datatable_view import BaseDatatableView
+from django.db.models import F
 
 
 class ExamsActiveView(ListView):
@@ -37,7 +38,7 @@ class ExamsActiveView(ListView):
         context["title_desc"] = self.title_desc
         context["recent_exam_res"] = (
             ExamResultsActive.objects.all()
-            .order_by("-published_date")
+            .order_by(F("published_date").desc(nulls_last=True))
             .values_list("exam_number", "list_title_desc", "published_date")
             .distinct()[:4]
         )
