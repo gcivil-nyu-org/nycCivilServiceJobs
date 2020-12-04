@@ -222,3 +222,23 @@ class SaveCivilServiceTitleView(View):
                 # print ('inside post else')
                 response_data["response_data"] = "User not authenticated"
                 return JsonResponse(response_data, status=200)
+
+
+def handler404(request, *args, **argv):
+    context = {"code": 404}
+    return render(request, "errors/errors.html", context=context)
+
+
+def handler403(request, *args, **argv):
+    context = {"code": 403}
+    return render(request, "errors/errors.html", context=context)
+
+
+def handler400(request, *args, **argv):
+    context = {"code": 400}
+    return render(request, "errors/errors.html", context=context)
+
+
+def handler500(request, *args, **argv):
+    context = {"code": 500}
+    return render(request, "errors/errors.html", context=context)

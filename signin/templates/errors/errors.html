@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+	<title>nycCivilServiceJobs</title>
+
+	<link href="https://fonts.googleapis.com/css?family=Kanit:200" rel="stylesheet">
+
+
+	<!-- Custom stlylesheet -->
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+
+</head>
+
+<body>
+
+	<div id="notfound">
+		<div class="notfound">
+			<div class="text-center d-flex justify-content-center">
+      <a  class="navbar-brand" href="{% url 'index' %}"><img alt="nycCivilServiceJobs"
+          src="{% static 'images/Logo.png' %}" height="100"></a>
+			</div>
+			<div class="notfound-404">
+				<h1>{{code}} </h1>
+			</div>
+
+      {% if code == 404 %}
+			<h2>Oops! Nothing was found</h2>
+			<p>The page you are looking for might have been removed or is temporarily unavailable.</p>
+      {% elif code == 403 %}
+        <h2>Resource Forbidden </h2>
+        <p> You don't have the permissions to view this page.</p>
+
+			{% elif code == 400 %}
+        <h2>Sorry. Request could not be processed</h2>
+
+			{% elif code == 500 %}
+        <h2>Something went wrong. </h2>
+        <p> There was error on our side. We are working on this. </p>
+			{% else %}
+        <h2>Something went wrong. </h2>
+        <p>
+      {% endif %}
+
+			<p><a class="error-link"  href="{% url 'index' %}">Return to homepage</a> <a class="error-link"  href="javascript:history.back()">Go Back</a>  <a class="error-link"  href="">Contact Us</a></p>
+		</div>
+	</div>
+
+</body>
+
+</html>

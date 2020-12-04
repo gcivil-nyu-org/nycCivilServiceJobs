@@ -30,3 +30,8 @@ urlpatterns = [
     path("profile/", UserProfileView.as_view(), name="userprofile"),
     path("dashboard/", include("dashboard.urls")),
 ]
+
+handler400 = "signin.views.handler400"
+handler403 = "signin.views.handler403"
+handler404 = "signin.views.handler404"
+handler500 = "signin.views.handler500"
