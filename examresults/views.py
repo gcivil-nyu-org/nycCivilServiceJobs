@@ -54,6 +54,7 @@ class ExamJSON(BaseDatatableView):
         "middle_initial",
         "last_name",
         "adjust_final_average",
+        "list_number",
     ]
     order_columns = [
         "display_exam_number",
@@ -63,6 +64,7 @@ class ExamJSON(BaseDatatableView):
         "middle_initial",
         "last_name",
         "adjust_final_average",
+        "list_number",
     ]
 
     def get_initial_queryset(self, q=None):
