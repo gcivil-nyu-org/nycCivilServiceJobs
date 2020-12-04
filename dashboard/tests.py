@@ -353,8 +353,8 @@ class JobDataTest(TestCase):
         # response = self.client.get(reverse("dashboard:recommendedjobs"))
         # self.assertEqual(response.context["jobs"].count(), 1)
 
-        """ Test-Pass Title ID 1 as the one user is interested and 
-         ID 2 as one user currently holds"""
+        # Test-Pass Title ID 1 as the one user is interested and
+        # ID 2 as one user currently holds
         response = self.client.post(
             reverse("signin:SaveCivilServiceTitleView"),
             data={"user_int_cst[]": [1]},
@@ -379,8 +379,8 @@ class JobDataTest(TestCase):
 
         response = self.client.get(reverse("dashboard:recommendedjobs"))
 
-        """ Expectation is 2 because we have 2 CSTs saved in preferences and 
-        savedjobs CST will not be executed"""
+        # Expectation is 2 because we have 2 CSTs saved in preferences and
+        # savedjobs CST will not be executed
         self.assertEqual(response.context["jobs"].count(), 2)
 
         # Testing when there are more than 10 Jobs matching the CSTs in preferences
