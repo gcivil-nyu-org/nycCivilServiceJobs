@@ -1,13 +1,25 @@
-{% extends 'landing_base.html' %}
-{% load static %}
-{% load humanize %}
-{% block content %}
+{% extends 'landing_base.html' %} {% load static %} {% load humanize %} {% block content %}
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <title>FAQs</title>
+    <Style>
+        .job-post-item-header .fa,
+        .title .fa {
+            transition: .3s transform ease-in-out;
+        }
+        
+        .job-post-item-header .collapsed .fa,
+        .title .collapsed .fa {
+            transform: rotate(-180deg);
+        }
+        
+        .job-post-item-header a {
+            display: flex;
+        }
+    </Style>
 </head>
 <br>
 <br>
@@ -17,6 +29,9 @@
 <section class="ftco-section bg-light">
     <div class="title" style="text-align: center; padding-top:10px">
         <h2 style="font-weight: 800;  ">Frequently Asked Questions</h2>
+        <button id='expandAll' class="btn collapsed" data-toggle="tooltip" title="Expand All" data-placement="bottom">
+            <i class="fa fa-chevron-up pull-right ml-auto" style="font-weight: 800;"></i>
+        </button>
     </div>
 
     <div class="d-flex" id="wrapper">
@@ -27,10 +42,13 @@
                 <div class="job-post-item p-4 d-block align-items-center">
                     <div class="mb-1">
                         <div class="job-post-item-header align-items-center">
-                            <h5><a class="mr-2" style="font-weight: 700; color: black;" data-toggle="collapse"
-                                    href="#demo{{faq.faq_id}}">{{faq.question}}</a>
+                            <h5>
+                                <a class="collapsed align-items-center" style="font-weight: 700; color: black;" data-toggle="collapse" href="#demo{{faq.faq_id}}">
+                                    <span class="pr-4">{{faq.question}}</span>
+                                    <i class="fa fa-chevron-up pull-right ml-auto"></i>
+                                </a>
                             </h5>
-                            <div id="demo{{faq.faq_id}}" class="collapse" style="overflow-y: auto; max-height: 30vh;">
+                            <div id="demo{{faq.faq_id}}" class="collapse text-justify pr-5" style="overflow-y: auto; max-height: 30vh;">
                                 <p style="color:#3b3b3b !important;">{{faq.answer|safe}}</p>
                             </div>
                         </div>
@@ -43,12 +61,37 @@
     </div>
 
 </section>
-{% endblock %}
-
-{% block javascript %}
+{% endblock %} {% block javascript %}
 <script>
-
     $('.active').removeClass('active');
     $('.navbar-nav li').eq(3).addClass('active');
+
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    var flag = true;
+
+    $('#expandAll').click(function() {
+        if (flag) {
+            expand();
+        } else {
+            collapse();
+        }
+
+        flag = !flag;
+    });
+
+    function expand() {
+        $('.job-post-item-header .collapse').collapse('show');
+        $('#expandAll').removeClass('collapsed');
+        $('#expandAll').tooltip('hide').attr('data-original-title', 'Collapse All').tooltip('show');
+    }
+
+    function collapse() {
+        $('.job-post-item-header .collapse').collapse('hide');
+        $('#expandAll').addClass('collapsed');
+        $('#expandAll').tooltip('hide').attr('data-original-title', 'Expand All').tooltip('show');
+    }
 </script>
 {% endblock javascript %}
