@@ -16,7 +16,7 @@
   if (q == '' || q == null) {
     var EXAMS_DATA = '{% url "examresults:exams_data" %}';
     $('#r1').css('display', 'none');
-    $('#noResFound')
+    $('#noResFound').css('display', 'block');
   }
   else {
     var EXAMS_DATA = '{% url "examresults:exams_data" %}?q=' + q;
@@ -49,56 +49,23 @@
   }
 
   var table = $('.datatable').DataTable({
-      language: dt_language,
-      order: [[0, "desc"]],
-      //    columns: [
-      //     {
-      //         data: 'first_name',
-      //         orderable: true,
-      //         searchable: true,
-      //         className: "center"
-      //     },
-      //     {
-      //         data: 'last_name',
-      //         orderable: true,
-      //         searchable: true,
-      //         className: "center"
-      //     },
-      //     {
-      //         data: 'list_title_code',
-      //         orderable: true,
-      //         searchable: true,
-      //         className: "center"
-      //     },
-      //     {
-      //         data: 'exam_number',
-      //         orderable: true,
-      //         searchable: true,
-      //         className: "center"
-      //     }
-      // ],
-      searching: true,
-      lengthChange: false,
-      processing: true,
-      serverSide: true,
-      stateSave: true,
-      ajax: EXAMS_DATA,
-      //          initComplete: function(settings, json){
-      //     var info = this.api().page.info();
-      //
-      //     if(info.recordsTotal==0)
-      //     {
-      //       document.getElementById("r1").style.display="none";
-      //     }
-      // },
-    });
+    language: dt_language,
+    order: [[0, "desc"]],
+    searching: true,
+    lengthChange: false,
+    processing: true,
+    serverSide: true,
+    stateSave: true,
+    ajax: EXAMS_DATA,
+
+  });
 
   $(document).ready(function () {
 
     $('.active').removeClass('active');
     $('.navbar-nav li').eq(2).addClass('active');
 
-    
+
     table.search('').columns().search('').draw();
 
 
@@ -135,7 +102,7 @@
     });
   });
 
-  function resetfilter(){
+  function resetfilter() {
     console.log("reset");
     $("#first-name").val('');
     $("#last-name").val('');
@@ -178,8 +145,7 @@
 <br>
 <br>
 <br>
-<section class="ftco-section bg-light full">
-  <!-- <div class="container"> -->
+<section class="ftco-section bg-light">
 
   <form method="GET" action="{% url 'examresults:exams' %}">
     <div class="form-row pt-3">
@@ -238,6 +204,7 @@
             <th>Middle Name</th>
             <th>Last Name</th>
             <th>Final Average</th>
+            <th>List Number</th>
           </thead>
 
         </table>
@@ -246,25 +213,26 @@
 
     <div class="col" id="noResFound">
       <div style="padding: 20px 100px 20px 100px">
-        <div>
-          <div class="heading-section">
-            <h2 id='jobCount' style="font-weight: 800; font-size: 25px; padding-left: 45px;">Recently Released Exam Results:</h2>
-          </div>
-          <div class="row flex align-items-center" style="justify-content: center;">
-            {% for result in recent_exam_res %}
-            <div class="job-post-item p-4" style="width: 400px !important; margin:20px 20px 20px 20px!important">
-              <div class="mb-1">
-                <div class="job-post-item-header align-items-center">
-                  <h4><b> {{result.1}} </b></h4>
-                </div>
-                <div class="job-post-item-center"> Exam Number: {{result.0}}</div>
-                <div class="job-post-item-center"> Date Published: {{result.2 |date:'m-d-Y'}}</div>
-              </div>
-              <div> <a class="btn-link" style="color:#28a745 !important ;" href="/exams/?q={{result.0}}"> View Result </a></div>
-            </div>
-            {% endfor %}
-          </div>
 
+        <div class="heading-section">
+          <h2 id='jobCount' style="font-weight: 800; font-size: 25px; text-align: center;">Recently Released Exam
+            Results:</h2>
+        </div>
+        <div class="row flex align-items-center" style="justify-content: center;">
+          {% for result in recent_exam_res %}
+          <div class="job-post-item p-4"
+            style="width: 400px !important; height: 210px; margin:20px 20px 20px 20px!important">
+            <div class="mb-1">
+              <div class="job-post-item-header align-items-center">
+                <h4><b> {{result.1}} </b></h4>
+              </div>
+              <div class="job-post-item-center"> Exam Number: {{result.0}}</div>
+              <div class="job-post-item-center"> Date Published: {{result.2 |date:'m-d-Y'}}</div>
+            </div>
+            <div> <a class="btn-link" style="color:#28a745 !important ;" href="/exams/?q={{result.0}}"> View Result </a>
+            </div>
+          </div>
+          {% endfor %}
         </div>
       </div>
     </div>
