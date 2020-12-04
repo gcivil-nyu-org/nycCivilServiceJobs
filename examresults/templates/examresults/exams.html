@@ -224,10 +224,14 @@
             style="width: 400px !important; height: 210px; margin:20px 20px 20px 20px!important">
             <div class="mb-1">
               <div class="job-post-item-header align-items-center">
+                {% if result.1|length >= 40 %}
+                <h4><b> {{result.1| slice:":40"}}....</b></h4>
+                {% else %}  
                 <h4><b> {{result.1}} </b></h4>
+                {% endif%}
               </div>
               <div class="job-post-item-center"> Exam Number: {{result.0}}</div>
-              <div class="job-post-item-center"> Date Published: {{result.2 |date:'m-d-Y'}}</div>
+              <div class="job-post-item-center"> Date Added: {{result.2|slice:":11" }}</div>
             </div>
             <div> <a class="btn-link" style="color:#28a745 !important ;" href="/exams/?q={{result.0}}"> View Result </a>
             </div>
