@@ -47,12 +47,8 @@
       "sortDescending": "{% trans ': activate to sort column descending' %}"
     }
   }
-  $(document).ready(function () {
 
-    $('.active').removeClass('active');
-    $('.navbar-nav li').eq(2).addClass('active');
-
-    var table = $('.datatable').DataTable({
+  var table = $('.datatable').DataTable({
       language: dt_language,
       order: [[0, "desc"]],
       //    columns: [
@@ -96,6 +92,13 @@
       //     }
       // },
     });
+
+  $(document).ready(function () {
+
+    $('.active').removeClass('active');
+    $('.navbar-nav li').eq(2).addClass('active');
+
+    
     table.search('').columns().search('').draw();
 
 
@@ -130,9 +133,15 @@
       minimumResultsForSearch: Infinity,
       width: '100%'
     });
-
-
   });
+
+  function resetfilter(){
+    console.log("reset");
+    $("#first-name").val('');
+    $("#last-name").val('');
+    $("#title-desc").val('').trigger('change.select2');
+    table.columns().search('').draw();
+  }
 </script>
 
 {% endblock javascript %}
@@ -215,10 +224,8 @@
           <br>
           <div> Last Name </div>
           <input class="form-control myfont" type="text" id="last-name" />
-
-
-
-
+          <br>
+          <button type="button" class="form-group btn btn-primary" onclick='resetfilter()'>Reset Filters</button>
         </div>
       </div>
       <div class="col-lg-9">
