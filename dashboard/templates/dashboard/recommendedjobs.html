@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <title>Saved Jobs</title>
+    <title>Recommended Jobs</title>
 </head>
 <br>
 <br>
@@ -25,10 +25,11 @@
                 <a href="{% url 'dashboard:dashboard' %}"
                     class="nav-item list-group-item list-group-item-action bg-light">Dashboard</a>
                 <a href="{% url 'dashboard:savedjobs' %}"
-                    class="nav-item list-group-item list-group-item-action bg-light text-success"> Saved Jobs</a>
+                    class="nav-item list-group-item list-group-item-action bg-light"> Saved Jobs</a>
                 <a href="{% url 'dashboard:recommendedjobs' %}"
-                    class="nav-item list-group-item list-group-item-action bg-light"> Recommended Jobs</a>
-                <a href="{% url 'dashboard:subscription' %}" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
+                    class="nav-item list-group-item list-group-item-action bg-light text-success"> Recommended Jobs</a>
+                <a href="{% url 'dashboard:subscription' %}"
+                    class="list-group-item list-group-item-action bg-light">Subscriptions</a>
             </div>
         </div>
 
@@ -99,7 +100,7 @@
                 <div id="layoutSidenav_content">
                     <div class="container-fluid " style="padding-top: 10px;">
                         <div class="row bg-light">
-                            {% if jobs and saved_jobs_user %}
+                            {% if jobs %}
 
                             {% for job in jobs %}
                             <div class="col-md-12 ftco-animate">
@@ -107,14 +108,15 @@
                                     <div class="one-third mb-4 mb-md-0">
                                         <div class="job-post-item-header align-items-center">
                                             {% if job.posting_type == "Internal" %}
-                            <span class="text-white badge py-2 px-3" style="background-color:palevioletred"
-                                data-toggle="tooltip" data-placement="top"
-                                title="Posting open to Internal City Employees">{{job.posting_type}}</span>
-                            {% else %}
-                            <span class="text-white badge py-2 px-3" style="background-color:steelblue"
-                                data-toggle="tooltip" data-placement="top"
-                                title="Posting open to Public">{{job.posting_type}}
-                            {% endif %}</span>
+                                            <span class="text-white badge py-2 px-3"
+                                                style="background-color:palevioletred" data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Posting open to Internal City Employees">{{job.posting_type}}</span>
+                                            {% else %}
+                                            <span class="text-white badge py-2 px-3" style="background-color:steelblue"
+                                                data-toggle="tooltip" data-placement="top"
+                                                title="Posting open to Public">{{job.posting_type}}
+                                                {% endif %}</span>
                                             <span class="text-white badge py-2 px-3"
                                                 style="margin-left: 5px; background-color:olive">{{job.career_level }}</span>
                                             {% if job.post_until is None %}
@@ -141,11 +143,11 @@
                                                     {% if job.title_classification == 'Competitive' %}
                                                     <span data-toggle="tooltip" data-placement="right"
                                                         title="The Civil Service Title for this posting requires taking an education/experience exam, written exam or both">{{job.title_classification}}</span>
-                                            
-                                                {% else %}
-                                                <span data-toggle="tooltip" data-placement="right"
-                                                    title="The Civil Service Title for this posting doesn't require taking an exam">{{job.title_classification}}
-                                                {% endif %}</span>
+
+                                                    {% else %}
+                                                    <span data-toggle="tooltip" data-placement="right"
+                                                        title="The Civil Service Title for this posting doesn't require taking an exam">{{job.title_classification}}
+                                                        {% endif %}</span>
                                                 </p>
                                                 {% if job.full_time_part_time_indicator == 'F' %}
                                                 <p><b>Full-time/Part-Time: </b>Full-Time</p>
@@ -170,14 +172,16 @@
                                             </div>
                                         </div>
                                         <div class="job-post-item-body d-block d-md-flex">
-                                            <div class="mr-3"><span class="icon-layers"></span> <span data-toggle="tooltip" data-placement="bottom"
-                                                title="Agency">{{job.agency}}</span>
-                                        </div>
-                                        <div><span class="icon-person"></span> <span data-toggle="tooltip" data-placement="bottom"
-                                                title="Civil Service Title">{{job.civil_service_title}}</span>
+                                            <div class="mr-3"><span class="icon-layers"></span> <span
+                                                    data-toggle="tooltip" data-placement="bottom"
+                                                    title="Agency">{{job.agency}}</span>
+                                            </div>
+                                            <div><span class="icon-person"></span> <span data-toggle="tooltip"
+                                                    data-placement="bottom"
+                                                    title="Civil Service Title">{{job.civil_service_title}}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
                                     <div class="one-forth ml-auto d-flex align-items-center mt-4 md-md-0" style="
                                         width: auto">
@@ -261,7 +265,7 @@
 
                         </div>
                         {% else %}
-                        <h4 class="ml-4 pt-1 pl-4">You do not have any saved jobs.</h4>
+                        <h4 class="ml-4 pt-1 pl-4">In order for nycCivilServiceJobs to recommend jobs please update your preferences.</h4>
                         {% endif %}
 
                     </div>
@@ -301,7 +305,7 @@
                 //     'cssText': 'background-color: #28a745 !important; opacity:1'
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#fdab44");
-               // $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
+                // $("#favBtnID" + response["job_id"]).attr('title', 'Unsave');
                 $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Unsave').tooltip('show');
             } else if (response["response_data"] == "Job Unsaved") {
                 $('#favBtnID' + response["job_id"]).css({
@@ -312,7 +316,7 @@
                 // });
                 $("#favBtnID" + response["job_id"]).children().css("color", "#FFFFFF");
                 // $("#favBtnID" + response["job_id"]).removeAttr("style");
-               // $("#favBtnID" + response["job_id"]).attr('title', 'Save');
+                // $("#favBtnID" + response["job_id"]).attr('title', 'Save');
                 $("#favBtnID" + response["job_id"]).tooltip('hide').attr('data-original-title', 'Save').tooltip('show');
             } else if (response["response_data"] == "User not authenticated") {
                 // if ($("#alert" + response["job_id"]).css('display') == 'none') {
