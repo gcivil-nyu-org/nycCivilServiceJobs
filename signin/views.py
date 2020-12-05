@@ -15,7 +15,6 @@ from django.core.exceptions import (
     SuspiciousOperation,
     ObjectDoesNotExist,
 )
-from django.http import Http404
 
 
 class SignInView(FormView):
@@ -232,10 +231,6 @@ class SaveCivilServiceTitleView(View):
 
 def permission_denied_view(request):
     raise PermissionDenied
-
-
-def not_found_view(request):
-    raise Http404()
 
 
 def bad_request_view(request):

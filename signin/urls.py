@@ -20,7 +20,6 @@ from signin.views import (
     SaveCivilServiceTitleView,
     permission_denied_view,
     bad_request_view,
-    not_found_view,
     server_error_view,
 )
 
@@ -65,6 +64,5 @@ urlpatterns = [
     ),
     path("403/", permission_denied_view, name="error403"),
     path("400/", bad_request_view, name="error400"),
-    path("404/", not_found_view, name="error404"),
     path("500/", server_error_view, name="error500"),
 ]

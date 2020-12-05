@@ -15,7 +15,7 @@ def get_faqs():
     faq_count_before = faq.objects.count()
     faq_csv = "scripts/FAQ_list.csv"
     entries = []
-    with open(faq_csv) as f:
+    with open(faq_csv, encoding="utf8") as f:
         reader_faq = csv.reader(f, delimiter=",")
 
         for row in reader_faq:

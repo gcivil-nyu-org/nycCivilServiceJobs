@@ -5,7 +5,7 @@ from django.urls import reverse
 class CustomErrorHandlerTests(TestCase):
     def test_handler_renders_template_response(self):
 
-        response = self.client.get("/404/")
+        response = self.client.get("/doesnotexist/")
         self.assertEqual(response.context["code"], 404)
         self.assertTemplateUsed(response, "errors/errors.html")
         self.assertContains(response, "Nothing was found")
