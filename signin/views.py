@@ -10,6 +10,12 @@ from signin.forms import UserProfileForm
 from examresults.models import CivilServicesTitle
 from signin.models import UsersCivilServiceTitle
 import json
+from django.core.exceptions import (
+    PermissionDenied,
+    SuspiciousOperation,
+    ObjectDoesNotExist,
+)
+from django.http import Http404
 
 
 class SignInView(FormView):
@@ -222,6 +228,22 @@ class SaveCivilServiceTitleView(View):
                 # print ('inside post else')
                 response_data["response_data"] = "User not authenticated"
                 return JsonResponse(response_data, status=200)
+
+
+def permission_denied_view(request):
+    raise PermissionDenied
+
+
+def not_found_view(request):
+    raise Http404()
+
+
+def bad_request_view(request):
+    raise SuspiciousOperation
+
+
+def server_error_view(request):
+    raise ObjectDoesNotExist
 
 
 def handler404(request, *args, **argv):
