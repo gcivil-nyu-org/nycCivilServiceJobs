@@ -35,12 +35,16 @@ class ExamsActiveView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title_desc"] = self.title_desc
-        context["recent_exam_res"] = (
+
+        recent_exam_res = (
             ExamResultsActive.objects.all()
-            .order_by("-published_date")
-            .values_list("exam_number", "list_title_desc", "published_date")
+            .extra(select={"recent_date": "COALESCE(published_date, established_date)"})
+            .extra(order_by=["-recent_date"])
+            .values_list("exam_number", "list_title_desc", "recent_date")
             .distinct()[:4]
         )
+
+        context["recent_exam_res"] = recent_exam_res
         return context
 
 
