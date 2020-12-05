@@ -34,3 +34,8 @@ urlpatterns = [
     path("faq/", include("faq.urls")),
     path("contact/", include("contactus.urls")),
 ]
+
+handler400 = "signin.views.handler400"
+handler403 = "signin.views.handler403"
+handler404 = "signin.views.handler404"
+handler500 = "signin.views.handler500"
