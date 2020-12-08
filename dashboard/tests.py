@@ -59,14 +59,11 @@ class JobDataTest(TestCase):
             job.save()
 
         # set up fake Civil Service title
-        civil_service_title = CivilServicesTitle(
-            title_code=1, title_description="title_description_1"
-        )
-        civil_service_title_2 = CivilServicesTitle(
-            title_code=2, title_description="title_description_2"
-        )
-        civil_service_title.save()
-        civil_service_title_2.save()
+        for i in range(15):
+            civil_service_title = CivilServicesTitle(
+                title_code=i + 1, title_description="title_description_" + str(i + 1)
+            )
+            civil_service_title.save()
 
         # set up fake Exam Reuslt Service title
         exam = ExamResultsActive(
@@ -283,3 +280,119 @@ class JobDataTest(TestCase):
         self.assertEqual(
             json.loads(response.content)["response_data"], "EXAM_SUBSCRIBED_DELETED"
         )
+
+    def test_recommended_jobs_dashboard_page(self):
+        # not logged in try accessing recommended page redirects landing
+        response = self.client.get(reverse("dashboard:recommendedjobs"))
+        self.assertRedirects(response, reverse("index"), fetch_redirect_response=False)
+        # logged in accessing savedjobs displays saved jobs
+        self.client.login(username=self.test_user.username, password="thisisapassword")
+        response = self.client.get(reverse("dashboard:recommendedjobs"))
+        self.assertTemplateUsed(response, "dashboard/recommendedjobs.html")
+
+    def test_recommended_jobs_view(self):
+
+        # set up fake jobs
+        for i in range(15):
+            job = job_record(
+                job_id=i,
+                agency="test_agency",
+                posting_type="External",
+                num_positions=10,
+                business_title="test_business_title",
+                civil_service_title="title_description_" + str(i + 1),
+                title_classification="test_title_classification",
+                title_code_no="test_title_code_no",
+                level="test_level",
+                job_category="test_job_category",
+                full_time_part_time_indicator="test_full_time",
+                career_level="test_career_level",
+                salary_range_from=100000,
+                salary_range_to=120000,
+                salary_frequency="test_salary_frequency",
+                work_location="test_work_location",
+                division_work_unit="test_division_work_unit",
+                job_description="test_job_description",
+                minimum_qual_requirements="test_minimum_qual_requirements",
+                preferred_skills="test_preferred_skills",
+                additional_information="test_additional_information",
+                to_apply="test_to_apply",
+                hours_shift="test_hours_shift",
+                work_location_1="test_work_location_1",
+                recruitment_contact="test_recruitment_contact",
+                residency_requirement="test_residency_requirement",
+                posting_date=timezone.now(),
+                post_until=None,
+                posting_updated=None,
+                process_date=timezone.now(),
+            )
+            job.save()
+
+        # Test-Check if user is authenticated
+        user_login = self.client.login(
+            username=self.test_user.username, password="thisisapassword"
+        )
+        self.assertTrue(user_login)
+
+        """ Expectation is  1 because saved Jobs  executes since preference is null(
+         not yet set) """
+        # response = self.client.post(
+        #     reverse("jobs:saveJob", kwargs={"pk": job_record.objects.get(id=5).id})
+        # )
+        # self.assertEqual(json.loads(response.content)["response_data"], "Job Saved")
+        # saved_job = (
+        #     job_record.objects.filter(civil_service_title="title_description_4")
+        #     .filter(
+        #         Q(post_until__gte=datetime.date.today()) | Q(post_until__isnull=True)
+        #     )
+        #     .filter(posting_type__iexact="External")
+        #     .distinct()
+        #     .order_by("-posting_date")[:10]
+        # )
+        # print(saved_job.count())
+        # response = self.client.get(reverse("dashboard:recommendedjobs"))
+        # self.assertEqual(response.context["jobs"].count(), 1)
+
+        # Test-Pass Title ID 1 as the one user is interested and
+        # ID 2 as one user currently holds
+        response = self.client.post(
+            reverse("signin:SaveCivilServiceTitleView"),
+            data={"user_int_cst[]": [1]},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)["response_data"], "CST_SAVED")
+
+        response = self.client.get(reverse("dashboard:recommendedjobs"))
+
+        self.assertEqual(response.context["jobs"].count(), 1)
+
+        # # Test - If user can save a job and save job 3 as saved job for the user
+
+        response = self.client.post(
+            reverse("signin:SaveCivilServiceTitleView"),
+            data={"user_int_cst[]": [1], "user_curr_cst[]": [2]},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)["response_data"], "CST_SAVED")
+
+        response = self.client.get(reverse("dashboard:recommendedjobs"))
+
+        # Expectation is 2 because we have 2 CSTs saved in preferences and
+        # savedjobs CST will not be executed
+        self.assertEqual(response.context["jobs"].count(), 2)
+
+        # Testing when there are more than 10 Jobs matching the CSTs in preferences
+        response = self.client.post(
+            reverse("signin:SaveCivilServiceTitleView"),
+            data={
+                "user_int_cst[]": [1, 3, 4, 5, 6, 7, 8, 9],
+                "user_curr_cst[]": [2, 11, 13, 12],
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content)["response_data"], "CST_SAVED")
+
+        response = self.client.get(reverse("dashboard:recommendedjobs"))
+        self.assertEqual(response.context["jobs"].count(), 10)

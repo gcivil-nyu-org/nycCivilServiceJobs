@@ -13,7 +13,7 @@ before_script:
 script:
   - black --check .
   - flake8 .
-  - coverage run --source=register,signin,jobs,examresults,dashboard,faq manage.py test
+  - coverage run --source=register,signin,jobs,examresults,dashboard,faq,contactus manage.py test
 
 after_script:
   - coveralls 

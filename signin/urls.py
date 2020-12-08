@@ -15,7 +15,13 @@
 
 from django.contrib.auth import views as auth_views
 from django.urls import path, reverse_lazy
-from signin.views import SignInView, SaveCivilServiceTitleView
+from signin.views import (
+    SignInView,
+    SaveCivilServiceTitleView,
+    permission_denied_view,
+    bad_request_view,
+    server_error_view,
+)
 
 app_name = "signin"
 urlpatterns = [
@@ -56,4 +62,7 @@ urlpatterns = [
         SaveCivilServiceTitleView.as_view(),
         name="SaveCivilServiceTitleView",
     ),
+    path("403/", permission_denied_view, name="error403"),
+    path("400/", bad_request_view, name="error400"),
+    path("500/", server_error_view, name="error500"),
 ]

@@ -13,250 +13,234 @@
   const urlParams = new URLSearchParams(queryString);
   const q = urlParams.get('q')
   //console.log(q);
-  if(q=='' || q==null){
+  if (q == '' || q == null) {
     var EXAMS_DATA = '{% url "examresults:exams_data" %}';
-    $('#r1').css('display','none');
-    $('#noResFound').css('display','flex');
+    $('#r1').css('display', 'none');
+    $('#noResFound').css('display', 'block');
   }
-  else{
-    var EXAMS_DATA = '{% url "examresults:exams_data" %}?q='+q;
-    $('#r1').css('display','flex');
-    $('#noResFound').css('display','none');
+  else {
+    var EXAMS_DATA = '{% url "examresults:exams_data" %}?q=' + q;
+    $('#r1').css('display', 'flex');
+    $('#noResFound').css('display', 'none');
   }
   //console.log(EXAMS_DATA);
   var dt_language = {
-     "emptyTable":     "{% trans 'No Exams Results Found' %}",
-     "info":           "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries' %}",
-     "infoEmpty":      "{% trans 'Showing 0 to 0 of 0 entries' %}",
-     "infoFiltered":   "{% trans '(filtered from _MAX_ total entries)' %}",
-     "infoPostFix":    "",
-     "thousands":      ",",
-     "lengthMenu":     "{% trans 'Show _MENU_ entries' %}",
-     "loadingRecords": "{% trans 'Loading...' %}",
-     "processing":     "{% trans 'Processing...' %}",
-     "search":         "{% trans 'Search:' %}",
-     "zeroRecords":    "{% trans 'No matching records found' %}",
-     "paginate": {
-         "first":      "{% trans 'First' %}",
-         "last":       "{% trans 'Last' %}",
-         "next":       "{% trans 'Next' %}",
-         "previous":   "{% trans 'Previous' %}"
-     },
-     "aria": {
-         "sortAscending":  "{% trans ': activate to sort column ascending' %}",
-         "sortDescending": "{% trans ': activate to sort column descending' %}"
-     }
- }
-  $(document).ready(function() {
+    "emptyTable": "{% trans 'No Exams Results Found' %}",
+    "info": "{% trans 'Showing _START_ to _END_ of _TOTAL_ entries' %}",
+    "infoEmpty": "{% trans 'Showing 0 to 0 of 0 entries' %}",
+    "infoFiltered": "{% trans '(filtered from _MAX_ total entries)' %}",
+    "infoPostFix": "",
+    "thousands": ",",
+    "lengthMenu": "{% trans 'Show _MENU_ entries' %}",
+    "loadingRecords": "{% trans 'Loading...' %}",
+    "processing": "{% trans 'Processing...' %}",
+    "search": "{% trans 'Search:' %}",
+    "zeroRecords": "{% trans 'No matching records found' %}",
+    "paginate": {
+      "first": "{% trans 'First' %}",
+      "last": "{% trans 'Last' %}",
+      "next": "{% trans 'Next' %}",
+      "previous": "{% trans 'Previous' %}"
+    },
+    "aria": {
+      "sortAscending": "{% trans ': activate to sort column ascending' %}",
+      "sortDescending": "{% trans ': activate to sort column descending' %}"
+    }
+  }
+
+  var table = $('.datatable').DataTable({
+    language: dt_language,
+    order: [[0, "desc"]],
+    searching: true,
+    lengthChange: false,
+    processing: true,
+    serverSide: true,
+    stateSave: true,
+    ajax: EXAMS_DATA,
+
+  });
+
+  $(document).ready(function () {
 
     $('.active').removeClass('active');
     $('.navbar-nav li').eq(2).addClass('active');
 
-  var table = $('.datatable').DataTable({
-          language: dt_language,
-          order: [[ 0, "desc" ]],
-       //    columns: [
-       //     {
-       //         data: 'first_name',
-       //         orderable: true,
-       //         searchable: true,
-       //         className: "center"
-       //     },
-       //     {
-       //         data: 'last_name',
-       //         orderable: true,
-       //         searchable: true,
-       //         className: "center"
-       //     },
-       //     {
-       //         data: 'list_title_code',
-       //         orderable: true,
-       //         searchable: true,
-       //         className: "center"
-       //     },
-       //     {
-       //         data: 'exam_number',
-       //         orderable: true,
-       //         searchable: true,
-       //         className: "center"
-       //     }
-       // ],
-          searching: true,
-          lengthChange: false,
-          processing: true,
-          serverSide: true,
-          stateSave: true,
-          ajax: EXAMS_DATA,
- //          initComplete: function(settings, json){
- //     var info = this.api().page.info();
- //
- //     if(info.recordsTotal==0)
- //     {
- //       document.getElementById("r1").style.display="none";
- //     }
- // },
-    });
-table.search('').columns().search('').draw();
+
+    table.search('').columns().search('').draw();
 
 
     $('#title-desc').change(function () {
-      console.log("Title",this.value)
-  table
-      .columns( 2 )
-      .search( this.value )
-      .draw();
-} );
-
-    $("#first-name").on("keyup", function() {
-      console.log("First",this.value)
-table
-        .columns( 3 )
-        .search( this.value )
+      console.log("Title", this.value)
+      table
+        .columns(2)
+        .search(this.value)
         .draw();
-  } );
+    });
 
-  $("#last-name").on("keyup", function() {
-    console.log("Last",this.value)
-    table
-          .columns( 5)
-          .search( this.value )
-          .draw();
-    } );
+    $("#first-name").on("keyup", function () {
+      console.log("First", this.value)
+      table
+        .columns(3)
+        .search(this.value)
+        .draw();
+    });
+
+    $("#last-name").on("keyup", function () {
+      console.log("Last", this.value)
+      table
+        .columns(5)
+        .search(this.value)
+        .draw();
+    });
     $('.js-example-basic-single').select2({
-    width: '100%'
-});
+      width: '100%'
+    });
 
-$('.js-hide-search').select2({
-    minimumResultsForSearch: Infinity,
-   width: '100%'
-});
+    $('.js-hide-search').select2({
+      minimumResultsForSearch: Infinity,
+      width: '100%'
+    });
+  });
 
-
-  } );
+  function resetfilter() {
+    console.log("reset");
+    $("#first-name").val('');
+    $("#last-name").val('');
+    $("#title-desc").val('').trigger('change.select2');
+    table.columns().search('').draw();
+  }
 </script>
 
 {% endblock javascript %}
 
 {% block content %}
 <style>
-  .dataTables_filter
-  {
-  display:none;
+  .dataTables_filter {
+    display: none;
   }
-  body{
-    color:black;
+
+  body {
+    color: black;
   }
 </style>
+
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <title>Exam Results</title>
-<style>
-  .myfont{
-    height: 35px !important; 
-    font-size: 15px; 
-    font-family: "Nunito Sans", Arial, sans-serif; 
-    font-weight: 400; 
-    border:1px solid #aaa; 
-    color: #444 !important;
-    
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <title>Exam Results</title>
+  <style>
+    .myfont {
+      height: 35px !important;
+      font-size: 15px;
+      font-family: "Nunito Sans", Arial, sans-serif;
+      font-weight: 400;
+      border: 1px solid #aaa;
+      color: #444 !important;
+
+    }
+  </style>
 </head>
 <br>
 <br>
 <br>
 <br>
 <section class="ftco-section bg-light">
-  <!-- <div class="container"> -->
 
-    <form method="GET" action="{% url 'examresults:exams' %}">
-        <div class="form-row pt-3">
-            <div class="col"></div>
-            <div class="form-group col col-md-6">
-                <div class="input-group">
-                    <input class="form-control" type="search" name="q" id="id_q" value="{{request.GET.q}}"
-                        placeholder="Civil Service Title Code, Civil Service Title or Exam Number" />
-                </div>
-            </div>
-            <button type="submit" class="form-group btn btn-primary"
-                value="Search">Search</button>
-            <div class="col"></div>
+  <form method="GET" action="{% url 'examresults:exams' %}">
+    <div class="form-row pt-3">
+      <div class="col"></div>
+      <div class="form-group col col-md-6">
+        <div class="input-group">
+          <input class="form-control" type="search" name="q" id="id_q" value="{{request.GET.q}}"
+            placeholder="Must enter Civil Service Title or Exam Number to Search for Result" />
         </div>
-    </form>
-<div class="container">
+      </div>
+      <button type="submit" class="form-group btn btn-primary" value="Search">Search</button>
+      <div class="col"></div>
+    </div>
+  </form>
+  <div class="container">
     <div id="r1" class="row">
-  <div class="col-lg-3 sidebar">
-    <div class="row justify-content-center">
-      <div class="col-md-12 heading-section">
-        <br>
+      <div class="col-lg-3 sidebar">
+        <div class="row justify-content-center">
+          <div class="col-md-12 heading-section">
+            <br>
+          </div>
+        </div>
+        <div class="sidebar-box bg-white p-4 ftco-animate">
+          <h4 class="heading-sidebar">Filters
+          </h4>
+          <hr class="mt-2 mb-3" />
+
+          <br>
+          <div>Civil Service Title </div>
+          <div>
+            <select class="js-example-basic-single form-control" name="title-desc" id="title-desc">
+              <option value=""> Any </option>
+              {% for desc in title_desc %}
+              <option value="{{desc}}"> {{desc}} </option>
+              {% endfor %}
+            </select>
+          </div>
+          <br>
+          <div> First Name </div>
+          <input class="form-control myfont" type="text" id="first-name" />
+
+          <br>
+          <div> Last Name </div>
+          <input class="form-control myfont" type="text" id="last-name" />
+          <br>
+          <button type="button" class="form-group btn btn-primary" onclick='resetfilter()'>Reset Filters</button>
+        </div>
       </div>
-    </div>
-    <div class="sidebar-box bg-white p-4 ftco-animate">
-      <h4 class="heading-sidebar">Filters
-        <!-- <div class="btn-group sort-btn" style="float:right;">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="sort-order"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Sort </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" onclick="sort(this.id)" id="" href="#">Default</a>
-                    <a class="dropdown-item" onclick="sort(this.id)" id="sort-posting" href="#">Date
-                        Posted<i class="fa fa-sort-amount-asc"></i> </a>
-                    <a class="dropdown-item" onclick="sort(this.id)" id="sort-salary" href="#">Starting
-                        Salary <i class="fa fa-sort-amount-asc"></i> </a>
-                </div>
-            </div> -->
-      </h4>
-      <hr class="mt-2 mb-3" />
-
-      <br>
-      <div>Civil Service Title </div>
-      <div>
-        <select class="js-example-basic-single form-control" name="title-desc" id="title-desc">
-          <option value=""> Any </option>
-          {% for desc in title_desc %}
-          <option value="{{desc}}" > {{desc}} </option>
-          {% endfor %}
-        </select>
-      </div>
-      <br>
-      <div> First Name </div>
-      <input class="form-control myfont"  type="text" id="first-name"/>
-
-      <br>
-      <div> Last Name </div>
-      <input class="form-control myfont" type="text" id="last-name"/>
-
-
-
-
-    </div>
-  </div>
-  <div class="col-lg-9">
-    <table  id="exams" class="datatable">
-      <thead>
-          <th>Exam Number</th>
+      <div class="col-lg-9">
+        <table id="exams" class="datatable">
+          <thead>
+            <th>Exam Number</th>
             <th>Civil Service Title Code</th>
             <th>Civil Service Title </th>
             <th>First Name</th>
             <th>Middle Name</th>
             <th>Last Name</th>
             <th>Final Average</th>
-      </thead>
+            <th>List Number</th>
+          </thead>
 
-    </table>
-  </div>
-  </div>
+        </table>
+      </div>
+    </div>
 
-<div id="noResFound" class="row">
-  <div class="col text-center">
-    <h4 class="block-27 pt-5">
-      Please Search for Exam Results
-    </h4>
+    <div class="col" id="noResFound">
+      <div style="padding: 20px 100px 20px 100px">
+
+        <div class="heading-section">
+          <h2 id='jobCount' style="font-weight: 800; font-size: 25px; text-align: center;">Recently Released Exam
+            Results</h2>
+        </div>
+        <div class="row flex align-items-center" style="justify-content: center;">
+          {% for result in recent_exam_res %}
+          <div class="job-post-item p-4"
+            style="width: 400px !important; height: 210px; margin:20px 20px 20px 20px!important">
+            <div class="mb-1">
+              <div class="job-post-item-header align-items-center">
+                {% if result.1|length >= 40 %}
+                <h4><b> {{result.1| slice:":40"}}....</b></h4>
+                {% else %}  
+                <h4><b> {{result.1}} </b></h4>
+                {% endif%}
+              </div>
+              <div class="job-post-item-center"> Exam Number: {{result.0}}</div>
+              <div class="job-post-item-center"> Date Added: {{result.2|slice:":11" }}</div>
+            </div>
+            <div> <a class="btn-link" style="color:#28a745 !important ;" href="/exams/?q={{result.0}}"> View Result </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-</div>
 </section>
 
 {% endblock %}

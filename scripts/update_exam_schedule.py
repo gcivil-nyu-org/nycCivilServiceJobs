@@ -43,7 +43,7 @@ def save_upcoming_exams():
                 )
 
                 if val_in_db.exists():
-                    break
+                    continue
 
                 exams.append(
                     ExamSchedule(
