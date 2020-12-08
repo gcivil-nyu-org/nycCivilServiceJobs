@@ -16,17 +16,21 @@
             font-size: 45px;
             font-weight: 650;
         }
-        label{
+
+        label {
             margin-top: 0.5rem;
             margin-right: 0.5rem;
         }
-        .bg-badge1{
+
+        .bg-badge1 {
             background-color: salmon;
         }
-        .bg-badge2{
-            background-color: olive;
+
+        .bg-badge2 {
+            background-color:rgb(59, 168, 148);
         }
-        .bg-badge3{
+
+        .bg-badge3 {
             background-color: steelblue;
         }
     </style>
@@ -49,7 +53,8 @@
                     class="nav-item list-group-item list-group-item-action bg-light"> Saved Jobs</a>
                 <a href="{% url 'dashboard:recommendedjobs' %}"
                     class="nav-item list-group-item list-group-item-action bg-light"> Recommended Jobs</a>
-                <a href="{% url 'dashboard:subscription' %}" class="list-group-item list-group-item-action bg-light">Subscriptions</a>
+                <a href="{% url 'dashboard:subscription' %}"
+                    class="list-group-item list-group-item-action bg-light">Subscriptions</a>
             </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -95,8 +100,8 @@
                                                 <p class="card-text">{{recommendations_count}}</p>
                                             </div>
                                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                                <a class="small text-white stretched-link" 
-                                                href="{% url 'dashboard:recommendedjobs' %}">View All</a>
+                                                <a class="small text-white stretched-link"
+                                                    href="{% url 'dashboard:recommendedjobs' %}">View All</a>
                                                 <div class="small text-white"><i class="fa fa-angle-right"></i></div>
                                             </div>
                                         </div>
@@ -109,7 +114,8 @@
                                                 <p class="card-text">{{user_subscriptions_count}}</p>
                                             </div>
                                             <div class="card-footer d-flex align-items-center justify-content-between">
-                                                <a class="small text-white stretched-link" href="{% url 'dashboard:subscription' %}">View All</a>
+                                                <a class="small text-white stretched-link"
+                                                    href="{% url 'dashboard:subscription' %}">View All</a>
                                                 <div class="small text-white"><i class="fa fa-angle-right"></i></div>
                                             </div>
                                         </div>
@@ -119,7 +125,14 @@
                                 </div>
                             </div>
                             <div class="card mb-4 text-black shadow-sm">
-                                <div class="card-header"> <i class="fa fa-table mr-1"></i>Upcoming Exams</div>
+                                <div class="card-header">
+                                    <div style="display: inline-block;float:left;"><i
+                                            class="fa fa-table mr-1"></i>Upcoming Exams</div>
+                                    <div style="display: inline-block;float:right;"><i class="fa fa-external-link"></i>
+                                        <a class="btn-link" style="color:#28a745;" target="_blank"
+                                            href="https://a856-exams.nyc.gov/OASysWeb/"> Apply for Exam</a>
+                                    </div>
+                                </div>
                                 <link rel="stylesheet" type="text/css"
                                     href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
                                 <table id="exam_schedule" class="table table-striped table-bordered" style="width:99%">
