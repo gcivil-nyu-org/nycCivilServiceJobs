@@ -13,13 +13,13 @@
                     data-placement="top" title="Posting open to Public">{{job.posting_type}}</span>
                 {% endif %}
                 <span class="text-white badge py-2 px-3"
-                    style="margin-left: 5px; background-color:olive">{{job.career_level }}</span>
+                    style="margin-left: 5px; background-color:salmon">{{job.career_level }}</span>
                 {% if job.post_until is None %}
-                <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:salmon">Deadline:
+                <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:rgb(59, 168, 148)">Deadline:
                     Until
                     Position is Filled</span>
                 {% else %}
-                <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:salmon">Deadline:
+                <span class="text-white badge py-2 px-3" style="margin-left: 5px; background-color:rgb(59, 168, 148)">Deadline:
                     {{job.post_until }}</span>
                 {% endif %}
 
